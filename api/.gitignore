@@ -1,1 +1,67 @@
-.env
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env/
+.venv/
+env/
+*.env
+*.venv
+
+# Python cache
+*.cache
+*.pyc
+*.pyo
+*.pyd
+
+# Logs and database
+logs/
+*.log
+*.sqlite3
+*.db
+
+# FastAPI specific
+instance/
+*.pid
+*.sock
+
+# Pytest / Coverage reports
+.coverage
+htmlcov/
+*.cover
+.cache/
+nosetests.xml
+coverage.xml
+*.pytest_cache/
+
+# IDE / Editor configs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Jupyter Notebooks
+.ipynb_checkpoints/
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+# Migrations
+migrations/
+
+# Dependencies
+*.lock
+pip-log.txt
+pip-delete-this-directory.txt
+Pipfile
+Pipfile.lock
+poetry.lock
+
+# Compiled files
+dist/
+build/
+*.egg-info/
