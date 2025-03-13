@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
 router = APIRouter(
-    prefix="/requirement_document",
+    prefix="/requirement-document",
     tags=["requirement_document"],
 )
