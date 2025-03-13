@@ -1,8 +1,10 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from api.routes import router
 
 app = FastAPI()
 
+# Add middlewares
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  
@@ -11,9 +13,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.post("/api/foo")
-async def submit_form(data: dict):
-    print(data)
-    if data is not None:
-        return {"message": "Form submitted successfully"}
-    raise HTTPException(status_code=400, detail="Failed to submit form")
+# Include routes
+app.include_router(router.router)
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
