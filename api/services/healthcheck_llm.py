@@ -1,4 +1,4 @@
-from api.utils.gemini_client import gemini_generate_response
+from utils.gemini_client import gemini_generate_response
 
 
 class HealthCheckLLMService:

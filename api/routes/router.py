@@ -1,7 +1,7 @@
 from fastapi import APIRouter
-from api.routes.project import router as project_router
-from api.routes.requirement_document import router as requirement_document_router
-from api.routes.healthcheck_llm import router as health_check_llm_router
+from .project import router as project_router
+from .requirement_document import router as requirement_document_router
+from .healthcheck_llm import router as health_check_llm_router
 
 router = APIRouter(prefix="/api", tags=["api"])
 

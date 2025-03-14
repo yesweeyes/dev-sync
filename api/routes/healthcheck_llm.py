@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-from api.services.healthcheck_llm import HealthCheckLLMService
+from services.healthcheck_llm import HealthCheckLLMService
 
 router = APIRouter(
     prefix="/healthcheck-llm",
