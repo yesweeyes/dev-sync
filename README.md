@@ -10,8 +10,8 @@ Dev Sync is an AI-powered SDLC Optimization Tool that bridges the gap between ex
 
 ## Tech Stack
 - **Backend**: FastAPI (Python 3.12)
-- **Frontend**: React Native
-- **UI Library**: Gluestack
+- **Frontend**: (React Native)[https://reactnative.dev/]
+- **UI Library**: (Gluestack)[https://gluestack.io/]
 
 ## Installation & Setup
 
