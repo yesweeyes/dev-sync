@@ -20,6 +20,11 @@ Ensure you have the following installed:
 - **Python 3.12**
 - **Node.js 18**
 
+### Clone the repository
+```bash
+git clone https://github.com/yesweeyes/DevSync.git
+```
+
 ### Setup .env files
 IMPORTANT: Copy the .env files to their respective directories
 
