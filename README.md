@@ -9,7 +9,7 @@ Dev Sync is an AI-powered SDLC Optimization Tool that bridges the gap between ex
 - **AI-Powered Code Review** - Automates code reviews for better code quality and adherence to best practices.
 
 ## Tech Stack
-- **Backend**: FastAPI (Python 3.12)
+- **Backend**: [FastAPI](https://fastapi.tiangolo.com/)
 - **Frontend**: [React Native](https://reactnative.dev/)
 - **UI Library**: [Gluestack](https://gluestack.io/)
 
