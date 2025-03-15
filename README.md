@@ -20,6 +20,9 @@ Ensure you have the following installed:
 - **Python 3.12**
 - **Node.js 18**
 
+### Setup .env files
+IMPORTANT: Copy the .env files to their respective directories
+
 ### Backend Setup (FastAPI)
 ```bash
 cd api  # Navigate to backend folder
