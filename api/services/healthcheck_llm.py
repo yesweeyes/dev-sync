@@ -6,5 +6,5 @@ class HealthCheckLLMService:
         pass
 
     def healthcheck_llm(self) -> str:
-        healthcheck_response: str = gemini_generate_response(prompt="How does AI Work?")
+        healthcheck_response: str = gemini_generate_response(prompt="Hello!")
         return healthcheck_response

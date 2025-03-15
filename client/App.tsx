@@ -7,7 +7,7 @@ import Home from "./src/screens/Home/page";
 
 export default function App() {
   return (
-    <GluestackUIProvider mode="light">
+    <GluestackUIProvider mode="dark">
       <View style={styles.container}>
         <StatusBar style="auto" />
         <Home />

@@ -5,11 +5,18 @@ import { View, Text } from "react-native";
 
 function Home() {
   const [message, setMessage] = useState<string>("");
-
+  const [loading, setLoading] = useState<boolean>(false);
   async function handleButtonPress() {
-    const response = await llmApi.healthcheck();
-    setMessage(response.data);
-    console.log(response);
+    setLoading(true);
+    try {
+      const response = await llmApi.healthcheck();
+      setMessage(response.data);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -18,14 +25,16 @@ function Home() {
         action={"primary"}
         variant={"solid"}
         size={"lg"}
-        isDisabled={false}
+        isDisabled={loading}
         onPress={handleButtonPress}
       >
         <ButtonText>LLM Healthcheck</ButtonText>
       </Button>
       {message.length > 0 && (
         <View>
-          <Text>LLM Says: {message}</Text>
+          <Text ellipsizeMode="tail" numberOfLines={2}>
+            LLM Says: {message}
+          </Text>
         </View>
       )}
     </View>
