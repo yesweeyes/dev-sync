@@ -4,7 +4,7 @@ import { Slot } from "expo-router";
 export default function RootLayout() {
   return (
     <GluestackUIProvider mode="system">
-      <Slot /> {/* This will render the active page */}
+      <Slot />
     </GluestackUIProvider>
   );
 }

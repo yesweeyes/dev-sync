@@ -8,7 +8,9 @@ import { Sidebar } from "@/components/Sidebar";
 export default function Page() {
   return (
     <SafeAreaView className="md:flex flex-col items-center justify-center md:w-full h-full">
-      <Sidebar />
+      <Button>
+        <ButtonText>Hello, World!</ButtonText>
+      </Button>
     </SafeAreaView>
   );
 }
