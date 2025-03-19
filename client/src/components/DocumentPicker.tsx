@@ -1,5 +1,5 @@
 import * as DocumentPicker from "expo-document-picker";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/src/components/ui/button";
 import { useState } from "react";
 import { View, Text } from "react-native";
 

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Button, ButtonText } from "@/components/ui/button";
+import { Button, ButtonText } from "@/src/components/ui/button";
 import llmApi from "@/src/api/llmApi";
 import { View, Text } from "react-native";
 import DocumentPickerComponent from "@/src/components/DocumentPicker";
