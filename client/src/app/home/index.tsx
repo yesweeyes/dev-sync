@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Button, ButtonText } from "../../../components/ui/button";
+import { Button, ButtonText } from "@/components/ui/button";
 import llmApi from "@/src/api/llmApi";
 import { View, Text } from "react-native";
+import DocumentPickerComponent from "@/src/components/DocumentPicker";
 
 function Home() {
   const [message, setMessage] = useState<string>("");
@@ -21,6 +22,8 @@ function Home() {
 
   return (
     <View>
+      <Text>Hello World</Text>
+      <DocumentPickerComponent />
       <Button
         action={"primary"}
         variant={"solid"}
@@ -28,7 +31,7 @@ function Home() {
         isDisabled={loading}
         onPress={handleButtonPress}
       >
-        <ButtonText>LLM Healthcheck</ButtonText>
+        <Text>LLM Healthcheck</Text>
       </Button>
       {message.length > 0 && (
         <View>
