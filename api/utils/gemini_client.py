@@ -1,11 +1,6 @@
 from google import genai
-from dotenv import load_dotenv
-import os
+from config import GEMINI_API_KEY
 
-load_dotenv()
-
-
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 GEMINI_1DOT5_FLASH_MODEL = "gemini-1.5-flash-8b"
 
 client = genai.Client(api_key=GEMINI_API_KEY)
