@@ -1,1 +1,0 @@
-export const HEALTHCHECK_LLM = `/healthcheck-llm`;
