@@ -14,6 +14,7 @@ Dev Sync is an AI-powered SDLC Optimization Tool that bridges the gap between ex
 - **Backend**: [FastAPI](https://fastapi.tiangolo.com/)
 - **Frontend**: [React Native](https://reactnative.dev/)
 - **UI Library**: [Gluestack](https://gluestack.io/)
+- **Database**: [PostgreSQL](https://www.postgresql.org/download/)
 
 ## Installation & Setup
 
@@ -23,6 +24,7 @@ Ensure you have the following installed:
 
 - **Python 3.12**
 - **Node.js 18**
+- **PostgreSQL**: Follow the [official PostgreSQL setup guide](https://www.postgresql.org/download/)
 
 ### Clone the repository
 
@@ -33,6 +35,14 @@ git clone https://github.com/yesweeyes/DevSync.git
 ### Setup .env files
 
 IMPORTANT: Copy the .env files to their respective directories
+
+### PostgreSQL Setup
+
+Ensure that PostgreSQL is installed and running. Create a new database:
+
+```sql
+CREATE DATABASE devsync;
+```
 
 ### Backend Setup (FastAPI)
 
