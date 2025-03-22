@@ -65,3 +65,6 @@ poetry.lock
 dist/
 build/
 *.egg-info/
+
+# Uploaded files
+uploads/
