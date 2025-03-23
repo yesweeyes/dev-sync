@@ -66,5 +66,5 @@ dist/
 build/
 *.egg-info/
 
-# Uploaded files
-uploads/
+# Ignore ChromaDB data
+data/chroma/
