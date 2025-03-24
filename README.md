@@ -82,3 +82,20 @@ cd client  # Navigate to frontend folder
 npm install  # Install dependencies
 npm start  # Start the React Native app
 ```
+
+### Microservice Setup: Vector Microservice
+
+Follow the [offical Ollama setup](https://ollama.com/download/linux)
+
+```bash
+ollama pull mxbai-embed-large # Run only once
+```
+
+```bash
+cd ms_vector # Navigate to microservice folder
+python -m venv venv  # Create a virtual environment
+source venv/bin/activate  # Activate virtual environment (Linux/macOS)
+venv\Scripts\activate  # Activate virtual environment (Windows)
+pip install -r requirements.txt  # Install dependencies
+uvicorn vector_service:app --port 5001 --reload  # Start FastAPI server
+```
