@@ -46,7 +46,7 @@ def get_requirement_document_by_id(db: Session, doc_id: uuid.UUID) -> Requiremen
     return doc
 
 def get_all_requirement_documents_for_project(db: Session, project_id: uuid.UUID) -> List[RequirementDocument]:
-    return db.query(RequirementDocument).filter(RequirementDocument.project_id == project_id).first()
+    return db.query(RequirementDocument).filter(RequirementDocument.project_id == project_id)
 
 def update_requirement_document(db: Session, doc_id: uuid.UUID, doc_data: RequirementDocumentUpdate) -> RequirementDocument:
     doc = db.query(RequirementDocument).filter(RequirementDocument.id == doc_id).first()
