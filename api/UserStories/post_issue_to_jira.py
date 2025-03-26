@@ -22,9 +22,6 @@ JIRA_URL = auth_details.jira_project_endpoint
 PROJECT_KEY = auth_details.jira_project_key
 JIRA_EMAIL = auth_details.jira_project_email
 
-print(f"api:", JIRA_API_TOKEN)
-print(f"email", JIRA_EMAIL)
-print(f"ednpoint:", JIRA_URL)
 
 auth = HTTPBasicAuth(JIRA_EMAIL, JIRA_API_TOKEN)
 headers = {
@@ -79,6 +76,6 @@ def create_jira_issue(story):
     else:
         print(f"Failed to create '{story.title}'. Error: {response.text}")
 
-# for issue in issue_details:
-#     #create_jira_issue(issue)
+for issue in issue_details:
+    create_jira_issue(issue)
     
