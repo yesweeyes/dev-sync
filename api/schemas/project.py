@@ -9,7 +9,7 @@ class ProjectBase(BaseModel):
     jira_project_email: EmailStr
 
 class ProjectCreate(ProjectBase):
-    pass
+    id: Optional[UUID4] = None  
 
 class ProjectUpdate(BaseModel):
     name: Optional[str] = None

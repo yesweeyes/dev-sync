@@ -1,4 +1,4 @@
-import { FlatList, ScrollView, Pressable } from "react-native";
+import { FlatList, ScrollView, Pressable, View, Linking } from "react-native";
 import { useRouter } from "expo-router";
 import { createProject, getAllProjects } from "../api/project";
 import { Box } from "@/components/ui/box";
@@ -8,7 +8,7 @@ import { Project, ProjectCreate } from "@/schema/project";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
-import { Plus, ArrowRight } from "lucide-react-native";
+import { Plus, ArrowRight, Link2, Link } from "lucide-react-native";
 import CreateProjectModal from "@/components/Home/CreateProjectModal";
 
 function HomePage() {
@@ -86,10 +86,10 @@ function HomePage() {
           <VStack className="w-full items-center mb-5">
             <HStack className="items-center justify-center p-2">
               <Text className="text-6xl text-blue-600 font-bold font-roboto">
-                navigate&nbsp;
+                open&nbsp;
               </Text>
               <Text className="text-6xl text-typography-black font-bold font-roboto">
-                to project
+                project
               </Text>
             </HStack>
           </VStack>
@@ -101,15 +101,23 @@ function HomePage() {
                 item?.id ? item.id.toString() : `fallback-${index}`
               }
               renderItem={({ item }) => (
-                <Button
-                  onPress={() => router.push(`/project/${item.id}`)}
-                  className="p-8 my-1 bg-gray-100 rounded-full flex-row justify-between items-center"
-                >
-                  <ButtonText className="text-lg font-roboto text-left text-typography-black ">
-                    {item.name} ({item.jira_project_key})
-                  </ButtonText>
-                  <ButtonIcon as={ArrowRight} />
-                </Button>
+                <View className="flex-row items-center">
+                  <Button
+                    onPress={() => router.push(`/project/${item.id}`)}
+                    className="p-8 my-1 bg-white rounded-full flex-row justify-between items-center flex-1"
+                  >
+                    <ButtonText className="text-lg font-roboto text-left text-typography-black">
+                      {item.name} ({item.jira_project_key})
+                    </ButtonText>
+                    <ButtonIcon as={ArrowRight} />
+                  </Button>
+                  <Button
+                    onPress={() => Linking.openURL(item.jira_project_endpoint)}
+                    className="ml-2 mr-2 w-14 h-14 bg-blue-600 rounded-full items-center justify-center"
+                  >
+                    <ButtonIcon as={Link} size="lg" />
+                  </Button>
+                </View>
               )}
             />
           </ScrollView>
