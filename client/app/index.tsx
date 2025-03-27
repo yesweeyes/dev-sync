@@ -1,4 +1,6 @@
 import { View, Text } from "react-native";
+import { getAllProjects } from "../api/project";
+import { useEffect } from "react";
 
 function HomePage() {
   return (

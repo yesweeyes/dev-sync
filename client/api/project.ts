@@ -3,6 +3,7 @@ import { Project, ProjectCreate, ProjectUpdate } from "../schema/project";
 
 export const getAllProjects = async (): Promise<Project[]> => {
   const response = await api.get("/project");
+  console.log(response);
   return response.data;
 };
 
