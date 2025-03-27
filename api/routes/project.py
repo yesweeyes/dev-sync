@@ -25,6 +25,7 @@ def get_all_projects(db: Session = Depends(get_db)):
 
 @router.post("/")
 def create_project(project: ProjectCreate, db: Session = Depends(get_db)):
+    print("Creating Project: ", project)
     return create_project_service(db, project)
 
 @router.get("/{project_id}")

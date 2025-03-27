@@ -11,7 +11,7 @@ export interface Project {
 export interface ProjectCreate {
     name: string, 
     jira_project_key: string, 
-    jira_auth_key: string, 
+    jira_project_auth: string, 
     jira_project_endpoint: string,
     jira_project_email: string, 
 }

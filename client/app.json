@@ -2,7 +2,7 @@
   "expo": {
     "name": "client",
     "slug": "client",
-    "scheme":"devsync",
+    "scheme": "devsync",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -27,7 +27,8 @@
       "bundler": "metro"
     },
     "plugins": [
-      "expo-router"
+      "expo-router",
+      "expo-font"
     ]
   }
 }
