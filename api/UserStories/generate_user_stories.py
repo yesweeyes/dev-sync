@@ -13,7 +13,6 @@ from services.user_story import create_user_story
 
 load_dotenv()
 db = next(get_db())
-project_id = uuid.UUID("7b1d790a-1daf-41ac-95fd-f453fac87348")
 
 def get_file(project_id: uuid.UUID, db: Session):   
     document = get_all_requirement_documents_for_project(db, project_id)
@@ -22,7 +21,7 @@ def get_file(project_id: uuid.UUID, db: Session):
     else:
         print("No document found for this project ID.")
 
-file_path = get_file(project_id,db)
+# file_path = get_file(project_id,db)
 
 def extract_text_from_pdf(file_path):
     document = fitz.open(file_path)
@@ -33,8 +32,8 @@ def extract_text_from_pdf(file_path):
         text_chunks.append(text)
     return text_chunks
 
-text_chunks = extract_text_from_pdf(file_path)
-print(f'text chunks list size:', len(text_chunks))
+# text_chunks = extract_text_from_pdf(file_path)
+# print(f'text chunks list size:', len(text_chunks))
 
 def generate_user_stories(text_chunks):
     stories = []
@@ -46,7 +45,7 @@ def generate_user_stories(text_chunks):
     else:
         return "Failed to extract text from URL"
 
-stories = generate_user_stories(text_chunks)
+# stories = generate_user_stories(text_chunks)
 
 def extract_json_blocks(stories):
     pattern = re.compile(r"\{(.*?)\}", re.DOTALL)
@@ -55,9 +54,9 @@ def extract_json_blocks(stories):
         matches.extend(pattern.findall(item))  
     return ["{" + match + "}" for match in matches]
 
-json_obj = extract_json_blocks(stories)
+# json_obj = extract_json_blocks(stories)
 
-def parse_user_story(data):
+def parse_user_story(data, project_id:uuid.UUID):
     title = data["summary"]
     description = data["description"]
     acceptance_criteria = data["Acceptance Criteria"]
@@ -77,11 +76,11 @@ def parse_user_story(data):
         "issueType": issueType
     }
 
-def insert_user_stories(user_story_data):
+def insert_user_stories(user_story_data, project_id:uuid.UUID):
     for story_data in user_story_data:
         story_data= json.loads(story_data)
-        parsed_story = parse_user_story(story_data)
+        parsed_story = parse_user_story(story_data, project_id)
         create_user_story(db, parsed_story)
     print("Inserting into db is successful")
         
-insert_user_stories(json_obj)
+# insert_user_stories(json_obj)
