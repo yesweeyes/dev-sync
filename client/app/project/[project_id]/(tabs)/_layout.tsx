@@ -4,7 +4,7 @@ import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import ProjectDetailCard from "@/components/Project/ProjectDetailCard";
 import { Tabs } from "expo-router";
-import FontAwesome from "@expo/vector-icons/FontAwesome";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 function ProjectPageLayout() {
   return (
@@ -20,14 +20,29 @@ function ProjectPageLayout() {
             description="This is my first project"
           />
         </VStack>
-        <VStack className="flex-1 h-full bg-gray-50 p-5 rounded-xl">
-          <Tabs screenOptions={{ tabBarActiveTintColor: "blue" }}>
+        <VStack className="flex-1 h-full pl-2 rounded-xl">
+          <Tabs
+            screenOptions={{
+              tabBarActiveTintColor: "blue",
+              headerShown: false,
+              tabBarPosition: "top",
+              tabBarStyle: {
+                backgroundColor: "gray-100",
+                borderBottomWidth: 0,
+                // borderBottomColor: "",
+              },
+            }}
+          >
             <Tabs.Screen
-              name="document"
+              name="requirements"
               options={{
-                title: "Documents",
+                title: "Requirements",
                 tabBarIcon: ({ color }) => (
-                  <FontAwesome size={28} name="file" color={color} />
+                  <MaterialIcons
+                    name="document-scanner"
+                    size={24}
+                    color={color}
+                  />
                 ),
               }}
             />
@@ -36,7 +51,7 @@ function ProjectPageLayout() {
               options={{
                 title: "User Story",
                 tabBarIcon: ({ color }) => (
-                  <FontAwesome size={28} name="book" color={color} />
+                  <MaterialIcons name="person" size={24} color={color} />
                 ),
               }}
             />
@@ -45,7 +60,7 @@ function ProjectPageLayout() {
               options={{
                 title: "Design",
                 tabBarIcon: ({ color }) => (
-                  <FontAwesome size={28} name="code" color={color} />
+                  <MaterialIcons name="engineering" size={24} color={color} />
                 ),
               }}
             />
@@ -54,7 +69,16 @@ function ProjectPageLayout() {
               options={{
                 title: "Testcases",
                 tabBarIcon: ({ color }) => (
-                  <FontAwesome size={28} name="check" color={color} />
+                  <MaterialIcons name="check-box" size={24} color={color} />
+                ),
+              }}
+            />
+            <Tabs.Screen
+              name="code_review"
+              options={{
+                title: "Code Review",
+                tabBarIcon: ({ color }) => (
+                  <MaterialIcons name="code" size={24} color={color} />
                 ),
               }}
             />

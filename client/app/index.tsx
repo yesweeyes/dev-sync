@@ -8,13 +8,13 @@ import { Project, ProjectCreate } from "@/schema/project";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
 import { HStack } from "@/components/ui/hstack";
-import { Plus, ArrowRight, Link2, Link } from "lucide-react-native";
+import { Plus } from "lucide-react-native";
 import CreateProjectModal from "@/components/Home/CreateProjectModal";
+import ProjectListCard from "@/components/Home/ProjectListCard";
 
 function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
-  const router = useRouter();
 
   async function fetchProjects() {
     try {
@@ -63,10 +63,10 @@ function HomePage() {
         >
           {/* Create Project Section */}
           <HStack className="items-center justify-center flex-wrap">
-            <Text className="text-6xl text-blue-600 font-bold font-roboto">
+            <Text className="text-6xl text-blue-600 font-semibold font-roboto ">
               create
             </Text>
-            <Text className="text-6xl text-typography-black font-bold font-roboto">
+            <Text className="text-6xl text-typography-black font-semibold font-roboto">
               project
             </Text>
           </HStack>
@@ -85,10 +85,10 @@ function HomePage() {
           {/* Navigate to Project Section (Above List) */}
           <VStack className="w-full items-center mb-5">
             <HStack className="items-center justify-center p-2">
-              <Text className="text-6xl text-blue-600 font-bold font-roboto">
+              <Text className="text-6xl text-blue-600 font-semibold font-roboto">
                 open&nbsp;
               </Text>
-              <Text className="text-6xl text-typography-black font-bold font-roboto">
+              <Text className="text-6xl text-typography-black font-semibold font-roboto">
                 project
               </Text>
             </HStack>
@@ -101,23 +101,7 @@ function HomePage() {
                 item?.id ? item.id.toString() : `fallback-${index}`
               }
               renderItem={({ item, index }) => (
-                <View className="flex-row items-center">
-                  <Button
-                    onPress={() => router.push(`/project/${item.id}`)}
-                    className={`p-8 my-1 rounded-full flex-row justify-between items-center flex-1 bg-gray-50`}
-                  >
-                    <ButtonText className="text-lg font-roboto text-left text-typography-black">
-                      {item.name} ({item.jira_project_key})
-                    </ButtonText>
-                    <ButtonIcon as={ArrowRight} />
-                  </Button>
-                  <Button
-                    onPress={() => Linking.openURL(item.jira_project_endpoint)}
-                    className="ml-2 mr-2 w-14 h-14 bg-blue-600 rounded-full items-center justify-center"
-                  >
-                    <ButtonIcon as={Link} size="lg" />
-                  </Button>
-                </View>
+                <ProjectListCard project={item} />
               )}
             />
           </ScrollView>
