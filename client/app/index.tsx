@@ -104,9 +104,7 @@ function HomePage() {
                 <View className="flex-row items-center">
                   <Button
                     onPress={() => router.push(`/project/${item.id}`)}
-                    className={`p-8 my-1 rounded-full flex-row justify-between items-center flex-1 ${
-                      index % 2 === 0 ? "bg-gray-100" : "bg-gray-50"
-                    }`}
+                    className={`p-8 my-1 rounded-full flex-row justify-between items-center flex-1 bg-gray-50`}
                   >
                     <ButtonText className="text-lg font-roboto text-left text-typography-black">
                       {item.name} ({item.jira_project_key})
