@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
 from models.requirement_document import RequirementDocument
-from schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate
+from schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate, RequirementDocumentBase
 import uuid
 from fastapi import UploadFile
 from typing import List
@@ -46,7 +46,7 @@ def get_requirement_document_by_id(db: Session, doc_id: uuid.UUID) -> Requiremen
     return doc
 
 def get_all_requirement_documents_for_project(db: Session, project_id: uuid.UUID) -> List[RequirementDocument]:
-    return db.query(RequirementDocument).filter(RequirementDocument.project_id == project_id)
+    return db.query(RequirementDocument).filter(RequirementDocument.project_id == project_id).all()
 
 def update_requirement_document(db: Session, doc_id: uuid.UUID, doc_data: RequirementDocumentUpdate) -> RequirementDocument:
     doc = db.query(RequirementDocument).filter(RequirementDocument.id == doc_id).first()

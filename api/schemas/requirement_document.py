@@ -2,6 +2,7 @@ from pydantic import BaseModel, UUID4
 from typing import Optional
 
 class RequirementDocumentBase(BaseModel):
+    id: UUID4
     project_id: UUID4
     original_name: str
     stored_name: str

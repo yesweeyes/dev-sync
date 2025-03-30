@@ -1,12 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import ProjectDetailCard from "@/components/Project/ProjectDetailCard";
-import { Tabs } from "expo-router";
+import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useProjectStore } from "@/store/project";
 
 function ProjectPageLayout() {
+  const { project_id } = useLocalSearchParams();
+  const { fetchProject } = useProjectStore();
+
+  useEffect(() => {
+    fetchProject(project_id as string);
+  }, [project_id]);
+
   return (
     <Box className="flex-1 w-full">
       <HStack className="w-full flex-1">
@@ -24,9 +32,7 @@ function ProjectPageLayout() {
               headerShown: false,
               tabBarPosition: "top",
               tabBarStyle: {
-                backgroundColor: "gray-100",
                 borderBottomWidth: 0,
-                // borderBottomColor: "",
               },
             }}
           >

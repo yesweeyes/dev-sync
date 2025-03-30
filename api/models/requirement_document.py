@@ -12,4 +12,3 @@ class RequirementDocument(Base):
     stored_name = Column(String, nullable=False)  
     file_path = Column(String, nullable=False)
 
-    __table_args__ = (UniqueConstraint('project_id', name='unique_project_document'),)

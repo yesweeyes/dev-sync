@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
 from sqlalchemy.orm import Session
 import uuid
 from schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate
@@ -15,8 +15,8 @@ router = APIRouter(
     tags=["document"],
 )
 
-@router.post("/{project_id}/upload")
-def upload_document(project_id: uuid.UUID, file: UploadFile = File(...), db: Session = Depends(get_db)):
+@router.post("/upload")
+def upload_document(project_id: uuid.UUID = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
     try:
         return save_requirement_document_service(db, project_id, file)
     except ValueError as e:

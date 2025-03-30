@@ -1,10 +1,12 @@
 import { Project, ProjectCreate, ProjectUpdate } from "@/schema/project";
-import { getAllProjects, getProject, createProject, updateProject, deleteProject } from "@/api/project";
+import { RequirementDocument} from "@/schema/requirement_document";
+import { getAllProjects, getProject, createProject, updateProject, deleteProject, getProjectDocuments } from "@/api/project";
 import { create } from "zustand";
 
 interface ProjectStore {
   projects: Project[];
   project: Project | null;
+  documents: RequirementDocument[];
   loading: boolean;
   error: string | null;
   fetchProjects: () => Promise<void>;
@@ -12,11 +14,13 @@ interface ProjectStore {
   addProject: (data: ProjectCreate) => Promise<void>;
   editProject: (projectId: string, data: ProjectUpdate) => Promise<void>;
   removeProject: (projectId: string) => Promise<void>;
+  fetchProjectDocuments: (projectId: string) => Promise<void>;
 }
 
 export const useProjectStore = create<ProjectStore>((set) => ({
   projects: [],
   project: null,
+  documents: [],
   loading: false,
   error: null,
 
@@ -34,7 +38,9 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     set({ loading: true, error: null });
     try {
       const project = await getProject(projectId);
+      const documents = await getProjectDocuments(projectId);
       set({ project, loading: false });
+      set({ project, documents, loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -69,4 +75,14 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       set({ error: error.message, loading: false });
     }
   },
+
+  fetchProjectDocuments: async (projectId) => {
+    set({ loading: true, error: null });
+    try {
+      const documents = await getProjectDocuments(projectId);
+      set({ documents, loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  }
 }));
