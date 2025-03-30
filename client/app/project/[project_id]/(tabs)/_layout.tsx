@@ -15,10 +15,7 @@ function ProjectPageLayout() {
           space="md"
           className="flex-1 max-w-sm items-center justify-center bg-gray-100 p-5 rounded-xl"
         >
-          <ProjectDetailCard
-            name="My Project"
-            description="This is my first project"
-          />
+          {/* <ProjectDetailCard /> */}
         </VStack>
         <VStack className="flex-1 h-full pl-2 rounded-xl">
           <Tabs

@@ -11,33 +11,15 @@ import { HStack } from "@/components/ui/hstack";
 import { Plus } from "lucide-react-native";
 import CreateProjectModal from "@/components/Home/CreateProjectModal";
 import ProjectListCard from "@/components/Home/ProjectListCard";
+import { useProjectStore } from "@/store/project";
 
 function HomePage() {
-  const [projects, setProjects] = useState<Project[]>([]);
+  const { projects, fetchProjects, addProject } = useProjectStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
-  async function fetchProjects() {
-    try {
-      const response = await getAllProjects();
-      if (Array.isArray(response)) {
-        setProjects(response);
-      } else {
-        setProjects([]);
-      }
-    } catch (error) {
-      console.error(error);
-      setProjects([]);
-    }
-  }
-
   async function handleSubmit(project: ProjectCreate) {
-    try {
-      await createProject(project);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      fetchProjects();
-    }
+    await addProject(project);
+    setIsCreateModalOpen(false);
   }
 
   useEffect(() => {
