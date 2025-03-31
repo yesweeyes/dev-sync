@@ -7,8 +7,10 @@ import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { House } from "lucide-react-native";
+import { useProjectStore } from "@/store/project";
 
 function RootLayout() {
+  const { clearProject } = useProjectStore();
   const router = useRouter();
   return (
     <GluestackUIProvider>
@@ -19,7 +21,12 @@ function RootLayout() {
             <Text className="text-2xl font-bold text-typography-black">
               DevSync
             </Text>
-            <Button onPress={() => router.push(`/`)}>
+            <Button
+              onPress={() => {
+                clearProject();
+                router.push(`/`);
+              }}
+            >
               <ButtonIcon as={House} variant="outline" size="xl" />
             </Button>
           </Box>

@@ -171,7 +171,10 @@ function CreateProjectModal({
           </Box>
         </ModalBody>
         <ModalFooter>
-          <Button onPress={handleSubmit} className=" bg-blue-600">
+          <Button onPress={onClose} className=" bg-red-600 w-20">
+            <ButtonText>Cancel</ButtonText>
+          </Button>
+          <Button onPress={handleSubmit} className=" bg-blue-600 w-20">
             <ButtonText>Create</ButtonText>
           </Button>
         </ModalFooter>
