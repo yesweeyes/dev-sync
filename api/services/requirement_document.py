@@ -9,35 +9,33 @@ import os
 
 UPLOAD_FOLDER = "uploads"
 
-def save_requirement_document(db: Session, project_id: uuid.UUID, file: UploadFile):
+def save_requirement_document(db: Session, project_id: uuid.UUID, files: List[UploadFile]):
     # Ensure uploads folder exists
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+    saved_docs = []
     # Generate a unique filename
-    unique_filename = f"{uuid.uuid4()}_{file.filename}"
-    file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+    for file_instance in files:
+        unique_filename = f"{uuid.uuid4()}_{file_instance.filename}"
+        file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
 
-    # Read and save the file
-    with open(file_path, "wb") as buffer:
-        buffer.write(file.file.read())
+        # Read and save the file
+        with open(file_path, "wb") as buffer:
+            buffer.write(file_instance.file.read())
 
-    # Check if project already has a document
-    existing_doc = db.query(RequirementDocument).filter(RequirementDocument.project_id == project_id).first()
-    if existing_doc:
-        raise ValueError(f"Project {project_id} already has a requirement document.")
+        # Save document details in DB
+        new_doc = RequirementDocument(
+            project_id=project_id,
+            original_name=file_instance.filename,
+            stored_name=unique_filename,
+            file_path=file_path
+        )
+        db.add(new_doc)
+        db.commit()
+        db.refresh(new_doc)
+        saved_docs.append(new_doc)
 
-    # Save document details in DB
-    new_doc = RequirementDocument(
-        project_id=project_id,
-        original_name=file.filename,
-        stored_name=unique_filename,
-        file_path=file_path
-    )
-    db.add(new_doc)
-    db.commit()
-    db.refresh(new_doc)
-
-    return new_doc
+    return saved_docs
 
 def get_requirement_document_by_id(db: Session, doc_id: uuid.UUID) -> RequirementDocument:
     doc = db.query(RequirementDocument).filter(RequirementDocument.id == doc_id).first()
@@ -46,7 +44,7 @@ def get_requirement_document_by_id(db: Session, doc_id: uuid.UUID) -> Requiremen
     return doc
 
 def get_all_requirement_documents_for_project(db: Session, project_id: uuid.UUID) -> List[RequirementDocument]:
-    return db.query(RequirementDocument).filter(RequirementDocument.project_id == project_id).first()
+    return db.query(RequirementDocument).filter(RequirementDocument.project_id == project_id).all()
 
 def update_requirement_document(db: Session, doc_id: uuid.UUID, doc_data: RequirementDocumentUpdate) -> RequirementDocument:
     doc = db.query(RequirementDocument).filter(RequirementDocument.id == doc_id).first()

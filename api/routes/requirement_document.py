@@ -9,6 +9,7 @@ from services.requirement_document import (
     update_requirement_document as update_doc_service,
     delete_requirement_document as delete_doc_service
 )
+from typing import List
 
 router = APIRouter(
     prefix="/document",
@@ -16,9 +17,9 @@ router = APIRouter(
 )
 
 @router.post("/{project_id}/upload")
-def upload_document(project_id: uuid.UUID, file: UploadFile = File(...), db: Session = Depends(get_db)):
+def upload_document(project_id: uuid.UUID, files: List[UploadFile] = File(...), db: Session = Depends(get_db)):
     try:
-        return save_requirement_document_service(db, project_id, file)
+        return save_requirement_document_service(db, project_id, files)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
