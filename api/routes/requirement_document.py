@@ -16,11 +16,16 @@ router = APIRouter(
 )
 
 @router.post("/upload")
-def upload_document(project_id: uuid.UUID = Form(...), file: UploadFile = File(...), db: Session = Depends(get_db)):
+async def upload_document(
+    project_id: uuid.UUID = Form(...), 
+    file: UploadFile = File(...), 
+    db: Session = Depends(get_db),
+):
     try:
         return save_requirement_document_service(db, project_id, file)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 
 @router.get("/{doc_id}")

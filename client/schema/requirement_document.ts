@@ -6,9 +6,8 @@ export interface RequirementDocument {
     file_path: string;
 }
 
-export interface RequirementDocumentCreate {
+export interface RequirementDocumentUpload {
     project_id: string;
-    original_name: string;
-    stored_name: string;
-    file_path: string;
-}
+    file: any
+  }
+  

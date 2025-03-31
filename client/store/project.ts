@@ -1,6 +1,7 @@
 import { Project, ProjectCreate, ProjectUpdate } from "@/schema/project";
-import { RequirementDocument} from "@/schema/requirement_document";
+import { RequirementDocument, RequirementDocumentUpload} from "@/schema/requirement_document";
 import { getAllProjects, getProject, createProject, updateProject, deleteProject, getProjectDocuments } from "@/api/project";
+import {createProjectDocument} from "@/api/document";
 import { create } from "zustand";
 
 interface ProjectStore {
@@ -14,8 +15,10 @@ interface ProjectStore {
   addProject: (data: ProjectCreate) => Promise<void>;
   updateProject: (projectId: string, data: ProjectUpdate) => Promise<void>;
   deleteProject: (projectId: string) => Promise<void>;
-  fetchProjectDocuments: (projectId: string) => Promise<void>;
   clearProject: () => void;
+  fetchProjectDocuments: (projectId: string) => Promise<void>;
+  addDocument: (data: RequirementDocumentUpload) => Promise<void>;
+  deleteDocument: (documentId: string) => Promise<void>;
 }
 
 export const useProjectStore = create<ProjectStore>((set) => ({
@@ -76,6 +79,8 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       set({ error: error.message, loading: false });
     }
   },
+  
+  clearProject: () => set({ project: null, documents: []}),
 
   fetchProjectDocuments: async (projectId) => {
     set({ loading: true, error: null });
@@ -87,5 +92,31 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     }
   },
 
-  clearProject: () => set({ project: null, documents: []}),
+  addDocument: async (data) => {
+    set({ loading: true, error: null });
+    try {
+      const formData = new FormData();
+      formData.append("project_id", data.project_id.toString());
+      formData.append("file", data.file);
+  
+      await createProjectDocument(formData);
+      await useProjectStore.getState().fetchProjectDocuments(data.project_id);
+      set({ loading: false }); // Reset loading state after success
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  
+  
+
+  deleteDocument: async (documentId) => {
+    set({ loading: true, error: null });
+    try {
+      // await deleteProjectDocument(documentId);
+      await useProjectStore.getState().fetchProjectDocuments(documentId);
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  }
+
 }));

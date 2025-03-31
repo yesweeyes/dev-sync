@@ -1,21 +1,54 @@
 import { Box } from "@/components/ui/box";
 import React, { useEffect } from "react";
 import { useProjectStore } from "@/store/project";
-import { useLocalSearchParams, useRouter } from "expo-router";
+import { useLocalSearchParams } from "expo-router";
 import ProjectDocumentListView from "@/components/Project/ProjectDocumentListCard";
+import { Fab, FabLabel, FabIcon } from "@/components/ui/fab";
+import { AddIcon } from "@/components/ui/icon";
+import * as DocumentPicker from "expo-document-picker";
+import { Alert } from "react-native";
 
 function ProjectDocumentPage() {
-  const { documents, fetchProjectDocuments } = useProjectStore();
-  // const router = useRouter();
+  const { fetchProjectDocuments, addDocument, project } = useProjectStore();
   const { project_id } = useLocalSearchParams();
 
   useEffect(() => {
     fetchProjectDocuments(project_id as string);
-  }, []);
+  }, [project_id]);
+
+  const handleDocumentSelect = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: "*/*", // Accept all file types
+        copyToCacheDirectory: true,
+        multiple: false,
+      });
+
+      if (result.canceled) return;
+
+      const file = result.assets[0];
+
+      console.log("Proj id: ", project?.id);
+      console.log("Selected file: ", file);
+
+      await addDocument({
+        project_id: project?.id as string,
+        file: file.uri,
+      });
+
+      Alert.alert("Success", "Document uploaded successfully!");
+    } catch (error) {
+      Alert.alert("Error", "Failed to select a document.");
+    }
+  };
 
   return (
-    <Box className="p-2">
+    <Box className="p-2 h-full w-full">
       <ProjectDocumentListView />
+      <Fab size="md" placement="bottom right" onPress={handleDocumentSelect}>
+        <FabIcon as={AddIcon} />
+        <FabLabel>Add Document</FabLabel>
+      </Fab>
     </Box>
   );
 }

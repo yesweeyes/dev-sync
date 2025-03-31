@@ -1,4 +1,4 @@
-import api from "./api";
+import {api, api_form_data}  from "./api";
 import { Project, ProjectCreate, ProjectUpdate } from "../schema/project";
 
 const PROJECT_BASE_URL = "/project";
@@ -20,7 +20,7 @@ export const getProject = async(project_id: string): Promise<Project>  => {
 }
 
 export const updateProject = async(project_id: string, data: ProjectUpdate): Promise<Project> => {
-    const response = await api.put(`${PROJECT_BASE_URL}/${project_id}`, data);
+  const response = await api.put(`${PROJECT_BASE_URL}/${project_id}`, data);
   return response.data
 }
 
