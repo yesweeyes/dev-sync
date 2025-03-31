@@ -11,9 +11,6 @@ import { useProjectStore } from "@/store/project";
 
 function ProjectDocumentListView() {
   const { documents } = useProjectStore();
-
-  console.log("HEREEEEEEEEEEE", documents);
-
   return (
     <ScrollView className="flex-1">
       <FlatList

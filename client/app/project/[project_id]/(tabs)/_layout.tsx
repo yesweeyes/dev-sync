@@ -21,9 +21,9 @@ function ProjectPageLayout() {
         {/* Left Section: Project Card */}
         <VStack
           space="md"
-          className="flex-1 max-w-sm items-center justify-center bg-gray-100 p-5 rounded-xl"
+          className="flex-1 max-w-sm items-center justify-center bg-gray-100 p-5 rounded-xl h-full"
         >
-          {/* <ProjectDetailCard /> */}
+          <ProjectDetailCard />
         </VStack>
         <VStack className="flex-1 h-full pl-2 rounded-xl">
           <Tabs
