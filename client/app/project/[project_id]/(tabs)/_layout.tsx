@@ -3,7 +3,7 @@ import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import ProjectDetailCard from "@/components/Project/ProjectDetailCard";
-import { Tabs, useLocalSearchParams, useRouter } from "expo-router";
+import { Tabs, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useProjectStore } from "@/store/project";
 

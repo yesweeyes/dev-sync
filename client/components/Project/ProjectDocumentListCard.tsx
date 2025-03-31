@@ -8,6 +8,7 @@ import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { useProjectStore } from "@/store/project";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 function ProjectDocumentListView() {
   const { documents } = useProjectStore();
@@ -19,6 +20,7 @@ function ProjectDocumentListView() {
         renderItem={({ item }: { item: RequirementDocument }) => (
           <Card className="p-2 m-2 rounded-xl bg-white">
             <HStack className="justify-between items-center" space="lg">
+              <MaterialIcons name="file-present" size={24} color="black" />
               <Text className="text-base font-roboto text-typography-black flex-1">
                 {item.original_name}
               </Text>

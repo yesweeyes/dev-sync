@@ -12,9 +12,10 @@ interface ProjectStore {
   fetchProjects: () => Promise<void>;
   fetchProject: (projectId: string) => Promise<void>;
   addProject: (data: ProjectCreate) => Promise<void>;
-  editProject: (projectId: string, data: ProjectUpdate) => Promise<void>;
-  removeProject: (projectId: string) => Promise<void>;
+  updateProject: (projectId: string, data: ProjectUpdate) => Promise<void>;
+  deleteProject: (projectId: string) => Promise<void>;
   fetchProjectDocuments: (projectId: string) => Promise<void>;
+  clearProject: () => void;
 }
 
 export const useProjectStore = create<ProjectStore>((set) => ({
@@ -56,7 +57,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     }
   },
 
-  editProject: async (projectId, data) => {
+  updateProject: async (projectId, data) => {
     set({ loading: true, error: null });
     try {
       await updateProject(projectId, data);
@@ -66,7 +67,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     }
   },
 
-  removeProject: async (projectId) => {
+  deleteProject: async (projectId) => {
     set({ loading: true, error: null });
     try {
       await deleteProject(projectId);
@@ -84,5 +85,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
-  }
+  },
+
+  clearProject: () => set({ project: null, documents: []}),
 }));
