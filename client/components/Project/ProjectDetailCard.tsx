@@ -20,7 +20,6 @@ const ProjectCard = () => {
   function handleProjectEdit(projectUpdateData: ProjectUpdate) {
     if (!project) return;
     updateProject(project.id, projectUpdateData);
-    fetchProject(project.id).then(() => setEditModalOpen(false));
   }
 
   function handleProjectDelete() {
