@@ -26,13 +26,13 @@ def generate_user_story(context: str, user_prompt: str):
   system_template = "Generate user story for content given by user in format described in example: \n{example_output} "
 
   prompt_template = ChatPromptTemplate.from_messages(
-      [("system", system_template), ("user", "{context}"), ("user", enhanced_user_prompt)]
+      [("system", system_template), ("user", "{context}"), ("user", user_prompt)]
   )
 
   prompt = prompt_template.invoke({
     "example_output": example_output,
     "context": context,
-    "enhanced_user_prompt": enhanced_user_prompt,
+    "enhanced_user_prompt": user_prompt,
     })
   
   response =model.invoke(prompt)
