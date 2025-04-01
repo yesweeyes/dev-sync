@@ -3,6 +3,8 @@ from sqlalchemy.orm import Session
 from schemas.user_story import CreateUserStory, UpdateUserStory
 from database import get_db
 import uuid
+import os
+from fastapi.responses import FileResponse
 from services.user_story import(
     create_user_story as create_user_story_service,
     get_user_story as get_user_story_service,
@@ -15,6 +17,9 @@ router = APIRouter(
     prefix = "/story",
     tags = ["story"],
 )
+
+DOWNLOAD_FOLDER = "downloads"
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True) 
 
 @router.get("/{project_id}")
 def get_all_user_stories(project_id : uuid.UUID ,db:Session = Depends(get_db)):
@@ -66,3 +71,32 @@ def generate_stories(project_id: uuid.UUID, db:Session = Depends(get_db)):
             return get_all_user_stories(project_id, db)
     except Exception as e:
         raise HTTPException(status_code = 404, detail = str(e))
+    
+@router.get("/userStories/download/{project_id}")
+def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):
+    userStories = get_all_user_stories(project_id, db)
+    if not userStories:
+        raise HTTPException(status_code=404, detail=f"No user stories found for project {project_id}")
+    try:
+        unique_filename = f"{project_id}_UserStories.txt"
+        file_path = os.path.join(DOWNLOAD_FOLDER, unique_filename)
+        with open(file_path, "w", encoding="utf-8") as file:
+            for story in userStories:
+                file.write(
+                    f"User Story:\n"
+                    f"Title: {story.title or 'N/A'}\n"
+                    f"Description: {story.description or 'N/A'}\n"
+                    f"Acceptance Criteria: {story.acceptance_criteria or 'N/A'}\n"
+                    f"Priority: {story.priority or 'N/A'}\n"
+                    f"Story Points: {story.storyPoints or 'N/A'}\n"
+                    f"Labels: {story.labels or 'N/A'}\n"
+                    f"{'-'*40}\n\n" 
+                )
+        return FileResponse(
+            path=file_path,
+            media_type="application/octet-stream",
+            filename=unique_filename,
+            headers={"Content-Disposition": f"attachment; filename={unique_filename}"}
+        )
+    except Exception as e:
+        raise HTTPException(400, detail=f"Error fetching user stories: {str(e)}")
