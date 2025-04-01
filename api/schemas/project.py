@@ -1,15 +1,22 @@
 from pydantic import BaseModel, UUID4, EmailStr
 from typing import Optional
+from datetime import datetime
 
-class ProjectBase(BaseModel):
+class ProjectCreate(BaseModel):
     name: str
     jira_project_key: str
     jira_project_auth: str
     jira_project_endpoint: str
     jira_project_email: EmailStr
 
-class ProjectCreate(ProjectBase):
-    id: Optional[UUID4] = None  
+class ProjectBase(BaseModel):
+    id: UUID4
+    name: str
+    jira_project_key: str
+    jira_project_auth: str
+    jira_project_endpoint: str
+    jira_project_email: EmailStr
+    created_at: datetime
 
 class ProjectUpdate(BaseModel):
     name: Optional[str] = None
