@@ -20,13 +20,7 @@ def save_requirement_document(db: Session, project_id: uuid.UUID, file: UploadFi
     # Read and save the file
     with open(file_path, "wb") as buffer:
         buffer.write(file.file.read())
-
-    # Check if project already has a document
-    # existing_doc = db.query(RequirementDocument).filter(RequirementDocument.project_id == project_id).first()
-    # if existing_doc:
-    #     raise ValueError(f"Project {project_id} already has a requirement document.")
-
-    # Save document details in DB
+        
     new_doc = RequirementDocument(
         project_id=project_id,
         original_name=file.filename,

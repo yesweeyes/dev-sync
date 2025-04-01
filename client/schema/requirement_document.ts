@@ -8,6 +8,6 @@ export interface RequirementDocument {
 
 export interface RequirementDocumentUpload {
     project_id: string;
-    file: any
+    file: any;
   }
   
