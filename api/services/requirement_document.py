@@ -13,7 +13,6 @@ def save_requirement_document(db: Session, project_id: uuid.UUID, file: UploadFi
     # Ensure uploads folder exists
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-    # Generate a unique filename
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
     file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
 

@@ -11,4 +11,3 @@ class RequirementDocument(Base):
     original_name = Column(String, nullable=False)
     stored_name = Column(String, nullable=False)  
     file_path = Column(String, nullable=False)
-
