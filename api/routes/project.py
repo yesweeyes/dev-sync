@@ -13,6 +13,9 @@ from services.project import (
 from services.requirement_document import (
     get_all_requirement_documents_for_project as get_project_documents_service
 )
+from services.user_story import(
+    get_all_user_stories as get_all_user_stories_service,
+)
 
 router = APIRouter(
     prefix="/project",
@@ -57,4 +60,12 @@ def get_documents(project_id: uuid.UUID, db: Session = Depends(get_db)):
         return documents
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
+    
+@router.get("/{project_id}/user_stories")
+def get_user_stories(project_id : uuid.UUID, db:Session = Depends(get_db)):
+    try:
+        return get_all_user_stories_service(db, project_id)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail = str(e))
+    
         

@@ -12,30 +12,24 @@ from services.user_story import(
     update_user_story as update_user_story_service,
     delete_user_story as delete_user_story_service,
 )
-import UserStories.generate_user_stories as story
+import utils.user_story.generate_user_stories as user_story_gen_util
 router = APIRouter(
-    prefix = "/story",
-    tags = ["story"],
+    prefix = "/user_story",
+    tags = ["user_story"],
 )
 
 DOWNLOAD_FOLDER = "downloads"
-os.makedirs(DOWNLOAD_FOLDER, exist_ok=True) 
+os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
-@router.get("/{project_id}")
-def get_all_user_stories(project_id : uuid.UUID ,db:Session = Depends(get_db)):
+
+@router.post("/")
+def create_user_story(user_story: CreateUserStory, project_id: uuid.UUID, db:Session = Depends(get_db)):
     try:
-        return get_all_user_stories_service(db, project_id)
-    except Exception as e:
-        raise HTTPException(status_code = 404, detail = str(e))
-    
-@router.post("/{project_id}/post")
-def create_user_story(story : CreateUserStory, db:Session = Depends(get_db)):
-    try:
-        return create_user_story_service(db, story)
+        return create_user_story_service(db, user_story)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     
-@router.get("/story/{story_id}")
+@router.get("/{story_id}")
 def get_user_story(story_id : uuid.UUID ,db:Session = Depends(get_db)):
     try:
         return get_user_story_service(db, story_id)
@@ -56,47 +50,56 @@ def delete_user_story(story_id:uuid.UUID, db:Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code = 404, detail = str(e))
     
-@router.get("/userStories/{project_id}")
-def generate_stories(project_id: uuid.UUID, db:Session = Depends(get_db)):
+
+@router.get("/{project_id}/user_stories")
+def get_user_stories(project_id : uuid.UUID, db:Session = Depends(get_db)):
     try:
-        if not get_all_user_stories(project_id, db):
-            doc_list = story.get_file(project_id, db)
-            text_chunks = story.extract_text_from_pdf(doc_list)
-            stories = story.generate_user_stories(text_chunks)
-            json_data = story.extract_json_blocks(stories)
-            story.insert_user_stories(json_data, project_id)
-            userStories = get_all_user_stories(project_id, db)
-            return userStories
-        else:
-            return get_all_user_stories(project_id, db)
+        return get_all_user_stories_service(db, project_id)
     except Exception as e:
-        raise HTTPException(status_code = 404, detail = str(e))
+        raise HTTPException(status_code=404, detail = str(e))
+        
+@router.get("/generate")
+def generate_stories(project_id: uuid.UUID, user_prompt: str, db: Session = Depends(get_db)):
+    try:
+        documents = user_story_gen_util.get_files(project_id, db)
+        if not documents:
+            raise HTTPException(status_code=404, detail="No requirement documents found for the given project ID.")
+        
+        text_chunks = user_story_gen_util.extract_text_from_pdf(documents)
+        user_stories_json = user_story_gen_util.generate_user_stories(text_chunks, user_prompt)
+        user_story_gen_util.insert_user_stories(db, user_stories_json, project_id)
+        
+        return {"message": "User stories generated and stored successfully."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
     
-@router.get("/userStories/download/{project_id}")
-def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):
-    userStories = get_all_user_stories(project_id, db)
-    if not userStories:
-        raise HTTPException(status_code=404, detail=f"No user stories found for project {project_id}")
-    try:
-        unique_filename = f"{project_id}_UserStories.txt"
-        file_path = os.path.join(DOWNLOAD_FOLDER, unique_filename)
-        with open(file_path, "w", encoding="utf-8") as file:
-            for story in userStories:
-                file.write(
-                    f"User Story:\n"
-                    f"Title: {story.title or 'N/A'}\n"
-                    f"Description: {story.description or 'N/A'}\n"
-                    f"Acceptance Criteria: {story.acceptance_criteria or 'N/A'}\n"
-                    f"Priority: {story.priority or 'N/A'}\n"
-                    f"Story Points: {story.storyPoints or 'N/A'}\n"
-                    f"Labels: {story.labels or 'N/A'}\n"
-                    f"{'-'*40}\n\n" 
-                )
-        return FileResponse(
-            path=file_path,
-            media_type="application/octet-stream",
-            filename=unique_filename,
-            headers={"Content-Disposition": f"attachment; filename={unique_filename}"}
-        )
-    except Exception as e:
-        raise HTTPException(400, detail=f"Error fetching user stories: {str(e)}")
+
+# TODO: Move the logic to project router and fine tune the code  
+# @router.get("/userStories/download/{project_id}")
+# def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):
+#     userStories = get_all_user_stories(project_id, db)
+#     if not userStories:
+#         raise HTTPException(status_code=404, detail=f"No user stories found for project {project_id}")
+#     try:
+#         unique_filename = f"{project_id}_UserStories.txt"
+#         file_path = os.path.join(DOWNLOAD_FOLDER, unique_filename)
+#         with open(file_path, "w", encoding="utf-8") as file:
+#             for story in userStories:
+#                 file.write(
+#                     f"User Story:\n"
+#                     f"Title: {story.title or 'N/A'}\n"
+#                     f"Description: {story.description or 'N/A'}\n"
+#                     f"Acceptance Criteria: {story.acceptance_criteria or 'N/A'}\n"
+#                     f"Priority: {story.priority or 'N/A'}\n"
+#                     f"Story Points: {story.storyPoints or 'N/A'}\n"
+#                     f"Labels: {story.labels or 'N/A'}\n"
+#                     f"{'-'*40}\n\n" 
+#                 )
+#         return FileResponse(
+#             path=file_path,
+#             media_type="application/octet-stream",
+#             filename=unique_filename,
+#             headers={"Content-Disposition": f"attachment; filename={unique_filename}"}
+#         )
+#     except Exception as e:
+#         raise HTTPException(400, detail=f"Error fetching user stories: {str(e)}")

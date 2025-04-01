@@ -15,6 +15,7 @@ project_id = uuid.UUID("7b1d790a-1daf-41ac-95fd-f453fac87348")
 def get_auth_details(project_id: uuid.UUID, db: Session):
     auth_details = get_project(db, project_id)
     return auth_details
+
 auth_details = get_auth_details(project_id, db)
 
 JIRA_API_TOKEN = auth_details.jira_project_auth
