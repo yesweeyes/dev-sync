@@ -28,12 +28,9 @@ function ProjectDocumentPage() {
 
       const file = result.assets[0];
 
-      console.log("Proj id: ", project?.id);
-      console.log("Selected file: ", file);
-
       await addDocument({
         project_id: project?.id as string,
-        file: file.uri,
+        file: file,
       });
 
       Alert.alert("Success", "Document uploaded successfully!");
