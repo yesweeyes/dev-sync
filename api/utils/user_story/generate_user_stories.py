@@ -7,7 +7,7 @@ import fitz
 from dotenv import load_dotenv
 from database import get_db
 from models import user_story
-from utils.user_story.user_story_structure import generate_user_story
+from utils.user_story.user_story_structure import generate_user_story_helper
 from services.requirement_document import get_all_requirement_documents_for_project
 from services.user_story import create_user_story
 import os
@@ -54,36 +54,8 @@ def extract_text_from_pdf(doc_list):
 
 def generate_user_stories(text_chunks, user_prompt):
     try:
-        if not text_chunks:
-            return []
-        
-        system_template = """
-        You are an AI specialized in generating user stories. Maintain context across multiple inputs.
-        At the end, return an array of user stories in JSON format, following this structure:
-        {example_output}
-        """
-
-        example_output = """
-        [{
-            "summary": "User Registration",
-            "description": "As a new user, I want to register an account so that I can access the platform.",
-            "Acceptance Criteria": "The user should be able to enter their details (name, email, password).",
-            "issueType": "Story",
-            "labels": ["authentication", "user-management"],
-            "storyPoints": 3,
-            "Priority": "High"
-        }]
-        """
-
-        messages = [SystemMessage(content=system_template.format(example_output=example_output))]
-        
-        for chunk in text_chunks:
-            messages.append(HumanMessage(content=chunk))
-        
-        messages.append(HumanMessage(content=user_prompt))
-        
-        response = model.invoke(messages)
-        return json.loads(response.content)
+        response = generate_user_story_helper(text_chunks, user_prompt)
+        return json.loads(response)
     except Exception as e:
         raise Exception(f"Failed to generate user stories: {str(e)}")
 

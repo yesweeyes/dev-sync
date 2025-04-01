@@ -20,10 +20,10 @@ class UserStoryBase(BaseModel):
     class Config:
         from_attributes = True 
 
-class CreateUserStory(UserStoryBase):
+class UserStoryCreate(UserStoryBase):
     pass
 
-class UpdateUserStory(UserStoryBase):
+class UserStoryUpdate(UserStoryBase):
     title: Optional[str]
     description: Optional[str]
     acceptance_criteria: Optional[List[str]]
@@ -34,4 +34,8 @@ class UpdateUserStory(UserStoryBase):
 
     class Config:
         from_attributes = True 
+
+class UserStoryGenerate(BaseModel):
+    project_id: UUID4
+    user_prompt: str
 

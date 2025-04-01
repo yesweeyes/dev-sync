@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
-from schemas.user_story import CreateUserStory, UpdateUserStory
+from schemas.user_story import UserStoryCreate, UserStoryUpdate, UserStoryGenerate
 from database import get_db
 import uuid
 import os
@@ -13,6 +13,7 @@ from services.user_story import(
     delete_user_story as delete_user_story_service,
 )
 import utils.user_story.generate_user_stories as user_story_gen_util
+
 router = APIRouter(
     prefix = "/user_story",
     tags = ["user_story"],
@@ -23,7 +24,7 @@ os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 
 @router.post("/")
-def create_user_story(user_story: CreateUserStory, project_id: uuid.UUID, db:Session = Depends(get_db)):
+def create_user_story(user_story: UserStoryCreate, project_id: uuid.UUID, db:Session = Depends(get_db)):
     try:
         return create_user_story_service(db, user_story)
     except ValueError as e:
@@ -37,7 +38,7 @@ def get_user_story(story_id : uuid.UUID ,db:Session = Depends(get_db)):
         raise HTTPException(status_code = 404, detail = str(e))
     
 @router.put("/{story_id}")
-def update_user_story(story_id: uuid.UUID, story:UpdateUserStory, db: Session = Depends(get_db)):
+def update_user_story(story_id: uuid.UUID, story:UserStoryUpdate, db: Session = Depends(get_db)):
     try:
         return update_user_story_service(db, story_id, story)
     except Exception as e:
@@ -58,8 +59,11 @@ def get_user_stories(project_id : uuid.UUID, db:Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=404, detail = str(e))
         
-@router.get("/generate")
-def generate_stories(project_id: uuid.UUID, user_prompt: str, db: Session = Depends(get_db)):
+@router.post("/generate")
+def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db)):
+    project_id = data.project_id
+    user_prompt = data.user_prompt
+
     try:
         documents = user_story_gen_util.get_files(project_id, db)
         if not documents:
