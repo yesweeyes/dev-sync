@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, String, ForeignKey, UniqueConstraint
+from sqlalchemy import TIMESTAMP, Column, String, ForeignKey, UniqueConstraint, text
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
@@ -11,3 +11,4 @@ class RequirementDocument(Base):
     original_name = Column(String, nullable=False)
     stored_name = Column(String, nullable=False)  
     file_path = Column(String, nullable=False)
+    created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))

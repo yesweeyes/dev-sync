@@ -51,13 +51,6 @@ def delete_user_story(story_id:uuid.UUID, db:Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code = 404, detail = str(e))
     
-
-@router.get("/{project_id}/user_stories")
-def get_user_stories(project_id : uuid.UUID, db:Session = Depends(get_db)):
-    try:
-        return get_all_user_stories_service(db, project_id)
-    except Exception as e:
-        raise HTTPException(status_code=404, detail = str(e))
         
 @router.post("/generate")
 def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db)):
