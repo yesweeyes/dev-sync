@@ -8,6 +8,7 @@ class PriorityEnum(str, Enum):
     HIGH = "HIGH"
 
 class UserStoryBase(BaseModel):
+    id: UUID4
     project_id : UUID4
     title: str
     description: str
@@ -20,10 +21,20 @@ class UserStoryBase(BaseModel):
     class Config:
         from_attributes = True 
 
-class UserStoryCreate(UserStoryBase):
-    pass
+class UserStoryCreate(BaseModel):
+    project_id : UUID4
+    title: str
+    description: str
+    acceptance_criteria: str
+    priority : PriorityEnum
+    storyPoints: int = Field(..., gt=0)
+    labels : List[str]
+    issueType: str
 
-class UserStoryUpdate(UserStoryBase):
+    class Config:
+        from_attributes = True 
+
+class UserStoryUpdate(BaseModel):
     title: Optional[str]
     description: Optional[str]
     acceptance_criteria: Optional[List[str]]
