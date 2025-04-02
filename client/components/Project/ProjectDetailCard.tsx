@@ -62,7 +62,7 @@ const ProjectCard = () => {
       </View>
       <View className="flex flex-row justify-end gap-4 mt-4">
         <Button
-          className="bg-blue-500 px-4 py-2 flex flex-row items-center rounded-lg"
+          className="bg-yellow-500 px-4 py-2 flex flex-row items-center rounded-lg"
           onPress={() => {
             setEditModalOpen(true);
           }}
