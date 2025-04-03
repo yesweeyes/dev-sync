@@ -7,10 +7,10 @@ import { Text } from "@/components/ui/text";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { House } from "lucide-react-native";
-import { useStore } from "@/store/store";
+import { useAppStore } from "@/store/store";
 
 function RootLayout() {
-  const { clearProject } = useStore();
+  const { clearProject } = useAppStore();
   const router = useRouter();
   return (
     <GluestackUIProvider>

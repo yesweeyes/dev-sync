@@ -6,6 +6,7 @@ export interface UserStory {
     description: string;
     acceptance_criteria: string;
     storyPoints: number;
+    priority: string;
     labels: string[];
     issueType: string;
     created_at: Date
@@ -17,6 +18,7 @@ export interface UserStoryCreate {
     description: string;
     acceptance_criteria: string;
     storyPoints: number;
+    priority: string;
     labels: string[];
     issueType: string;
 }
@@ -27,6 +29,7 @@ export interface UserStoryUpdate {
     acceptance_criteria?: string;
     storyPoints?: number;
     labels?: string[];
+    priority?: string;
     issueType?: string;
 }
 

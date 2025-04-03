@@ -12,13 +12,13 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import { Fab, FabLabel, FabIcon } from "@/components/ui/fab";
 import { Sparkles } from "lucide-react-native";
-import { useStore } from "@/store/store";
+import { useAppStore } from "@/store/store";
 import { Box } from "@/components/ui/box";
 
 function ProjectGenerateUserStoryPromptModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const { project_id, generateUserStories } = useStore();
+  const { project_id, generateUserStories } = useAppStore();
 
   const handleGenerate = async () => {
     if (!prompt.trim() || !project_id) return;
@@ -34,7 +34,7 @@ function ProjectGenerateUserStoryPromptModal() {
 
   return (
     <Box>
-      <Fab size="md" placement="bottom right" onPress={() => setIsOpen(true)}>
+      <Fab size="md" placement="bottom left" onPress={() => setIsOpen(true)}>
         <FabIcon as={Sparkles} />
         <FabLabel>Generate User Story</FabLabel>
       </Fab>

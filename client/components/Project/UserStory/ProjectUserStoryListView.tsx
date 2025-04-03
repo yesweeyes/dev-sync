@@ -11,7 +11,7 @@ import { Card } from "@/components/ui/card";
 import { Button, ButtonIcon } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
-import { useStore } from "@/store/store";
+import { useAppStore } from "@/store/store";
 import { deleteUserStory, pushUserStoryToJIRA } from "@/api/user_story";
 import { UserStory, UserStoryUpdate } from "@/schema/user_story";
 import { Box } from "@/components/ui/box";
@@ -19,7 +19,7 @@ import EditUserStoryModal from "./EditUserStoryModal";
 
 function UserStoryListView() {
   const { user_stories, fetchUserStories, project_id, updateUserStory } =
-    useStore();
+    useAppStore();
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedStory, setSelectedStory] = useState<UserStory>();
@@ -55,12 +55,14 @@ function UserStoryListView() {
 
   return (
     <Box className="h-full w-full">
-      <EditUserStoryModal
-        isOpen={isEditModalOpen}
-        onClose={() => setEditModalOpen(false)}
-        onUpdate={handleUpdate}
-        userStory={selectedStory}
-      />
+      {selectedStory && (
+        <EditUserStoryModal
+          isOpen={isEditModalOpen}
+          onClose={() => setEditModalOpen(false)}
+          onUpdate={handleUpdate}
+          userStory={selectedStory}
+        />
+      )}
 
       <FlatList
         data={user_stories}

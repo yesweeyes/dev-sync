@@ -14,7 +14,7 @@ import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Box } from "@/components/ui/box";
-import { useStore } from "@/store/store";
+import { useAppStore } from "@/store/store";
 import { UserStory, UserStoryUpdate } from "@/schema/user_story";
 
 interface EditUserStoryModalProps {
@@ -42,7 +42,13 @@ function EditUserStoryModal({
 
   useEffect(() => {
     if (userStory) {
-      setFormData(userStory);
+      setFormData({
+        title: userStory.title ?? "",
+        description: userStory.description ?? "",
+        acceptance_criteria: userStory.acceptance_criteria ?? "",
+        storyPoints: userStory.storyPoints ?? 0,
+        issueType: userStory.issueType ?? "",
+      });
     }
   }, [userStory]);
 

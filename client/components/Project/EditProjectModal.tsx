@@ -15,7 +15,7 @@ import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Box } from "@/components/ui/box";
 import { ProjectUpdate } from "@/schema/project";
-import { useStore } from "@/store/store";
+import { useAppStore } from "@/store/store";
 
 interface EditProjectModalProps {
   isOpen: boolean;
@@ -28,7 +28,7 @@ function EditProjectModal({
   onClose,
   onUpdate,
 }: EditProjectModalProps) {
-  const { project } = useStore();
+  const { project } = useAppStore();
   const [formData, setFormData] = useState<ProjectUpdate>({
     name: project?.name ? project.name : "",
     jira_project_key: project?.jira_project_key ? project.jira_project_key : "",

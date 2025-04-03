@@ -23,7 +23,7 @@ import {
   createUserStory
 } from "@/api/user_story";
 
-interface StoreInterface {
+interface AppStoreInterface {
   loading: boolean;
   error: string | null;
   
@@ -53,7 +53,7 @@ interface StoreInterface {
   deleteUserStory: (userStoryId: string) => Promise<void>;
 }
 
-export const useStore = create<StoreInterface>((set) => ({
+export const useAppStore = create<AppStoreInterface>((set) => ({
   loading: false,
   error: null,
 
@@ -87,7 +87,7 @@ export const useStore = create<StoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await createProject(data);
-      await useStore.getState().fetchProjects();
+      await useAppStore.getState().fetchProjects();
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -97,7 +97,7 @@ export const useStore = create<StoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await updateProject(projectId, data);
-      await useStore.getState().fetchProject(projectId);
+      await useAppStore.getState().fetchProject(projectId);
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -107,7 +107,7 @@ export const useStore = create<StoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await deleteProject(projectId);
-      await useStore.getState().fetchProjects();
+      await useAppStore.getState().fetchProjects();
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -134,7 +134,7 @@ export const useStore = create<StoreInterface>((set) => ({
       formData.append("file", data.file);
   
       await createProjectDocument(formData);
-      await useStore.getState().fetchProjectDocuments(data.project_id);
+      await useAppStore.getState().fetchProjectDocuments(data.project_id);
       set({ loading: false }); 
     } catch (error: any) {
       set({ error: error.message, loading: false });
@@ -148,7 +148,7 @@ export const useStore = create<StoreInterface>((set) => ({
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
-      await useStore.getState().fetchProjectDocuments(documentId);
+      await useAppStore.getState().fetchProjectDocuments(documentId);
       set({ loading: false });
     }
   },
@@ -168,7 +168,7 @@ export const useStore = create<StoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await generateUserStory(data);
-      await useStore.getState().fetchUserStories(data.project_id);
+      await useAppStore.getState().fetchUserStories(data.project_id);
       set({ loading: false }); 
     } catch (error: any) {
       set({ error: error.message, loading: false });
@@ -179,8 +179,8 @@ export const useStore = create<StoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await createUserStory(data);
-      if (useStore.getState().project_id) {
-        await useStore.getState().fetchUserStories(useStore.getState().project_id!);
+      if (useAppStore.getState().project_id) {
+        await useAppStore.getState().fetchUserStories(useAppStore.getState().project_id!);
       }
       set({ loading: false });
     } catch (error: any) {
@@ -193,8 +193,8 @@ export const useStore = create<StoreInterface>((set) => ({
     try {
       console.log(userStoryId, data)
       await updateUserStory(userStoryId, data);
-      if (useStore.getState().project_id) {
-        await useStore.getState().fetchUserStories(useStore.getState().project_id!);
+      if (useAppStore.getState().project_id) {
+        await useAppStore.getState().fetchUserStories(useAppStore.getState().project_id!);
       }
       set({ loading: false });
     } catch (error: any) {
@@ -206,8 +206,8 @@ export const useStore = create<StoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await deleteUserStory(userStoryId);
-      if (useStore.getState().project_id) {
-        await useStore.getState().fetchUserStories(useStore.getState().project_id!);
+      if (useAppStore.getState().project_id) {
+        await useAppStore.getState().fetchUserStories(useAppStore.getState().project_id!);
       }
       set({ loading: false });
     } catch (error: any) {
