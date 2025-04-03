@@ -15,12 +15,13 @@ import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Box } from "@/components/ui/box";
 import { useStore } from "@/store/store";
+import { UserStory, UserStoryUpdate } from "@/schema/user_story";
 
 interface EditUserStoryModalProps {
   isOpen: boolean;
   onClose: () => void;
   onUpdate: (userStory: any) => void;
-  userStory: any;
+  userStory: UserStory;
 }
 
 function EditUserStoryModal({
@@ -29,12 +30,14 @@ function EditUserStoryModal({
   onUpdate,
   userStory,
 }: EditUserStoryModalProps) {
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    acceptance_criteria: "",
-    storyPoints: "",
-    issueType: "",
+  const [formData, setFormData] = useState<UserStoryUpdate>({
+    title: userStory.title ? userStory.title : "",
+    description: userStory.description ? userStory.description : "",
+    acceptance_criteria: userStory.acceptance_criteria
+      ? userStory.acceptance_criteria
+      : "",
+    storyPoints: userStory.storyPoints ? userStory.storyPoints : 0,
+    issueType: userStory.issueType ? userStory.issueType : "",
   });
 
   useEffect(() => {
@@ -43,7 +46,7 @@ function EditUserStoryModal({
     }
   }, [userStory]);
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: keyof UserStoryUpdate, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -97,7 +100,7 @@ function EditUserStoryModal({
               <Input variant="underlined" size="md">
                 <InputField
                   placeholder="Story Points"
-                  value={formData.storyPoints}
+                  value={String(formData.storyPoints ?? 0)}
                   onChangeText={(text) => handleChange("storyPoints", text)}
                 />
               </Input>

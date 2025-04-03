@@ -191,6 +191,7 @@ export const useStore = create<StoreInterface>((set) => ({
   updateUserStory: async (userStoryId, data) => {
     set({ loading: true, error: null });
     try {
+      console.log(userStoryId, data)
       await updateUserStory(userStoryId, data);
       if (useStore.getState().project_id) {
         await useStore.getState().fetchUserStories(useStore.getState().project_id!);

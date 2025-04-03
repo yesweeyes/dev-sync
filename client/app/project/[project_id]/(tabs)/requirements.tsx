@@ -38,11 +38,11 @@ function ProjectDocumentPage() {
       // });
       const formData = new FormData();
       formData.append("project_id", project.id);
-      formData.append("file", {
-        uri: file.uri,
-        name: file.name,
-        type: file.mimeType || "application/pdf",
-      });
+      // formData.append("file", {
+      //   uri: file.uri,
+      //   name: file.name,
+      //   type: file.mimeType || "application/pdf",
+      // });
 
       const response = await api_form_data.post("/document/upload", formData, {
         headers: {

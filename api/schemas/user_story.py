@@ -1,5 +1,5 @@
 from pydantic import BaseModel, UUID4, Field
-from typing import List, Optional
+from typing import List, Optional, Union
 from enum import Enum
 
 class PriorityEnum(str, Enum):
@@ -37,7 +37,7 @@ class UserStoryCreate(BaseModel):
 class UserStoryUpdate(BaseModel):
     title: Optional[str]
     description: Optional[str]
-    acceptance_criteria: Optional[List[str]]
+    acceptance_criteria: Optional[Union[str, List[str]]]
     priority : Optional[PriorityEnum]
     storyPoints: Optional[int] = Field(None, gt=0)
     labels : Optional[List[str]]
