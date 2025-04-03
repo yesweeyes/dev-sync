@@ -12,6 +12,8 @@ interface ProjectStore {
   
   projects: Project[];
   fetchProjects: () => Promise<void>;
+
+  project_id: string | null;
   
   project: Project | null;
   fetchProject: (projectId: string) => Promise<void>;
@@ -45,15 +47,18 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     }
   },
 
+  project_id: null, 
+
   project: null,
   fetchProject: async (projectId) => {
     set({ loading: true, error: null });
     try {
       const project = await getProject(projectId);
+      const project_id = project.id
       const documents = await getProjectDocuments(projectId);
       const user_stories = await getProjectUserStories(projectId);
-      set({ project, loading: false });
-      set({ project, documents, user_stories, loading: false });
+      console.log(user_stories)
+      set({ project, project_id, documents, user_stories, loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }

@@ -12,14 +12,22 @@ import { Button, ButtonIcon } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { useProjectStore } from "@/store/project";
+import { deleteUserStory } from "@/api/user_story";
 
 function UserStoryListView() {
-  const { user_stories } = useProjectStore();
+  const { user_stories, fetchUserStories, project_id } = useProjectStore();
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
 
   const toggleExpand = (id: string) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
   };
+
+  async function handleDelete(user_story_id: string) {
+    if (user_story_id && project_id) {
+      await deleteUserStory(user_story_id);
+      fetchUserStories(project_id);
+    }
+  }
 
   return (
     <FlatList
@@ -48,7 +56,10 @@ function UserStoryListView() {
                 <Button className="bg-yellow-500 rounded-full w-14 h-14 items-center justify-center">
                   <ButtonIcon as={Edit} size="lg" />
                 </Button>
-                <Button className="bg-red-600 rounded-full w-14 h-14 items-center justify-center">
+                <Button
+                  className="bg-red-600 rounded-full w-14 h-14 items-center justify-center"
+                  onPress={() => handleDelete(item.id)}
+                >
                   <ButtonIcon as={Trash2} size="lg" />
                 </Button>
               </HStack>

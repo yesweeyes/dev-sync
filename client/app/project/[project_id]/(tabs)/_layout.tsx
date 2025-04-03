@@ -9,7 +9,7 @@ import { useProjectStore } from "@/store/project";
 
 function ProjectPageLayout() {
   const { project_id } = useLocalSearchParams();
-  const { fetchProject } = useProjectStore();
+  const { fetchProject, documents, user_stories } = useProjectStore();
 
   useEffect(() => {
     fetchProject(project_id as string);
@@ -39,7 +39,7 @@ function ProjectPageLayout() {
             <Tabs.Screen
               name="requirements"
               options={{
-                title: "Requirements",
+                title: `Requirements (${documents.length})`,
                 tabBarIcon: ({ color }) => (
                   <MaterialIcons
                     name="document-scanner"
@@ -52,7 +52,7 @@ function ProjectPageLayout() {
             <Tabs.Screen
               name="user_story"
               options={{
-                title: "User Story",
+                title: `User Story (${user_stories.length})`,
                 tabBarIcon: ({ color }) => (
                   <MaterialIcons name="person" size={24} color={color} />
                 ),

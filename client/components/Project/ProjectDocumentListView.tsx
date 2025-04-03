@@ -11,7 +11,12 @@ import { useProjectStore } from "@/store/project";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 function ProjectDocumentListView() {
-  const { documents } = useProjectStore();
+  const { documents, deleteDocument } = useProjectStore();
+
+  function handleDocumentDelete(documentId: string) {
+    deleteDocument(documentId);
+  }
+
   return (
     <ScrollView className="flex-1">
       <FlatList
@@ -31,7 +36,10 @@ function ProjectDocumentListView() {
                 >
                   <ButtonIcon as={Download} size="lg" />
                 </Button>
-                <Button className="w-14 h-14 bg-red-600 rounded-full items-center justify-center">
+                <Button
+                  className="w-14 h-14 bg-red-600 rounded-full items-center justify-center"
+                  onPress={() => handleDocumentDelete(item.id)}
+                >
                   <ButtonIcon as={Trash2} size="lg" />
                 </Button>
               </HStack>
