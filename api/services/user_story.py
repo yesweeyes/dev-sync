@@ -6,6 +6,14 @@ import uuid
 from typing import List
 
 def create_user_story(db:Session, user_story_data: UserStoryCreate) -> UserStory:
+    new_story = UserStory(**user_story_data.model_dump())
+    db.add(new_story)
+    db.commit()
+    db.refresh(new_story)
+    return new_story
+
+# Function called by generate user stories from llm
+def generate_create_user_story(db:Session, user_story_data: UserStoryCreate) -> UserStory:
     new_story = UserStory(**user_story_data)
     db.add(new_story)
     db.commit()

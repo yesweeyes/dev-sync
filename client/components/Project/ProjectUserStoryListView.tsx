@@ -12,7 +12,7 @@ import { Button, ButtonIcon } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { useProjectStore } from "@/store/project";
-import { deleteUserStory } from "@/api/user_story";
+import { deleteUserStory, pushUserStoryToJIRA } from "@/api/user_story";
 
 function UserStoryListView() {
   const { user_stories, fetchUserStories, project_id } = useProjectStore();
@@ -26,6 +26,12 @@ function UserStoryListView() {
     if (user_story_id && project_id) {
       await deleteUserStory(user_story_id);
       fetchUserStories(project_id);
+    }
+  }
+
+  async function handlePushToJIRA(user_story_id: string) {
+    if (user_story_id) {
+      await pushUserStoryToJIRA(user_story_id);
     }
   }
 
@@ -50,7 +56,10 @@ function UserStoryListView() {
                 </HStack>
               </TouchableOpacity>
               <HStack space="sm">
-                <Button className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center">
+                <Button
+                  className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center"
+                  onPress={() => handlePushToJIRA(item.id)}
+                >
                   <ButtonIcon as={Send} size="lg" />
                 </Button>
                 <Button className="bg-yellow-500 rounded-full w-14 h-14 items-center justify-center">

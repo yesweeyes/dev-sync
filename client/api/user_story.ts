@@ -27,3 +27,8 @@ export const generateUserStory = async (data: UserStoryGenerate) => {
     const response = await api.post(`${USER_STORY_BASE_URL}/generate`, data);
     return response.data;
 }
+
+export const pushUserStoryToJIRA = async (user_story_id: string) => {
+    const response = await api.post(`${USER_STORY_BASE_URL}/${user_story_id}/push`);
+    return response.data;
+}

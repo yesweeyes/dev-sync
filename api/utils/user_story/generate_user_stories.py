@@ -9,7 +9,7 @@ from database import get_db
 from models import user_story
 from utils.user_story.user_story_structure import generate_user_story_helper
 from services.requirement_document import get_all_requirement_documents_for_project
-from services.user_story import create_user_story
+from services.user_story import generate_create_user_story
 import os
 import getpass
 from langchain_core.messages import HumanMessage, SystemMessage
@@ -73,7 +73,7 @@ def insert_user_stories(db: Session, user_stories_json, project_id: uuid.UUID):
                 "labels": user_story["labels"],
                 "issueType": user_story["issueType"]
             }
-            create_user_story(db, parsed_story)
+            generate_create_user_story(db, parsed_story)
     except Exception as e:
         raise Exception(f"Failed to insert user stories: {str(e)}")
 

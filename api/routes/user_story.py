@@ -13,6 +13,7 @@ from services.user_story import(
     delete_user_story as delete_user_story_service,
 )
 import utils.user_story.generate_user_stories as user_story_gen_util
+import utils.user_story.user_story_jira_interface as user_story_jira_interface_util
 
 router = APIRouter(
     prefix = "/user_story",
@@ -24,7 +25,7 @@ os.makedirs(DOWNLOAD_FOLDER, exist_ok=True)
 
 
 @router.post("/")
-def create_user_story(user_story: UserStoryCreate, project_id: uuid.UUID, db:Session = Depends(get_db)):
+def create_user_story(user_story: UserStoryCreate, db:Session = Depends(get_db)):
     try:
         return create_user_story_service(db, user_story)
     except ValueError as e:
@@ -45,7 +46,7 @@ def update_user_story(story_id: uuid.UUID, story:UserStoryUpdate, db: Session = 
         raise HTTPException(status_code = 404, detail = str(e))
     
 @router.delete("/{story_id}")
-def delete_user_story(story_id:uuid.UUID, db:Session = Depends(get_db)):
+def delete_user_story(story_id: uuid.UUID, db:Session = Depends(get_db)):
     try:
         return delete_user_story_service(db, story_id)
     except Exception as e:
@@ -67,6 +68,14 @@ def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db)):
         user_story_gen_util.insert_user_stories(db, user_stories_json, project_id)
         
         return {"message": "User stories generated and stored successfully."}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@router.post("/{user_story_id}/push")
+def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session =Depends(get_db)):
+    try:
+        jira_response = user_story_jira_interface_util.push_user_story_to_jira(user_story_id, db)
+        return jira_response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
