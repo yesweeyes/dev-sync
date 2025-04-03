@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Box } from "@/components/ui/box";
-import UserStoryListView from "@/components/Project/ProjectUserStoryListView";
-import ProjectGenerateUserStoryPromptModal from "@/components/Project/ProjectGenerateUserStoryPromptModal";
+import UserStoryListView from "@/components/Project/UserStory/ProjectUserStoryListView";
+import ProjectGenerateUserStoryPromptModal from "@/components/Project/UserStory/ProjectGenerateUserStoryPromptModal";
 
 function ProjectUserStoryPage() {
   return (

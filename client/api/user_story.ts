@@ -13,7 +13,7 @@ export const getUserStory = async (user_story_id: string) => {
     return response.data
 }
 
-export const updateUserStory = async (user_story_id:string, data: UserStoryUpdate) => {
+export const updateUserStory = async (user_story_id: string, data: UserStoryUpdate) => {
     const response = await api.put(`${USER_STORY_BASE_URL}/${user_story_id}`, data);
     return response.data
 }

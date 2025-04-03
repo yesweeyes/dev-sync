@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ProjectUpdate } from "@/schema/project";
 import { Linking, View } from "react-native";
 import { Edit, Trash } from "lucide-react-native";
-import { useProjectStore } from "@/store/project";
+import { useStore } from "@/store/store";
 import { Heading } from "@/components/ui/heading";
 import { Link, LinkText } from "@/components/ui/link";
 import { Text } from "@/components/ui/text";
@@ -12,8 +12,7 @@ import { useState } from "react";
 import EditProjectModal from "./EditProjectModal";
 
 const ProjectCard = () => {
-  const { project, updateProject, deleteProject, fetchProject } =
-    useProjectStore();
+  const { project, updateProject, deleteProject, fetchProject } = useStore();
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const router = useRouter();
 

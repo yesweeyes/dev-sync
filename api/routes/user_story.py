@@ -39,7 +39,7 @@ def get_user_story(story_id : uuid.UUID ,db:Session = Depends(get_db)):
         raise HTTPException(status_code = 404, detail = str(e))
     
 @router.put("/{story_id}")
-def update_user_story(story_id: uuid.UUID, story:UserStoryUpdate, db: Session = Depends(get_db)):
+def update_user_story(story_id: uuid.UUID, story: UserStoryUpdate, db: Session = Depends(get_db)):
     try:
         return update_user_story_service(db, story_id, story)
     except Exception as e:

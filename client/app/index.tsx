@@ -11,10 +11,10 @@ import { HStack } from "@/components/ui/hstack";
 import { Plus } from "lucide-react-native";
 import CreateProjectModal from "@/components/Home/CreateProjectModal";
 import ProjectListCard from "@/components/Home/ProjectListCard";
-import { useProjectStore } from "@/store/project";
+import { useStore } from "@/store/store";
 
 function HomePage() {
-  const { projects, fetchProjects, addProject } = useProjectStore();
+  const { projects, fetchProjects, addProject } = useStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
 
   async function handleSubmit(project: ProjectCreate) {

@@ -7,11 +7,11 @@ import { Card } from "@/components/ui/card";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
-import { useProjectStore } from "@/store/project";
+import { useStore } from "@/store/store";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 function ProjectDocumentListView() {
-  const { documents, deleteDocument } = useProjectStore();
+  const { documents, deleteDocument } = useStore();
 
   function handleDocumentDelete(documentId: string) {
     deleteDocument(documentId);

@@ -5,11 +5,11 @@ import { Box } from "@/components/ui/box";
 import ProjectDetailCard from "@/components/Project/ProjectDetailCard";
 import { Tabs, useLocalSearchParams } from "expo-router";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useProjectStore } from "@/store/project";
+import { useStore } from "@/store/store";
 
 function ProjectPageLayout() {
   const { project_id } = useLocalSearchParams();
-  const { fetchProject, documents, user_stories } = useProjectStore();
+  const { fetchProject, documents, user_stories } = useStore();
 
   useEffect(() => {
     fetchProject(project_id as string);

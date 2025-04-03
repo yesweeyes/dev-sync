@@ -12,13 +12,13 @@ import { Button, ButtonText } from "@/components/ui/button";
 import { Input, InputField } from "@/components/ui/input";
 import { Fab, FabLabel, FabIcon } from "@/components/ui/fab";
 import { Sparkles } from "lucide-react-native";
-import { useProjectStore } from "@/store/project";
-import { Box } from "../ui/box";
+import { useStore } from "@/store/store";
+import { Box } from "@/components/ui/box";
 
 function ProjectGenerateUserStoryPromptModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [prompt, setPrompt] = useState("");
-  const { project_id, generateUserStories } = useProjectStore();
+  const { project_id, generateUserStories } = useStore();
 
   const handleGenerate = async () => {
     if (!prompt.trim() || !project_id) return;

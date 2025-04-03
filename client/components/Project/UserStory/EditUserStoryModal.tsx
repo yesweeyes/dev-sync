@@ -14,40 +14,36 @@ import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Box } from "@/components/ui/box";
-import { ProjectUpdate } from "@/schema/project";
 import { useStore } from "@/store/store";
 
-interface EditProjectModalProps {
+interface EditUserStoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onUpdate: (project: ProjectUpdate) => void;
+  onUpdate: (userStory: any) => void;
+  userStory: any;
 }
 
-function EditProjectModal({
+function EditUserStoryModal({
   isOpen,
   onClose,
   onUpdate,
-}: EditProjectModalProps) {
-  const { project } = useStore();
-  const [formData, setFormData] = useState<ProjectUpdate>({
-    name: project?.name ? project.name : "",
-    jira_project_key: project?.jira_project_key ? project.jira_project_key : "",
-    jira_auth_key: project?.jira_auth_key ? project.jira_auth_key : "",
-    jira_project_endpoint: project?.jira_project_endpoint
-      ? project.jira_project_endpoint
-      : "",
-    jira_project_email: project?.jira_project_email
-      ? project.jira_project_email
-      : "",
+  userStory,
+}: EditUserStoryModalProps) {
+  const [formData, setFormData] = useState({
+    title: "",
+    description: "",
+    acceptance_criteria: "",
+    storyPoints: "",
+    issueType: "",
   });
 
   useEffect(() => {
-    if (project) {
-      setFormData(project);
+    if (userStory) {
+      setFormData(userStory);
     }
-  }, [project]);
+  }, [userStory]);
 
-  const handleChange = (field: keyof ProjectUpdate, value: string) => {
+  const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -68,59 +64,50 @@ function EditProjectModal({
             <FormControl>
               <Input variant="underlined" size="md">
                 <InputField
-                  placeholder="Project Name"
-                  value={formData.name}
-                  onChangeText={(text) => handleChange("name", text)}
+                  placeholder="Title"
+                  value={formData.title}
+                  onChangeText={(text) => handleChange("title", text)}
                 />
               </Input>
             </FormControl>
           </Box>
           <Box className="mt-6 mb-2 space-y-4">
-            <Heading size="sm">JIRA Integration</Heading>
-
+            <Heading size="sm">User Story Details</Heading>
             <FormControl>
               <Input variant="underlined" size="md">
                 <InputField
-                  placeholder="Project Key"
-                  value={formData.jira_project_key}
+                  placeholder="Description"
+                  value={formData.description}
+                  onChangeText={(text) => handleChange("description", text)}
+                />
+              </Input>
+            </FormControl>
+            <FormControl>
+              <Input variant="underlined" size="md">
+                <InputField
+                  placeholder="Acceptance Criteria"
+                  value={formData.acceptance_criteria}
                   onChangeText={(text) =>
-                    handleChange("jira_project_key", text)
+                    handleChange("acceptance_criteria", text)
                   }
                 />
               </Input>
             </FormControl>
-
             <FormControl>
               <Input variant="underlined" size="md">
                 <InputField
-                  placeholder="Project URL"
-                  value={formData.jira_project_endpoint}
-                  onChangeText={(text) =>
-                    handleChange("jira_project_endpoint", text)
-                  }
+                  placeholder="Story Points"
+                  value={formData.storyPoints}
+                  onChangeText={(text) => handleChange("storyPoints", text)}
                 />
               </Input>
             </FormControl>
-
             <FormControl>
               <Input variant="underlined" size="md">
                 <InputField
-                  placeholder="Email"
-                  value={formData.jira_project_email}
-                  onChangeText={(text) =>
-                    handleChange("jira_project_email", text)
-                  }
-                />
-              </Input>
-            </FormControl>
-
-            <FormControl>
-              <Input variant="underlined" size="md">
-                <InputField
-                  placeholder="Auth Key"
-                  type="password"
-                  value={formData.jira_auth_key}
-                  onChangeText={(text) => handleChange("jira_auth_key", text)}
+                  placeholder="Issue Type"
+                  value={formData.issueType}
+                  onChangeText={(text) => handleChange("issueType", text)}
                 />
               </Input>
             </FormControl>
@@ -139,4 +126,4 @@ function EditProjectModal({
   );
 }
 
-export default EditProjectModal;
+export default EditUserStoryModal;

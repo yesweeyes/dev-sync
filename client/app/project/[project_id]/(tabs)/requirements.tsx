@@ -1,8 +1,8 @@
 import { Box } from "@/components/ui/box";
 import React, { useEffect } from "react";
-import { useProjectStore } from "@/store/project";
+import { useStore } from "@/store/store";
 import { useLocalSearchParams } from "expo-router";
-import ProjectDocumentListView from "@/components/Project/ProjectDocumentListView";
+import ProjectDocumentListView from "@/components/Project/UserStory/ProjectUserStoryListView";
 import { Fab, FabLabel, FabIcon } from "@/components/ui/fab";
 import { AddIcon } from "@/components/ui/icon";
 import * as DocumentPicker from "expo-document-picker";
@@ -10,7 +10,7 @@ import { Alert } from "react-native";
 import { api_form_data } from "@/api/api";
 
 function ProjectDocumentPage() {
-  const { fetchProjectDocuments, addDocument, project } = useProjectStore();
+  const { fetchProjectDocuments, addDocument, project } = useStore();
   const { project_id } = useLocalSearchParams();
 
   useEffect(() => {

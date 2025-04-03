@@ -1,12 +1,29 @@
 import { create } from "zustand";
-import { Project, ProjectCreate, ProjectUpdate } from "@/schema/project";
-import { RequirementDocument, RequirementDocumentUpload} from "@/schema/requirement_document";
-import { UserStory, UserStoryGenerate } from "@/schema/user_story";
-import { getAllProjects, getProject, createProject, updateProject, deleteProject, getProjectDocuments, getProjectUserStories } from "@/api/project";
-import { createProjectDocument, deleteProjectDocument } from "@/api/document";
-import { generateUserStory, deleteUserStory } from "@/api/user_story";
+import { 
+  Project, ProjectCreate, ProjectUpdate 
+} from "@/schema/project";
+import { 
+  RequirementDocument, RequirementDocumentUpdate, RequirementDocumentUpload 
+} from "@/schema/requirement_document";
+import { 
+  UserStory, UserStoryCreate, UserStoryGenerate, UserStoryUpdate 
+} from "@/schema/user_story";
 
-interface ProjectStore {
+import { 
+  getAllProjects, getProject, createProject, updateProject, deleteProject, 
+  getProjectDocuments, getProjectUserStories 
+} from "@/api/project";
+
+import { 
+  createProjectDocument, deleteProjectDocument, updateProjectDocument 
+} from "@/api/document";
+
+import { 
+  generateUserStory, deleteUserStory, updateUserStory, 
+  createUserStory
+} from "@/api/user_story";
+
+interface StoreInterface {
   loading: boolean;
   error: string | null;
   
@@ -25,17 +42,21 @@ interface ProjectStore {
   documents: RequirementDocument[];
   fetchProjectDocuments: (projectId: string) => Promise<void>;
   addDocument: (data: RequirementDocumentUpload) => Promise<void>;
-  deleteDocument: (documentId: string) => Promise<void>;
-  
+  updateDocument: (documentId: string, data: RequirementDocumentUpdate) => Promise<void>;
+  // deleteDocument: (documentId: string) => Promise<void>;
+
   user_stories: UserStory[];
-  fetchUserStories: (ProjectId: string) => Promise<void>;
+  fetchUserStories: (projectId: string) => Promise<void>;
   generateUserStories: (data: UserStoryGenerate) => Promise<void>;
+  createUserStory: (data: UserStoryCreate) => Promise<void>;
+  updateUserStory: (userStoryId: string, data: UserStoryUpdate) => Promise<void>;
+  deleteUserStory: (userStoryId: string) => Promise<void>;
 }
 
-export const useProjectStore = create<ProjectStore>((set) => ({
+export const useStore = create<StoreInterface>((set) => ({
   loading: false,
   error: null,
-  
+
   projects: [],
   fetchProjects: async () => {
     set({ loading: true, error: null });
@@ -54,11 +75,9 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     set({ loading: true, error: null });
     try {
       const project = await getProject(projectId);
-      const project_id = project.id
       const documents = await getProjectDocuments(projectId);
       const user_stories = await getProjectUserStories(projectId);
-      console.log(user_stories)
-      set({ project, project_id, documents, user_stories, loading: false });
+      set({ project, project_id: project.id, documents, user_stories, loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -68,7 +87,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     set({ loading: true, error: null });
     try {
       await createProject(data);
-      await useProjectStore.getState().fetchProjects();
+      await useStore.getState().fetchProjects();
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -78,7 +97,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     set({ loading: true, error: null });
     try {
       await updateProject(projectId, data);
-      await useProjectStore.getState().fetchProject(projectId);
+      await useStore.getState().fetchProject(projectId);
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -88,12 +107,13 @@ export const useProjectStore = create<ProjectStore>((set) => ({
     set({ loading: true, error: null });
     try {
       await deleteProject(projectId);
-      await useProjectStore.getState().fetchProjects();
+      await useStore.getState().fetchProjects();
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
   },
-  clearProject: () => set({ project: null, documents: []}),
+
+  clearProject: () => set({ project: null, project_id: null, documents: [], user_stories: [] }),
 
   documents: [],
   fetchProjectDocuments: async (projectId) => {
@@ -105,7 +125,7 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       set({ error: error.message, loading: false });
     }
   },
-  //TODO: fix this 
+
   addDocument: async (data) => {
     set({ loading: true, error: null });
     try {
@@ -114,19 +134,22 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       formData.append("file", data.file);
   
       await createProjectDocument(formData);
-      await useProjectStore.getState().fetchProjectDocuments(data.project_id);
+      await useStore.getState().fetchProjectDocuments(data.project_id);
       set({ loading: false }); 
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
   },
-  deleteDocument: async (documentId) => {
+
+  updateDocument: async (documentId, data)  => {
     set({ loading: true, error: null });
     try {
-      await deleteProjectDocument(documentId);
-      await useProjectStore.getState().fetchProjectDocuments(documentId);
+      await updateProjectDocument(documentId, data);
+      set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
+      await useStore.getState().fetchProjectDocuments(documentId);
+      set({ loading: false });
     }
   },
 
@@ -140,15 +163,54 @@ export const useProjectStore = create<ProjectStore>((set) => ({
       set({ error: error.message, loading: false });
     }
   },
+
   generateUserStories: async (data) => {
     set({ loading: true, error: null });
     try {
       await generateUserStory(data);
-      await useProjectStore.getState().fetchUserStories(data.project_id);
+      await useStore.getState().fetchUserStories(data.project_id);
       set({ loading: false }); 
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
   },
 
+  createUserStory: async (data) => {
+    set({ loading: true, error: null });
+    try {
+      await createUserStory(data);
+      if (useStore.getState().project_id) {
+        await useStore.getState().fetchUserStories(useStore.getState().project_id!);
+      }
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  updateUserStory: async (userStoryId, data) => {
+    set({ loading: true, error: null });
+    try {
+      await updateUserStory(userStoryId, data);
+      if (useStore.getState().project_id) {
+        await useStore.getState().fetchUserStories(useStore.getState().project_id!);
+      }
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  deleteUserStory: async (userStoryId) => {
+    set({ loading: true, error: null });
+    try {
+      await deleteUserStory(userStoryId);
+      if (useStore.getState().project_id) {
+        await useStore.getState().fetchUserStories(useStore.getState().project_id!);
+      }
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
 }));
