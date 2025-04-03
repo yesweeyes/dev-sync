@@ -14,13 +14,12 @@ import { Text } from "@/components/ui/text";
 import { Heading } from "@/components/ui/heading";
 import { Button, ButtonText } from "@/components/ui/button";
 import { Box } from "@/components/ui/box";
-import { useAppStore } from "@/store/store";
 import { UserStory, UserStoryUpdate } from "@/schema/user_story";
 
 interface EditUserStoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onUpdate: (userStory: any) => void;
+  onUpdate: (userStory: UserStoryUpdate) => void;
   userStory: UserStory;
 }
 
@@ -31,13 +30,12 @@ function EditUserStoryModal({
   userStory,
 }: EditUserStoryModalProps) {
   const [formData, setFormData] = useState<UserStoryUpdate>({
-    title: userStory.title ? userStory.title : "",
-    description: userStory.description ? userStory.description : "",
-    acceptance_criteria: userStory.acceptance_criteria
-      ? userStory.acceptance_criteria
-      : "",
-    storyPoints: userStory.storyPoints ? userStory.storyPoints : 0,
-    issueType: userStory.issueType ? userStory.issueType : "",
+    title: userStory.title ?? "",
+    description: userStory.description ?? "",
+    acceptance_criteria: userStory.acceptance_criteria ?? "",
+    storyPoints: userStory.storyPoints ?? 0,
+    issueType: userStory.issueType ?? "",
+    labels: userStory.labels ?? [], // Handle labels as an array
   });
 
   useEffect(() => {
@@ -48,16 +46,24 @@ function EditUserStoryModal({
         acceptance_criteria: userStory.acceptance_criteria ?? "",
         storyPoints: userStory.storyPoints ?? 0,
         issueType: userStory.issueType ?? "",
+        labels: userStory.labels ?? [],
       });
     }
   }, [userStory]);
 
   const handleChange = (field: keyof UserStoryUpdate, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field === "labels") {
+      setFormData((prev) => ({
+        ...prev,
+        labels: value.split(",").map((label) => label.trim()), // Convert string to array
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    }
   };
 
   const handleSubmit = () => {
-    onUpdate(formData);
+    onUpdate({ ...formData, priority: "LOW" });
     onClose();
   };
 
@@ -117,6 +123,15 @@ function EditUserStoryModal({
                   placeholder="Issue Type"
                   value={formData.issueType}
                   onChangeText={(text) => handleChange("issueType", text)}
+                />
+              </Input>
+            </FormControl>
+            <FormControl>
+              <Input variant="underlined" size="md">
+                <InputField
+                  placeholder="Labels(comma-separated)"
+                  value={formData.labels ? formData.labels.join(", ") : ""}
+                  onChangeText={(text) => handleChange("labels", text)}
                 />
               </Input>
             </FormControl>

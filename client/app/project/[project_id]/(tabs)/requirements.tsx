@@ -2,7 +2,7 @@ import { Box } from "@/components/ui/box";
 import React, { useEffect } from "react";
 import { useAppStore } from "@/store/store";
 import { useLocalSearchParams } from "expo-router";
-import ProjectDocumentListView from "@/components/Project/UserStory/ProjectUserStoryListView";
+import ProjectDocumentListView from "@/components/Project/Requirements/ProjectDocumentListView";
 import { Fab, FabLabel, FabIcon } from "@/components/ui/fab";
 import { AddIcon } from "@/components/ui/icon";
 import * as DocumentPicker from "expo-document-picker";
