@@ -7,6 +7,7 @@ import { Fab, FabLabel, FabIcon } from "@/components/ui/fab";
 import { AddIcon } from "@/components/ui/icon";
 import * as DocumentPicker from "expo-document-picker";
 import { Alert } from "react-native";
+import { api_form_data } from "@/api/api";
 
 function ProjectDocumentPage() {
   const { fetchProjectDocuments, addDocument, project } = useProjectStore();
@@ -20,18 +21,36 @@ function ProjectDocumentPage() {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: "*/*", // Accept all file types
-        copyToCacheDirectory: true,
+        copyToCacheDirectory: false,
         multiple: false,
       });
 
-      if (result.canceled) return;
+      if (result.canceled || !result.assets.length || !project) {
+        console.log("File selection cancelled");
+        return;
+      }
 
       const file = result.assets[0];
 
-      await addDocument({
-        project_id: project?.id as string,
-        file: file,
+      // await addDocument({
+      //   project_id: project?.id as string,
+      //   file: file,
+      // });
+      const formData = new FormData();
+      formData.append("project_id", project.id);
+      formData.append("file", {
+        uri: file.uri,
+        name: file.name,
+        type: file.mimeType || "application/pdf",
       });
+
+      const response = await api_form_data.post("/document/upload", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Ensure correct format
+        },
+      });
+
+      console.log("File uploaded successfully:", response.data);
 
       Alert.alert("Success", "Document uploaded successfully!");
     } catch (error) {
