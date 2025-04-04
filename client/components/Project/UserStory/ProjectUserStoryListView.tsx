@@ -16,6 +16,7 @@ import { deleteUserStory, pushUserStoryToJIRA } from "@/api/user_story";
 import { UserStory, UserStoryUpdate } from "@/schema/user_story";
 import { Box } from "@/components/ui/box";
 import EditUserStoryModal from "./EditUserStoryModal";
+import NoRecordsFound from "@/components/Common/NoRecordsFound";
 
 function UserStoryListView() {
   const { user_stories, fetchUserStories, project_id, updateUserStory } =
@@ -64,66 +65,70 @@ function UserStoryListView() {
         />
       )}
 
-      <FlatList
-        data={user_stories}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <Card className="p-2 m-2 rounded-xl bg-white">
-            <VStack space="md">
-              <HStack className="justify-between items-center">
-                <TouchableOpacity onPress={() => toggleExpand(item.id)}>
-                  <HStack className="items-center space-x-2">
-                    {expanded[item.id] ? (
-                      <ChevronUp size={20} color="black" />
-                    ) : (
-                      <ChevronDown size={20} color="black" />
-                    )}
-                    <Text className="text-base font-roboto text-typography-black">
-                      {item.title}
-                    </Text>
+      {user_stories.length === 0 ? (
+        <NoRecordsFound />
+      ) : (
+        <FlatList
+          data={user_stories}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }) => (
+            <Card className="p-2 m-2 rounded-xl bg-white">
+              <VStack space="md">
+                <HStack className="justify-between items-center">
+                  <TouchableOpacity onPress={() => toggleExpand(item.id)}>
+                    <HStack className="items-center space-x-2">
+                      {expanded[item.id] ? (
+                        <ChevronUp size={20} color="black" />
+                      ) : (
+                        <ChevronDown size={20} color="black" />
+                      )}
+                      <Text className="text-base font-roboto text-typography-black">
+                        {item.title}
+                      </Text>
+                    </HStack>
+                  </TouchableOpacity>
+                  <HStack space="sm">
+                    <Button
+                      className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center"
+                      onPress={() => handlePushToJIRA(item.id)}
+                    >
+                      <ButtonIcon as={Send} size="lg" />
+                    </Button>
+                    <Button
+                      className="bg-yellow-500 rounded-full w-14 h-14 items-center justify-center"
+                      onPress={() => handleEdit(item)}
+                    >
+                      <ButtonIcon as={Edit} size="lg" />
+                    </Button>
+                    <Button
+                      className="bg-red-600 rounded-full w-14 h-14 items-center justify-center"
+                      onPress={() => handleDelete(item.id)}
+                    >
+                      <ButtonIcon as={Trash2} size="lg" />
+                    </Button>
                   </HStack>
-                </TouchableOpacity>
-                <HStack space="sm">
-                  <Button
-                    className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center"
-                    onPress={() => handlePushToJIRA(item.id)}
-                  >
-                    <ButtonIcon as={Send} size="lg" />
-                  </Button>
-                  <Button
-                    className="bg-yellow-500 rounded-full w-14 h-14 items-center justify-center"
-                    onPress={() => handleEdit(item)}
-                  >
-                    <ButtonIcon as={Edit} size="lg" />
-                  </Button>
-                  <Button
-                    className="bg-red-600 rounded-full w-14 h-14 items-center justify-center"
-                    onPress={() => handleDelete(item.id)}
-                  >
-                    <ButtonIcon as={Trash2} size="lg" />
-                  </Button>
                 </HStack>
-              </HStack>
-              {expanded[item.id] && (
-                <VStack className="p-2 bg-gray-100 rounded-lg" space="sm">
-                  <Text className="text-sm font-roboto text-gray-800">
-                    {item.description}
-                  </Text>
-                  <Text className="text-sm font-roboto text-gray-600">
-                    Acceptance Criteria: {item.acceptance_criteria}
-                  </Text>
-                  <Text className="text-sm font-roboto text-gray-600">
-                    Story Points: {item.storyPoints}
-                  </Text>
-                  <Text className="text-sm font-roboto text-gray-600">
-                    Issue Type: {item.issueType}
-                  </Text>
-                </VStack>
-              )}
-            </VStack>
-          </Card>
-        )}
-      />
+                {expanded[item.id] && (
+                  <VStack className="p-2 bg-gray-100 rounded-lg" space="sm">
+                    <Text className="text-sm font-roboto text-gray-800">
+                      {item.description}
+                    </Text>
+                    <Text className="text-sm font-roboto text-gray-600">
+                      Acceptance Criteria: {item.acceptance_criteria}
+                    </Text>
+                    <Text className="text-sm font-roboto text-gray-600">
+                      Story Points: {item.storyPoints}
+                    </Text>
+                    <Text className="text-sm font-roboto text-gray-600">
+                      Issue Type: {item.issueType}
+                    </Text>
+                  </VStack>
+                )}
+              </VStack>
+            </Card>
+          )}
+        />
+      )}
     </Box>
   );
 }

@@ -12,6 +12,7 @@ import { Plus } from "lucide-react-native";
 import CreateProjectModal from "@/components/Home/CreateProjectModal";
 import ProjectListCard from "@/components/Home/ProjectListCard";
 import { useAppStore } from "@/store/store";
+import NoRecordsFound from "@/components/Common/NoRecordsFound";
 
 function HomePage() {
   const { projects, fetchProjects, addProject } = useAppStore();
@@ -76,17 +77,21 @@ function HomePage() {
             </HStack>
           </VStack>
 
-          <ScrollView className="h-full">
-            <FlatList
-              data={projects.filter((item) => item?.id)}
-              keyExtractor={(item, index) =>
-                item?.id ? item.id.toString() : `fallback-${index}`
-              }
-              renderItem={({ item, index }) => (
-                <ProjectListCard project={item} />
-              )}
-            />
-          </ScrollView>
+          {projects.length === 0 ? (
+            <NoRecordsFound />
+          ) : (
+            <ScrollView className="h-full w-full">
+              <FlatList
+                data={projects.filter((item) => item?.id)}
+                keyExtractor={(item, index) =>
+                  item?.id ? item.id.toString() : `fallback-${index}`
+                }
+                renderItem={({ item, index }) => (
+                  <ProjectListCard project={item} />
+                )}
+              />
+            </ScrollView>
+          )}
         </VStack>
       </HStack>
     </Box>

@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
 import { ArrowRight, Link } from "lucide-react-native";
 import { Project } from "@/schema/project";
+import { Box } from "@/components/ui/box";
 
 interface ProjectListCardProps {
   project: Project;
@@ -13,7 +14,7 @@ function ProjectListCard(props: ProjectListCardProps) {
   const router = useRouter();
   const { project } = props;
   return (
-    <View className="flex-row items-center">
+    <Box className="flex-row items-center h-full w-full p-2">
       <Button
         onPress={() => router.push(`/project/${project.id}`)}
         className={`p-8 my-1 rounded-full flex-row justify-between items-center flex-1 bg-gray-50`}
@@ -29,7 +30,7 @@ function ProjectListCard(props: ProjectListCardProps) {
       >
         <ButtonIcon as={Link} size="lg" />
       </Button>
-    </View>
+    </Box>
   );
 }
 

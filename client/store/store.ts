@@ -43,7 +43,7 @@ interface AppStoreInterface {
   fetchProjectDocuments: (projectId: string) => Promise<void>;
   addDocument: (data: RequirementDocumentUpload) => Promise<void>;
   updateDocument: (documentId: string, data: RequirementDocumentUpdate) => Promise<void>;
-  // deleteDocument: (documentId: string) => Promise<void>;
+  deleteDocument: (documentId: string) => Promise<void>;
 
   user_stories: UserStory[];
   fetchUserStories: (projectId: string) => Promise<void>;
@@ -148,7 +148,19 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
-      await useAppStore.getState().fetchProjectDocuments(documentId);
+      await useAppStore.getState().fetchProjectDocuments(useAppStore.getState().project_id!);
+      set({ loading: false });
+    }
+  },
+
+  deleteDocument: async (documentId) => {
+    set({ loading: true, error: null });
+    try {
+      await deleteProjectDocument(documentId);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+      await useAppStore.getState().fetchProjectDocuments(useAppStore.getState().project_id!);
       set({ loading: false });
     }
   },
