@@ -11,6 +11,9 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Explicitly import models so Alembic can detect them
 from models.project import Project  
 from models.requirement_document import RequirementDocument  
+from models.user_story import UserStory
+from models.jira_issues import JiraIssues
+from models.testcase import TestCase
 
 # Alembic Config object
 config = context.config
