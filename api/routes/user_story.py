@@ -11,8 +11,9 @@ from services.user_story import(
     get_all_user_stories as get_all_user_stories_service,
     update_user_story as update_user_story_service,
     delete_user_story as delete_user_story_service,
+    download_user_stories as download_user_stories_service
 )
-import UserStories.generate_user_stories as story
+import utils.user_story.generate_user_stories as story
 router = APIRouter(
     prefix = "/story",
     tags = ["story"],
@@ -74,29 +75,7 @@ def generate_stories(project_id: uuid.UUID, db:Session = Depends(get_db)):
     
 @router.get("/userStories/download/{project_id}")
 def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):
-    userStories = get_all_user_stories(project_id, db)
-    if not userStories:
-        raise HTTPException(status_code=404, detail=f"No user stories found for project {project_id}")
     try:
-        unique_filename = f"{project_id}_UserStories.txt"
-        file_path = os.path.join(DOWNLOAD_FOLDER, unique_filename)
-        with open(file_path, "w", encoding="utf-8") as file:
-            for story in userStories:
-                file.write(
-                    f"User Story:\n"
-                    f"Title: {story.title or 'N/A'}\n"
-                    f"Description: {story.description or 'N/A'}\n"
-                    f"Acceptance Criteria: {story.acceptance_criteria or 'N/A'}\n"
-                    f"Priority: {story.priority or 'N/A'}\n"
-                    f"Story Points: {story.storyPoints or 'N/A'}\n"
-                    f"Labels: {story.labels or 'N/A'}\n"
-                    f"{'-'*40}\n\n" 
-                )
-        return FileResponse(
-            path=file_path,
-            media_type="application/octet-stream",
-            filename=unique_filename,
-            headers={"Content-Disposition": f"attachment; filename={unique_filename}"}
-        )
+        return download_user_stories_service(db, project_id)
     except Exception as e:
         raise HTTPException(400, detail=f"Error fetching user stories: {str(e)}")

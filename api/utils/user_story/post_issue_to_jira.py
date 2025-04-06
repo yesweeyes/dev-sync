@@ -73,9 +73,22 @@ def create_jira_issue(story):
 
     if response.status_code == 201:
         print(f"Story '{story.title}' created successfully.")
+        return response
     else:
         print(f"Failed to create '{story.title}'. Error: {response.text}")
 
 for issue in issue_details:
     create_jira_issue(issue)
     
+def parse_jira_issue(data, project_id:uuid.UUID):
+    project_id = project_id
+    issue_id = data["id"]
+    key = data["key"]
+    end_point = data["self"]
+
+    return {
+        "project_id":project_id,
+        "issue_id":issue_id,
+        "key":key,
+        "end_point":end_point
+    }
