@@ -6,7 +6,7 @@ import uuid
 class Project(Base):
     __tablename__ = "project"
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4())
+    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     name = Column(String, nullable=False)
     jira_project_key = Column(String, nullable=False)
     jira_project_auth = Column(String, nullable=False)
