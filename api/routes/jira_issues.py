@@ -30,5 +30,3 @@ def post_issue(project_id:uuid.UUID, db:Session = Depends(get_db)):
         else:
             raise HTTPException(404, detail="Response is null")
 
-    # ATATT3xFfGF0M0XPpjYD9q6jonZlQ6aIalU579AYqFfvJkzrQQ5hYG1_Tu-CFI3dGQBXaxxsNML-wS2ubiBqY1xdXKHJ7UXuptxIbhYzC6LiQhsFEHZ0FUtVXT0J_YE_fcBuAz20pANH7AtSCDKKlwjhkmYEX7zDW69rRlwydT6gHoAuI_zRETQ=B3A75689
-
