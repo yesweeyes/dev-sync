@@ -77,10 +77,6 @@ def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session =Depends(get_d
     try:
         jira_response = user_story_jira_interface_util.push_user_story_to_jira(user_story_id, db)
         return jira_response
-@router.get("/userStories/download/{project_id}")
-def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):
-    try:
-        return download_user_stories_service(db, project_id)
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
     
