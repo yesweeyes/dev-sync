@@ -9,6 +9,10 @@ Dev Sync is an AI-powered SDLC Optimization Tool that bridges the gap between ex
 - **Ticket Test Case Generation** - AI-driven test case creation for tickets.
 - **AI-Powered Code Review** - Automates code reviews for better code quality and adherence to best practices.
 
+## Documentation
+
+Refer the notion board for documentation: [Docs](https://www.notion.so/yesweeyes/Dev-Sync-Documentation-1ce12c3598cd80b6a68ac447989bf648?pvs=4)
+
 ## Tech Stack
 
 - **Backend**: [FastAPI](https://fastapi.tiangolo.com/)
