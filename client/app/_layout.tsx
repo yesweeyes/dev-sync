@@ -27,24 +27,27 @@ function RootLayout() {
         <VStack space="xl" className="h-full w-full">
           {/* Header Section */}
           <Box className="w-full flex-row items-center justify-between">
-            <Text className="text-2xl font-bold text-typography-black">
-              DevSync
-            </Text>
+            {/* Left side: DevSync + Documentation */}
             <HStack space="md">
+              <Text className="text-2xl font-bold text-typography-black">
+                DevSync
+              </Text>
               <Pressable onPress={openNotion}>
-                <Text className="text-base text-primary underline py-2">
+                <Text className="text-base text-primary underline py-1">
                   Documentation
                 </Text>
               </Pressable>
-              <Button
-                onPress={() => {
-                  clearProject();
-                  router.push(`/`);
-                }}
-              >
-                <ButtonIcon as={House} variant="outline" size="xl" />
-              </Button>
             </HStack>
+
+            {/* Right side: Home button */}
+            <Button
+              onPress={() => {
+                clearProject();
+                router.push(`/`);
+              }}
+            >
+              <ButtonIcon as={House} variant="outline" size="xl" />
+            </Button>
           </Box>
 
           {/* Main Content */}
