@@ -10,10 +10,15 @@ import { Button, ButtonIcon } from "@/components/ui/button";
 import { House } from "lucide-react-native";
 import { Pressable, Linking } from "react-native";
 import { useAppStore } from "@/store/store";
+import { useEffect } from "react";
 
 function RootLayout() {
   const { clearProject } = useAppStore();
   const router = useRouter();
+
+  useEffect(() => {
+    document.title = "DevSync";
+  }, []);
 
   const openNotion = () => {
     Linking.openURL(
