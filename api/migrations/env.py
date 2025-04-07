@@ -4,6 +4,7 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 from database import Base  # Import Base to access metadata
+from models.db_models import Generated_HLD_Document, Generated_LLD_Document
 
 # Ensure models are imported
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -11,6 +12,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 # Explicitly import models so Alembic can detect them
 from models.project import Project  
 from models.requirement_document import RequirementDocument  
+from models.user_story import UserStory
 
 # Alembic Config object
 config = context.config
@@ -25,7 +27,7 @@ target_metadata = Base.metadata
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
 
-    url = os.getenv("POSTGRES_DATABASE_URL", "postgresql://postgres:password@localhost:5432/devsync")
+    url = os.getenv("POSTGRES_DATABASE_URL", "postgresql://postgres:12345@localhost:5432/devsync")
     config.set_main_option("sqlalchemy.url", url)
     context.configure(
         url=url,
