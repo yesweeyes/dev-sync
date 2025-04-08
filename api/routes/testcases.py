@@ -20,7 +20,7 @@ router = APIRouter(
 )
 
 @router.post("/")
-def create_test_case(test_case_data: TestCaseCreate, project_id:uuid.UUID, db:Session = Depends(get_db)):
+def create_test_case(test_case_data: TestCaseCreate, db:Session = Depends(get_db)):
     try:
         return create_test_case_service(db, test_case_data)
     except Exception as e:

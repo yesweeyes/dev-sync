@@ -38,7 +38,6 @@ class TestCaseCreate(BaseModel):
 
 class TestCaseUpdate(BaseModel):
     module_name: Optional[str]
-    title: Optional[str]
     description: Optional[str]
     preconditions: Optional[str]
     test_steps : Optional[List[str]]
