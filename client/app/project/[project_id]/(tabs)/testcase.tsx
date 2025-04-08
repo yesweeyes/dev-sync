@@ -9,7 +9,7 @@ function ProjectTestcasePage() {
   return (
     <Box className="p-2 h-full w-full">
       <TestCaseListView />
-      {/* <CreateTestCase /> */}
+      <CreateTestCase />
       <GenerateTestCase />
     </Box>
   );

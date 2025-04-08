@@ -6,6 +6,9 @@ from sqlalchemy.exc import NoResultFound
 from typing import List
 
 def create_test_case(db:Session, test_case_data:TestCaseCreate) -> TestCase:
+    print("Type of test_case_data:", type(test_case_data))
+    if hasattr(test_case_data, "model_dump"):
+        test_case_data = test_case_data.model_dump()
     new_test_case = TestCase(**test_case_data)
     db.add(new_test_case)
     db.commit()
