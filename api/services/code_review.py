@@ -32,6 +32,12 @@ def save_code_review_file(db: Session, project_id: uuid.UUID, file_name: str, fi
 
     return code_review_file
 
+def get_code_review_file_by_id(db: Session, doc_id: uuid.UUID) -> CodeReviewFile:
+    doc = db.query(CodeReviewFile).filter(CodeReviewFile.id == doc_id).first()
+    if not doc:
+        raise NoResultFound(f"Requirement Document with ID {doc_id} not found")
+    return doc
+
 def update_code_review_file(db: Session, code_review_file_data: CodeReviewUpdate) -> CodeReviewFile:
     code_review = db.query(CodeReviewFile).filter(CodeReviewFile.id == code_review_file_data.id).first()
     if not code_review:
@@ -55,7 +61,7 @@ def delete_code_review_file(db: Session, code_review_id: uuid.UUID):
 def get_all_code_review_file_for_project(db: Session, project_id: uuid.UUID) -> List[CodeReviewFile]:
     return db.query(CodeReviewFile).filter(CodeReviewFile.project_id == project_id).all()
 
-def generate_code_review_file(db: Session, project_id: uuid.UUID, user_prompt: str) -> CodeReviewFile:
+def generate_code_review_file(db: Session, project_id: uuid.UUID, user_prompt: str):
     project = get_project_service(db, project_id)
     github_endpoint = project.github_endpoint
 
@@ -63,6 +69,6 @@ def generate_code_review_file(db: Session, project_id: uuid.UUID, user_prompt: s
     code = read_code_from_temp_dir_util(temp_dir)
     html_string = generate_code_review_html_util(code, user_prompt=user_prompt)
     file_path, file_name = save_review_to_file_util(html_string)
-    saved_entry = save_code_review_file(db, project_id, file_name, file_path)
+    code_review_file = save_code_review_file(db, project_id, file_name, file_path)
 
-    return saved_entry
+    return code_review_file
