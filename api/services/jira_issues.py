@@ -3,9 +3,9 @@ from sqlalchemy.exc import NoResultFound
 import uuid
 from typing import List
 from models.jira_issues import JiraIssues
-from schemas.jira_issues import CreateJiraIssue, UpdateJiraIssue
+from schemas.jira_issues import JiraIssueCreate
 
-def create_jira_issue(db:Session, jira_issue_data:CreateJiraIssue)->JiraIssues:
+def create_jira_issue(db:Session, jira_issue_data:JiraIssueCreate)->JiraIssues:
     new_issue = JiraIssues(**jira_issue_data)
     db.add(new_issue)
     db.commit()

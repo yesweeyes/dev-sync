@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.jira_issues import CreateJiraIssue
+from schemas.jira_issues import JiraIssueCreate
 from database import get_db
 import uuid
 from requests.auth import HTTPBasicAuth
