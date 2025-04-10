@@ -21,7 +21,6 @@ async def generate_code_review(data: CodeReviewGenerate, db: Session = Depends(g
     user_prompt = data.user_prompt
     try:
         return generate_code_review_service(db, project_id, user_prompt)
-        # return {"message": "Code reviews generated and stored successfully."}
     except Exception as e:
         raise Exception(f"Failed to generate code review: {str(e)}")
     
