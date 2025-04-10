@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, ScrollView, Text } from "react-native";
-import { Download, Trash2 } from "lucide-react-native";
+import { ExternalLink, Trash2 } from "lucide-react-native";
 import { RequirementDocument } from "@/schema/requirement_document";
 import { Linking } from "react-native";
 import { Card } from "@/components/ui/card";
@@ -43,7 +43,7 @@ function ProjectDocumentListView() {
                     }}
                     className="w-14 h-14 bg-blue-600 rounded-full items-center justify-center"
                   >
-                    <ButtonIcon as={Download} size="lg" />
+                    <ButtonIcon as={ExternalLink} size="lg" />
                   </Button>
                   <Button
                     className="w-14 h-14 bg-red-600 rounded-full items-center justify-center"

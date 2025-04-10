@@ -22,4 +22,3 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-

@@ -15,6 +15,7 @@ from models.requirement_document import RequirementDocument
 from models.user_story import UserStory
 from models.jira_issues import JiraIssues
 from models.testcase import TestCase
+from models.code_review import CodeReviewFile
 
 # Alembic Config object
 config = context.config
