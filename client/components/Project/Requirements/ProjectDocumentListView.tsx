@@ -36,7 +36,11 @@ function ProjectDocumentListView() {
                 </Text>
                 <HStack space="sm">
                   <Button
-                    onPress={() => Linking.openURL(item.file_path)}
+                    onPress={() => {
+                      const BACKEND_BASE_URL = "http://127.0.0.1:8000/api/v1"; // or from env
+                      const fileUrl = `${BACKEND_BASE_URL}/${item.file_path}`;
+                      Linking.openURL(fileUrl);
+                    }}
                     className="w-14 h-14 bg-blue-600 rounded-full items-center justify-center"
                   >
                     <ButtonIcon as={Download} size="lg" />
