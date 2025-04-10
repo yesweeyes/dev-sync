@@ -50,3 +50,9 @@ export const getProjectTestCases = async (project_id: string) => {
   console.log(response.data);
   return response.data;
 };
+
+export const getProjectJiraIssues = async (project_id: string) => {
+  const response = await api.get(`${PROJECT_BASE_URL}/${project_id}/jira`);
+  console.log(response.data);
+  return response.data;
+};
