@@ -9,37 +9,21 @@ import requests
 import json
 
 load_dotenv()
-db = next(get_db())
-project_id = uuid.UUID("7b1d790a-1daf-41ac-95fd-f453fac87348")
-
-def get_auth_details(project_id: uuid.UUID, db: Session):
-    auth_details = get_project(db, project_id)
-    return auth_details
-auth_details = get_auth_details(project_id, db)
-
-JIRA_API_TOKEN = auth_details.jira_project_auth
-JIRA_URL = auth_details.jira_project_endpoint
-PROJECT_KEY = auth_details.jira_project_key
-JIRA_EMAIL = auth_details.jira_project_email
 
 
-auth = HTTPBasicAuth(JIRA_EMAIL, JIRA_API_TOKEN)
 headers = {
   "Accept": "application/json",
   "Content-Type": "application/json"
 }
 
-def user_story_details(project_id: uuid.UUID, db: Session):
-    issue_details = get_all_user_stories(db, project_id)
-    return issue_details
 
-issue_details = user_story_details(project_id, db)
-
-def create_jira_issue(story):
+def create_jira_issue(story , auth_details):
+    print(f"im inside:", auth_details)
+    auth = HTTPBasicAuth(auth_details.jira_project_email, auth_details.jira_project_auth)
     payload = json.dumps({
         "fields": {
             "project": {
-                "key": PROJECT_KEY
+                "key": auth_details.jira_project_key
             },
             "summary": story.title,
             "description": {
@@ -58,14 +42,14 @@ def create_jira_issue(story):
                 ]
             },
             "issuetype": {
-                "name": story.issueType
+                "name": story.issueType 
             },
-            "customfield_10016": story.storyPoints
+            "customfield_10016": story.storyPoints | 3
         }
     })
 
     response = requests.post(
-        JIRA_URL,
+        auth_details.jira_project_endpoint,
         data=payload,
         headers=headers,
         auth=auth
@@ -77,18 +61,63 @@ def create_jira_issue(story):
     else:
         print(f"Failed to create '{story.title}'. Error: {response.text}")
 
-for issue in issue_details:
-    create_jira_issue(issue)
     
-def parse_jira_issue(data, project_id:uuid.UUID):
+def parse_jira_issue(data, project_id:uuid.UUID, parent):
     project_id = project_id
     issue_id = data["id"]
     key = data["key"]
     end_point = data["self"]
+    issue_type = getattr(parent, "issueType", "task")
+    parent_id = parent.id
 
     return {
         "project_id":project_id,
         "issue_id":issue_id,
         "key":key,
-        "end_point":end_point
+        "end_point":end_point,
+        "issue_type":issue_type,
+        "parent_id" : parent_id
     }
+
+def create_test_case_jira_issue(story , auth_details):
+    print(f"im inside:", auth_details)
+    auth = HTTPBasicAuth(auth_details.jira_project_email, auth_details.jira_project_auth)
+    payload = json.dumps({
+        "fields": {
+            "project": {
+                "key": auth_details.jira_project_key
+            },
+            "summary": story.module_name,
+            "description": {
+                "type": "doc",
+                "version": 1,
+                "content": [
+                    {
+                        "type": "paragraph",
+                        "content": [
+                            {
+                                "type": "text",
+                                "text": story.description + "/n" + "/n" + story.post_condition
+                            }
+                        ]
+                    }
+                ]
+            },
+            "issuetype": {
+                "name": "Task"
+            },
+        }
+    })
+
+    response = requests.post(
+        auth_details.jira_project_endpoint,
+        data=payload,
+        headers=headers,
+        auth=auth
+    )
+
+    if response.status_code == 201:
+        print(f"Story '{story.title}' created successfully.")
+        return response
+    else:
+        print(f"Failed to create '{story.title}'. Error: {response.text}")

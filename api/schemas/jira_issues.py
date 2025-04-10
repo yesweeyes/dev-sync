@@ -6,6 +6,8 @@ class JiraIssueBase(BaseModel):
     issue_id:int
     key: str
     end_point : str
+    issue_type:str
+    parent_id:UUID4
 
 class CreateJiraIssue(JiraIssueBase):
     pass

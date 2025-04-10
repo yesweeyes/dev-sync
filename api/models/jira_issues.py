@@ -11,6 +11,8 @@ class JiraIssues(Base):
     issue_id = Column(Integer, primary_key=True, nullable=False, unique=True)
     key = Column(String, nullable=False)
     end_point = Column(String, nullable=False)
+    issue_type = Column(String, nullable=False)
+    parent_id = Column(UUID(as_uuid=True), nullable=False)
 
     class Config:
         from_attributes = True
