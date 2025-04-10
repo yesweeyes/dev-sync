@@ -68,3 +68,6 @@ build/
 
 # Uploaded files
 uploads/
+
+# Alembic init
+alembic.ini
