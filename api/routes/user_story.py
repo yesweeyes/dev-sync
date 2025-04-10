@@ -11,6 +11,7 @@ from services.user_story import(
     get_all_user_stories as get_all_user_stories_service,
     update_user_story as update_user_story_service,
     delete_user_story as delete_user_story_service,
+    download_user_stories as download_user_stories_service
 )
 import utils.user_story.generate_user_stories as user_story_gen_util
 import utils.user_story.user_story_jira_interface as user_story_jira_interface_util
@@ -78,6 +79,13 @@ def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session =Depends(get_d
         return jira_response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+# @router.get("/userStories/download/{project_id}")
+# def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):
+#     try:
+#         return download_user_stories_service(db, project_id)
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
     
 
 # TODO: Move the logic to project router and fine tune the code  

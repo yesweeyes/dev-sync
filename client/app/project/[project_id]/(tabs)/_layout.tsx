@@ -9,7 +9,7 @@ import { useAppStore } from "@/store/store";
 
 function ProjectPageLayout() {
   const { project_id } = useLocalSearchParams();
-  const { fetchProject, documents, user_stories } = useAppStore();
+  const { fetchProject, documents, user_stories, test_cases } = useAppStore();
 
   useEffect(() => {
     fetchProject(project_id as string);
@@ -70,7 +70,7 @@ function ProjectPageLayout() {
             <Tabs.Screen
               name="testcase"
               options={{
-                title: "Testcases",
+                title: `Testcases (${test_cases.length})`,
                 tabBarIcon: ({ color }) => (
                   <MaterialIcons name="check-box" size={24} color={color} />
                 ),

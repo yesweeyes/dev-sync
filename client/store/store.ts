@@ -1,56 +1,91 @@
 import { create } from "zustand";
-import { 
-  Project, ProjectCreate, ProjectUpdate 
-} from "@/schema/project";
-import { 
-  RequirementDocument, RequirementDocumentUpdate, RequirementDocumentUpload 
+import { Project, ProjectCreate, ProjectUpdate } from "@/schema/project";
+import {
+  RequirementDocument,
+  RequirementDocumentUpdate,
+  RequirementDocumentUpload,
 } from "@/schema/requirement_document";
-import { 
-  UserStory, UserStoryCreate, UserStoryGenerate, UserStoryUpdate 
+import {
+  UserStory,
+  UserStoryCreate,
+  UserStoryGenerate,
+  UserStoryUpdate,
 } from "@/schema/user_story";
+import { TestCase, TestCaseCreate, TestCaseUpdate } from "@/schema/test_case";
 
-import { 
-  getAllProjects, getProject, createProject, updateProject, deleteProject, 
-  getProjectDocuments, getProjectUserStories 
+import {
+  getAllProjects,
+  getProject,
+  createProject,
+  updateProject,
+  deleteProject,
+  getProjectDocuments,
+  getProjectUserStories,
+  getProjectTestCases,
 } from "@/api/project";
 
-import { 
-  createProjectDocument, deleteProjectDocument, updateProjectDocument 
+import {
+  createProjectDocument,
+  deleteProjectDocument,
+  updateProjectDocument,
 } from "@/api/document";
 
-import { 
-  generateUserStory, deleteUserStory, updateUserStory, 
-  createUserStory
+import {
+  generateUserStory,
+  deleteUserStory,
+  updateUserStory,
+  createUserStory,
 } from "@/api/user_story";
+
+import {
+  createTestCase,
+  getTestCase,
+  updateTestCase,
+  deleteTestCase,
+  generateTestCase,
+} from "@/api/test_case";
 
 interface AppStoreInterface {
   loading: boolean;
   error: string | null;
-  
+
   projects: Project[];
   fetchProjects: () => Promise<void>;
 
   project_id: string | null;
-  
+
   project: Project | null;
   fetchProject: (projectId: string) => Promise<void>;
   addProject: (data: ProjectCreate) => Promise<void>;
   updateProject: (projectId: string, data: ProjectUpdate) => Promise<void>;
   deleteProject: (projectId: string) => Promise<void>;
   clearProject: () => void;
-  
+
   documents: RequirementDocument[];
   fetchProjectDocuments: (projectId: string) => Promise<void>;
   addDocument: (data: RequirementDocumentUpload) => Promise<void>;
-  updateDocument: (documentId: string, data: RequirementDocumentUpdate) => Promise<void>;
+  updateDocument: (
+    documentId: string,
+    data: RequirementDocumentUpdate
+  ) => Promise<void>;
   deleteDocument: (documentId: string) => Promise<void>;
 
   user_stories: UserStory[];
   fetchUserStories: (projectId: string) => Promise<void>;
   generateUserStories: (data: UserStoryGenerate) => Promise<void>;
   createUserStory: (data: UserStoryCreate) => Promise<void>;
-  updateUserStory: (userStoryId: string, data: UserStoryUpdate) => Promise<void>;
+  updateUserStory: (
+    userStoryId: string,
+    data: UserStoryUpdate
+  ) => Promise<void>;
   deleteUserStory: (userStoryId: string) => Promise<void>;
+
+  test_cases: TestCase[];
+  fetchTestCases: (projectId: string) => Promise<void>;
+  createTestCase: (data: TestCaseCreate) => Promise<void>;
+  updateTestCase: (testCaseId: string, data: TestCaseUpdate) => Promise<void>;
+  deleteTestCase: (TestCaseId: string) => Promise<void>;
+  generateTestCase: (projectId: string) => Promise<void>;
 }
 
 export const useAppStore = create<AppStoreInterface>((set) => ({
@@ -68,7 +103,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     }
   },
 
-  project_id: null, 
+  project_id: null,
 
   project: null,
   fetchProject: async (projectId) => {
@@ -77,7 +112,15 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const project = await getProject(projectId);
       const documents = await getProjectDocuments(projectId);
       const user_stories = await getProjectUserStories(projectId);
-      set({ project, project_id: project.id, documents, user_stories, loading: false });
+      const test_cases = await getProjectTestCases(projectId);
+      set({
+        project,
+        project_id: project.id,
+        documents,
+        user_stories,
+        test_cases,
+        loading: false,
+      });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -113,7 +156,8 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     }
   },
 
-  clearProject: () => set({ project: null, project_id: null, documents: [], user_stories: [] }),
+  clearProject: () =>
+    set({ project: null, project_id: null, documents: [], user_stories: [] }),
 
   documents: [],
   fetchProjectDocuments: async (projectId) => {
@@ -132,23 +176,25 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const formData = new FormData();
       formData.append("project_id", data.project_id.toString());
       formData.append("file", data.file);
-  
+
       await createProjectDocument(formData);
       await useAppStore.getState().fetchProjectDocuments(data.project_id);
-      set({ loading: false }); 
+      set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
   },
 
-  updateDocument: async (documentId, data)  => {
+  updateDocument: async (documentId, data) => {
     set({ loading: true, error: null });
     try {
       await updateProjectDocument(documentId, data);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
-      await useAppStore.getState().fetchProjectDocuments(useAppStore.getState().project_id!);
+      await useAppStore
+        .getState()
+        .fetchProjectDocuments(useAppStore.getState().project_id!);
       set({ loading: false });
     }
   },
@@ -160,7 +206,9 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
-      await useAppStore.getState().fetchProjectDocuments(useAppStore.getState().project_id!);
+      await useAppStore
+        .getState()
+        .fetchProjectDocuments(useAppStore.getState().project_id!);
       set({ loading: false });
     }
   },
@@ -181,7 +229,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     try {
       await generateUserStory(data);
       await useAppStore.getState().fetchUserStories(data.project_id);
-      set({ loading: false }); 
+      set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -192,7 +240,9 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     try {
       await createUserStory(data);
       if (useAppStore.getState().project_id) {
-        await useAppStore.getState().fetchUserStories(useAppStore.getState().project_id!);
+        await useAppStore
+          .getState()
+          .fetchUserStories(useAppStore.getState().project_id!);
       }
       set({ loading: false });
     } catch (error: any) {
@@ -203,10 +253,12 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
   updateUserStory: async (userStoryId, data) => {
     set({ loading: true, error: null });
     try {
-      console.log(userStoryId, data)
+      console.log(userStoryId, data);
       await updateUserStory(userStoryId, data);
       if (useAppStore.getState().project_id) {
-        await useAppStore.getState().fetchUserStories(useAppStore.getState().project_id!);
+        await useAppStore
+          .getState()
+          .fetchUserStories(useAppStore.getState().project_id!);
       }
       set({ loading: false });
     } catch (error: any) {
@@ -219,8 +271,77 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     try {
       await deleteUserStory(userStoryId);
       if (useAppStore.getState().project_id) {
-        await useAppStore.getState().fetchUserStories(useAppStore.getState().project_id!);
+        await useAppStore
+          .getState()
+          .fetchUserStories(useAppStore.getState().project_id!);
       }
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  test_cases: [],
+  fetchTestCases: async (projectId) => {
+    set({ loading: true, error: null });
+    try {
+      const test_cases = await getProjectTestCases(projectId);
+      set({ test_cases, loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  createTestCase: async (data) => {
+    set({ loading: true, error: null });
+    try {
+      await createTestCase(data);
+      if (useAppStore.getState().project_id) {
+        await useAppStore
+          .getState()
+          .fetchTestCases(useAppStore.getState().project_id!);
+      }
+      set({ loading: false });
+    } catch (error: any) {
+      set({ loading: false, error: error.message });
+    }
+  },
+
+  updateTestCase: async (testCaseId, data) => {
+    set({ loading: true, error: null });
+    try {
+      await updateTestCase(testCaseId, data);
+      if (useAppStore.getState().project_id) {
+        await useAppStore
+          .getState()
+          .fetchTestCases(useAppStore.getState().project_id!);
+      }
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  deleteTestCase: async (testCaseId) => {
+    set({ loading: true, error: null });
+    try {
+      await deleteTestCase(testCaseId);
+      if (useAppStore.getState().project_id) {
+        await useAppStore
+          .getState()
+          .fetchTestCases(useAppStore.getState().project_id!);
+      }
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  generateTestCase: async (projectId) => {
+    set({ loading: true, error: null });
+    try {
+      await generateTestCase(projectId);
+      await useAppStore.getState().fetchTestCases(projectId);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
