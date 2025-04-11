@@ -9,7 +9,8 @@ import { useAppStore } from "@/store/store";
 
 function ProjectPageLayout() {
   const { project_id } = useLocalSearchParams();
-  const { fetchProject, documents, user_stories, test_cases } = useAppStore();
+  const { fetchProject, documents, user_stories, test_cases, code_reviews } =
+    useAppStore();
 
   useEffect(() => {
     fetchProject(project_id as string);
@@ -79,7 +80,7 @@ function ProjectPageLayout() {
             <Tabs.Screen
               name="code_review"
               options={{
-                title: "Code Review",
+                title: `Code Reviews (${code_reviews.length})`,
                 tabBarIcon: ({ color }) => (
                   <MaterialIcons name="code" size={24} color={color} />
                 ),

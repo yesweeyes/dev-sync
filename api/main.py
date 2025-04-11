@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from routes import router
 
 app = FastAPI()
@@ -16,7 +17,8 @@ app.add_middleware(
 # Include routes
 app.include_router(router.router)
 
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-

@@ -40,6 +40,14 @@ const ProjectCard = () => {
         {project?.name}
       </Text>
       <View className="mb-4 space-y-2">
+        <Heading className="font-roboto">Github Integration</Heading>
+        <Text className="text-gray-700" isTruncated={true}>
+          <Link href={project?.github_endpoint}>
+            <LinkText>{project?.github_endpoint}</LinkText>
+          </Link>
+        </Text>
+      </View>
+      <View className="mb-4 space-y-2">
         <Heading className="font-roboto">JIRA Integration</Heading>
         <Text className="text-gray-700" isTruncated={true}>
           <Link href={project?.jira_project_endpoint}>

@@ -12,20 +12,20 @@ import { useAppStore } from "@/store/store";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
 
-function ProjectDocumentListView() {
-  const { documents, deleteDocument } = useAppStore();
+function ProjectCodeReviewListView() {
+  const { code_reviews, deleteCodeReviewFile } = useAppStore();
 
-  function handleDocumentDelete(documentId: string) {
-    deleteDocument(documentId);
+  function handleDocumentDelete(code_review_file_id: string) {
+    deleteCodeReviewFile(code_review_file_id);
   }
 
   return (
     <Box className="flex-1 h-full w-full">
-      {documents.length === 0 ? (
+      {code_reviews.length === 0 ? (
         <NoRecordsFound />
       ) : (
         <FlatList
-          data={documents}
+          data={code_reviews}
           keyExtractor={(item) => item.id}
           renderItem={({ item }: { item: RequirementDocument }) => (
             <Card className="p-2 m-2 rounded-xl bg-white">
@@ -61,4 +61,4 @@ function ProjectDocumentListView() {
   );
 }
 
-export default ProjectDocumentListView;
+export default ProjectCodeReviewListView;

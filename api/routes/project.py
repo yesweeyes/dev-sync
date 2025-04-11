@@ -13,11 +13,17 @@ from services.project import (
 from services.requirement_document import (
     get_all_requirement_documents_for_project as get_project_documents_service
 )
-from services.user_story import(
+from services.user_story import (
     get_all_user_stories as get_all_user_stories_service,
 )
-from services.testcases import(
+from services.testcases import (
     get_all_test_cases as get_all_test_cases_service,
+)
+from services.code_review import (
+    get_all_code_review_file_for_project as get_all_code_review_file_service
+)
+from services.jira_issues import (
+    get_all_jira_issues_by_project as get_all_jira_issues_by_project_service,
 )
 
 router = APIRouter(
@@ -78,3 +84,18 @@ def get_all_test_cases(project_id:uuid.UUID, db:Session = Depends(get_db)):
         return get_all_test_cases_service(db, project_id)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
+    
+@router.get("/{project_id}/code_reviews")
+def get_all_code_reviews(project_id:uuid.UUID, db:Session = Depends(get_db)):
+    try:
+        return get_all_code_review_file_service(db, project_id)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+    
+@router.get("/{project_id}/jira")
+def get_all_issues(project_id:uuid.UUID, db:Session = Depends(get_db)):
+    try:
+        return get_all_jira_issues_by_project_service(db, project_id)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+

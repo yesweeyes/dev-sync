@@ -8,6 +8,7 @@ class ProjectCreate(BaseModel):
     jira_project_auth: str
     jira_project_endpoint: str
     jira_project_email: EmailStr
+    github_endpoint: str
 
 class ProjectBase(BaseModel):
     id: UUID4
@@ -16,6 +17,7 @@ class ProjectBase(BaseModel):
     jira_project_auth: str
     jira_project_endpoint: str
     jira_project_email: EmailStr
+    github_endpoint: str
     created_at: datetime
 
 class ProjectUpdate(BaseModel):
@@ -24,6 +26,7 @@ class ProjectUpdate(BaseModel):
     jira_project_auth: Optional[str] = None
     jira_project_endpoint: Optional[str] = None
     jira_project_email: Optional[EmailStr] = None
+    github_endpoint: Optional[str] = None
 
     class Config:
         from_attributes = True

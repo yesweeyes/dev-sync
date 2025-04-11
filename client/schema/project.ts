@@ -5,6 +5,7 @@ export interface Project {
     jira_auth_key: string, 
     jira_project_endpoint: string,
     jira_project_email: string, 
+    github_endpoint: string,
     created_at: Date
 }
 
@@ -14,6 +15,7 @@ export interface ProjectCreate {
     jira_project_auth: string, 
     jira_project_endpoint: string,
     jira_project_email: string, 
+    github_endpoint: string,
 }
 
 export interface ProjectUpdate {
@@ -22,4 +24,5 @@ export interface ProjectUpdate {
     jira_auth_key?: string, 
     jira_project_endpoint?: string,
     jira_project_email?: string, 
+    github_endpoint?: string,
 }
