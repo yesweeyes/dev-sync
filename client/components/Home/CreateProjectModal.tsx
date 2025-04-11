@@ -37,6 +37,7 @@ function CreateProjectModal({
     jira_project_auth: "",
     jira_project_endpoint: "",
     jira_project_email: "",
+    github_endpoint: "",
   });
 
   const [errors, setErrors] = useState<Partial<ProjectCreate>>({});
@@ -89,6 +90,27 @@ function CreateProjectModal({
               )}
             </FormControl>
           </Box>
+
+          <Box className="mt-6 mb-2 space-y-4">
+            <Heading size="sm">Github Integration</Heading>
+            <FormControl isInvalid={!!errors.github_endpoint}>
+              <Input variant="underlined" size="md">
+                <InputField
+                  placeholder="Github URL"
+                  value={formData.github_endpoint}
+                  onChangeText={(text) => handleChange("github_endpoint", text)}
+                />
+              </Input>
+              {errors.jira_project_endpoint && (
+                <FormControlError>
+                  <FormControlErrorText>
+                    {errors.jira_project_endpoint}
+                  </FormControlErrorText>
+                </FormControlError>
+              )}
+            </FormControl>
+          </Box>
+
           <Box className="mt-6 mb-2 space-y-4">
             <Heading size="sm">JIRA Integration</Heading>
 

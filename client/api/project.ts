@@ -47,7 +47,13 @@ export const getProjectTestCases = async (project_id: string) => {
   const response = await api.get(
     `${PROJECT_BASE_URL}/${project_id}/test_cases`
   );
-  console.log(response.data);
+  return response.data;
+};
+
+export const getProjectCodeReviewFiles = async (project_id: string) => {
+  const response = await api.get(
+    `${PROJECT_BASE_URL}/${project_id}/code_reviews`
+  );
   return response.data;
 };
 

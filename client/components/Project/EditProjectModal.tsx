@@ -39,6 +39,7 @@ function EditProjectModal({
     jira_project_email: project?.jira_project_email
       ? project.jira_project_email
       : "",
+    github_endpoint: project?.github_endpoint ? project.github_endpoint : "",
   });
 
   useEffect(() => {
@@ -75,6 +76,21 @@ function EditProjectModal({
               </Input>
             </FormControl>
           </Box>
+
+          <Box className="mt-6 mb-2 space-y-4">
+            <Heading size="sm">Github Integration</Heading>
+
+            <FormControl>
+              <Input variant="underlined" size="md">
+                <InputField
+                  placeholder="Project URL"
+                  value={formData.github_endpoint}
+                  onChangeText={(text) => handleChange("github_endpoint", text)}
+                />
+              </Input>
+            </FormControl>
+          </Box>
+
           <Box className="mt-6 mb-2 space-y-4">
             <Heading size="sm">JIRA Integration</Heading>
 

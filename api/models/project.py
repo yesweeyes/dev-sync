@@ -12,5 +12,5 @@ class Project(Base):
     jira_project_auth = Column(String, nullable=False)
     jira_project_endpoint = Column(String, nullable=False)
     jira_project_email = Column(String, nullable=False)
+    github_endpoint = Column(String, nullable=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))
-

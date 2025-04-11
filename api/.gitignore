@@ -66,8 +66,10 @@ dist/
 build/
 *.egg-info/
 
-# Uploaded files
+# Files
 uploads/
+reviews/
+outputs/
 
 # Alembic init
 alembic.ini
