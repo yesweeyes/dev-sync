@@ -4,7 +4,7 @@ from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
 from database import Base  # Import Base to access metadata
-from models.tech_db import GeneratedHLDDocument, GeneratedLLDDocument
+
 
 # Ensure models are imported
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -16,6 +16,7 @@ from models.user_story import UserStory
 from models.jira_issues import JiraIssues
 from models.testcase import TestCase
 from models.code_review import CodeReviewFile
+from models.tech_db import GeneratedHLDDocument, GeneratedLLDDocument
 
 # Alembic Config object
 config = context.config
