@@ -12,6 +12,7 @@ import {
   UserStoryUpdate,
 } from "@/schema/user_story";
 import { TestCase, TestCaseCreate, TestCaseUpdate } from "@/schema/test_case";
+import { JiraIssue, JiraIssueCreate } from "@/schema/jira_issue";
 
 import {
   getAllProjects,
@@ -23,6 +24,7 @@ import {
   getProjectUserStories,
   getProjectTestCases,
   getProjectCodeReviewFiles,
+  getProjectJiraIssues,
 } from "@/api/project";
 
 import {
@@ -58,6 +60,14 @@ import {
   deleteCodeReviewFile,
   generateCodeReviewFile,
 } from "@/api/code_review";
+
+import {
+  postIssueStories,
+  postIssueByStoryId,
+  postIssueTestCases,
+  postIssueByTestcaseId,
+} from "@/api/jira_issue";
+
 
 interface AppStoreInterface {
   loading: boolean;
@@ -106,6 +116,12 @@ interface AppStoreInterface {
   updateCodeReviewFile: (code_review_file_id: string, data: CodeReviewFileUpdate) => Promise<void>;
   deleteCodeReviewFile: (code_review_file_id: string) => Promise<void>;
   generateCodeReviewFile: (data: CodeReviewGenerate) => Promise<void>;
+  jira_issues: JiraIssue[];
+  fetchJiraIssues: (projectId: string) => Promise<void>;
+  postIssueStories: (projectId: string) => Promise<void>;
+  postIssueByStoryId: (storyId: string) => Promise<void>;
+  postIssueTestCases: (projectId: string) => Promise<void>;
+  postIssueByTestcaseId: (testCaseId: string) => Promise<void>;
 }
 
 export const useAppStore = create<AppStoreInterface>((set) => ({
@@ -134,6 +150,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const user_stories = await getProjectUserStories(projectId);
       const test_cases = await getProjectTestCases(projectId);
       const code_reviews = await getProjectCodeReviewFiles(projectId);
+      const jira_issues = await getProjectJiraIssues(projectId);
       set({
         project,
         project_id: project.id,
@@ -368,15 +385,14 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       set({ error: error.message, loading: false });
     }
   },
-
   code_reviews: [],
   fetchCodeReviewFiles: async (projectId) => {
-    set({loading: true, error: null});
+    set({ loading: true, error: null });
     try {
-      const code_reviews  = await getProjectCodeReviewFiles(projectId);
-      set({code_reviews, loading: false})
+      const code_reviews = await getProjectCodeReviewFiles(projectId);
+      set({ code_reviews, loading: false });
     } catch (error: any) {
-      set({error: error.message, loading: false})
+      set({ error: error.message, loading: false });
     }
   },
 
@@ -389,7 +405,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
         .fetchCodeReviewFiles(useAppStore.getState().project_id!);
       set({ loading: false });
     } catch (error: any) {
-      set({ error: error.message, loading: false }); 
+      set({ error: error.message, loading: false });
     }
   },
 
@@ -398,12 +414,11 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     try {
       await deleteCodeReviewFile(code_review_file_id);
       await useAppStore
-      .getState()
-      .fetchCodeReviewFiles(useAppStore.getState().project_id!);
+        .getState()
+        .fetchCodeReviewFiles(useAppStore.getState().project_id!);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
- 
     }
   },
 
@@ -412,6 +427,57 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     try {
       await generateCodeReviewFile(data);
       await useAppStore.getState().fetchCodeReviewFiles(data.project_id);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  jira_issues: [],
+  fetchJiraIssues: async (projectId) => {
+    set({ loading: true, error: null });
+    try {
+      const jira_issues = await getProjectJiraIssues(projectId);
+      set({ jira_issues, loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  postIssueStories: async (projectId) => {
+    set({ loading: true, error: null });
+    try {
+      await postIssueStories(projectId);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  postIssueByStoryId: async (storyId) => {
+    set({ loading: true, error: null });
+    try {
+      await postIssueByStoryId(storyId);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  postIssueTestCases: async (projectId) => {
+    set({ loading: true, error: null });
+    try {
+      await postIssueTestCases(projectId);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  postIssueByTestcaseId: async (testCaseId) => {
+    set({ loading: true, error: null });
+    try {
+      await postIssueByTestcaseId(testCaseId);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });

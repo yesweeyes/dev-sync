@@ -18,6 +18,7 @@ import NoRecordsFound from "@/components/Common/NoRecordsFound";
 import { TestCase, TestCaseUpdate } from "@/schema/test_case";
 import EditTestCaseModal from "./EditTestCaseModal";
 import { updateTestCase } from "@/api/test_case";
+import { postIssueByTestcaseId } from "@/api/jira_issue";
 
 const TestCaseListView = () => {
   const { test_cases, project_id, fetchTestCases, deleteTestCase } =
@@ -46,6 +47,12 @@ const TestCaseListView = () => {
       fetchTestCases(project_id);
     }
     setisEditModalOpen(false);
+  }
+
+  async function handlePushToJira(testcase_id: string) {
+    if (testcase_id) {
+      await postIssueByTestcaseId(testcase_id);
+    }
   }
   return (
     <Box className="h-full w-full">
@@ -86,12 +93,14 @@ const TestCaseListView = () => {
                     </HStack>
                   </TouchableOpacity>
                   <HStack className="basis-1/5 justify-end" space="sm">
-                    {/* <Button
+                    <Button
                       className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center"
-                      onPress={() => {}}
+                      onPress={() => {
+                        handlePushToJira(item.id);
+                      }}
                     >
                       <ButtonIcon as={Send} size="lg" />
-                    </Button> */}
+                    </Button>
                     <Button
                       className="bg-yellow-600 rounded-full w-14 h-14 items-center justify-center"
                       onPress={() => {
