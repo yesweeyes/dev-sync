@@ -203,13 +203,13 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await deleteProjectDocument(documentId);
+      await useAppStore
+      .getState()
+      .fetchProjectDocuments(useAppStore.getState().project_id!);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
-      await useAppStore
-        .getState()
-        .fetchProjectDocuments(useAppStore.getState().project_id!);
-      set({ loading: false });
+ 
     }
   },
 
