@@ -18,6 +18,7 @@ from models.testcase import TestCase
 from models.code_review import CodeReviewFile
 from models.tech_db import GeneratedHLDDocument, GeneratedLLDDocument
 
+
 # Alembic Config object
 config = context.config
 
