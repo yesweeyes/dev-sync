@@ -67,7 +67,7 @@ build/
 *.egg-info/
 
 # Files
-uploads/
-reviews/
-outputs/
+uploads/*
+reviews/*
+outputs/*
 
