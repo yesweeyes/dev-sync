@@ -45,18 +45,15 @@ def generate_lld(hld_response):
     lld_chain=LLMChain(llm=llm,prompt=lld_prompt)
     lld_response=lld_chain.run(hld_response=hld_response)
     lld_pdf_path=os.path.join("output","LLD_Document.pdf")
-    os.makedir("output",exist_ok=True)
+    os.makedirs("output",exist_ok=True)
     save_to_pdf(lld_response,lld_pdf_path)
 
     return lld_response,lld_pdf_path
 
 
-def process_with_llm(docx_path):
-    
-    doc = Document(docx_path)
-    content = "\n".join([para.text for para in doc.paragraphs])
-
-    hld_response,hld_path=generate_hld(content)
+def process_with_llm(text_chunks):
+   
+    hld_response,hld_path=generate_hld(text_chunks)
     lld_response,lld_path=generate_lld(hld_response)
 
     return hld_path,lld_path
