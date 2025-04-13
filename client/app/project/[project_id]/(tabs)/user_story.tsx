@@ -3,6 +3,7 @@ import { Box } from "@/components/ui/box";
 import UserStoryListView from "@/components/Project/UserStory/ProjectUserStoryListView";
 import ProjectGenerateUserStoryPromptModal from "@/components/Project/UserStory/ProjectGenerateUserStoryPromptModal";
 import CreateUserStoryModal from "@/components/Project/UserStory/CreateUserStoryModal";
+import BulkStoriesBtn from "@/components/Project/UserStory/BulkStoriesBtn";
 
 function ProjectUserStoryPage() {
   return (
@@ -10,6 +11,7 @@ function ProjectUserStoryPage() {
       <UserStoryListView />
       <CreateUserStoryModal />
       <ProjectGenerateUserStoryPromptModal />
+      <BulkStoriesBtn />
     </Box>
   );
 }
