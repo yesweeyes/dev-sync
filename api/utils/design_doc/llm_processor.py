@@ -4,7 +4,7 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from fpdf import FPDF
-from docx import Document
+
 
 load_dotenv(".env")
 Gemini_api_Key = os.getenv("GEMINI_API_KEY")
@@ -16,9 +16,28 @@ llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=Gemini_api
 hld_prompt = PromptTemplate(
     input_variables=["content"],
     template="""
-    You are a software engineer. Generate a detailed High-Level Design (HLD) document based on:
+    You are a solution architect. Generate a detailed High-Level Design (HLD) document based on the following content:
     {content}
-    Include Introduction, high-level architecture, network diagram, key modules, and formal structure.
+
+    The generated document should include :
+    1. First page - High-Level Design (HLD) for "title of uploaded document"
+    2. Table of content with page number (a complete table format)
+    3. Introduction, including - Why this HLD?, Scope of this doc, Intended audience, definitions, references, System overview
+    4. System Design, includin - Application Design, process flow, Information flow.
+    5. High level Architecture, workflow of the user's typical process
+    6. Key modules
+    7. Network Diagram(in mermaid syntax)
+    8. UML Class diagram (in mermaid syntax)
+    9. Database Design
+    10. User Interface, Hardware and Software Interface
+    11. Error Handling
+    12. Help
+    13. Performance specifications
+    14. Security
+    15. Reliability 
+    16. Tools Used
+    Include all the mentioned topics compulsorily and add other topics based on the content.
+    Make sure all pages have page numbers, have a formal structure and the diagrams should be embedded wherever appropriate.
     """
 )
 
@@ -26,9 +45,24 @@ hld_prompt = PromptTemplate(
 lld_prompt = PromptTemplate(
     input_variables=["hld_response"],
     template="""
-    You are a software engineer. Generate a detailed Low-Level Design (LLD) document based on:
+    You are a software developer. Generate a detailed Low-Level Design (LLD) document based on the following HLD document:
     {hld_response}
-    Include Introduction, architecture diagram, data flow, and implementation details.
+    
+    The generated document should include:
+    1. First page - Low-Level Design (LLD) for "title of uploaded document"
+    2. Table of content with page numbers
+    3. Introduction, include - Purpose, Scope, Audience, References, Definitions
+    4. System Overview, include - System description, system context,Implementation details
+    5. Detailed Design, include - Module Descriptions, Class diagrams, Sequence diagrams, state diagrams, activity diagrams, UML diagrams
+    6. Data Design, include - Data structures, Database design, data flow
+    7. Interface design , include - User interface, External interfaces
+    8. Algorithms - Complexity analysis
+    9. Security Design- Security measures, authentication and authorization , Data protection
+    10. Error handling and Logging
+    11. Testing and Validation- unit testing, integration testing and Validation
+    12. Deployment considerations, assumptions and dependencies
+    Include all the mentioned topics compulsorily and add other topics based on the content.
+    Make sure all pages have page numbers, have a formal structure and the diagrams should be embedded wherever appropriate.
     """
 )
 
