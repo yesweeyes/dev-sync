@@ -55,7 +55,7 @@ def delete_user_story(story_id: uuid.UUID, db:Session = Depends(get_db)):
     
         
 @router.post("/generate")
-def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db)):
+async def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db)):
     project_id = data.project_id
     user_prompt = data.user_prompt
 
