@@ -41,7 +41,7 @@ function ProjectGenerateCodeReviewPromptModal() {
         onPress={() => setIsOpen(true)}
       >
         <FabIcon as={Sparkles} className="text-white" />
-        <FabLabel>Generate Code Review</FabLabel>
+        <FabLabel>Custom Code Review</FabLabel>
       </Fab>
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>

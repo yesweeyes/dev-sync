@@ -4,6 +4,7 @@ import ProjectGenerateCodeReviewPromptModal from "@/components/Project/CodeRevie
 import { useCallback, useContext } from "react";
 import { InfoContext } from "@/components/Common/InfoContext";
 import { useFocusEffect } from "expo-router";
+import ProjectGenerateE2ECodeReviewButton from "@/components/Project/CodeReview/ProjectGenerateCodeReviewPromptModal copy";
 
 function ProjectCodeReviewPage() {
   const { setInfoText } = useContext(InfoContext);
@@ -16,6 +17,7 @@ function ProjectCodeReviewPage() {
     <Box className="p-2 h-full w-full">
       <ProjectCodeReviewListView />
       <ProjectGenerateCodeReviewPromptModal />
+      <ProjectGenerateE2ECodeReviewButton />
     </Box>
   );
 }
