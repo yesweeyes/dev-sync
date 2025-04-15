@@ -12,7 +12,7 @@ const GenerateBulkStoriesButton = () => {
     generateUserStories({
       project_id: project_id,
       user_prompt:
-        "Generate user stories for all the content including functional and non functional",
+        "Generate a maximum of 10 user storiesfor all the content including functional and non functional",
     });
   };
   return (

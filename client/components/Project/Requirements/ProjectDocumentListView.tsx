@@ -25,6 +25,7 @@ function ProjectDocumentListView() {
         <NoRecordsFound />
       ) : (
         <FlatList
+          className="pb-40"
           data={documents}
           keyExtractor={(item) => item.id}
           renderItem={({ item }: { item: RequirementDocument }) => (

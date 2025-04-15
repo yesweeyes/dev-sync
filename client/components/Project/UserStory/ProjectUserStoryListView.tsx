@@ -69,6 +69,7 @@ function UserStoryListView() {
         <NoRecordsFound />
       ) : (
         <FlatList
+          className="pb-40"
           data={user_stories}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (

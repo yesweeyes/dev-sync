@@ -25,6 +25,7 @@ function ProjectCodeReviewListView() {
         <NoRecordsFound />
       ) : (
         <FlatList
+          className="pb-40"
           data={code_reviews}
           keyExtractor={(item) => item.id}
           renderItem={({ item }: { item: RequirementDocument }) => (

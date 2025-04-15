@@ -71,6 +71,7 @@ const TestCaseListView = () => {
         </>
       ) : (
         <FlatList
+          className="pb-40"
           data={test_cases}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
