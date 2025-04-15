@@ -1,9 +1,9 @@
 import { FlatList, ScrollView, Pressable, View, Linking } from "react-native";
-import { useRouter } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 import { createProject, getAllProjects } from "../api/project";
 import { Box } from "@/components/ui/box";
 import { Button, ButtonText, ButtonIcon } from "@/components/ui/button";
-import { useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 import { Project, ProjectCreate } from "@/schema/project";
 import { Text } from "@/components/ui/text";
 import { VStack } from "@/components/ui/vstack";
@@ -13,15 +13,23 @@ import CreateProjectModal from "@/components/Home/CreateProjectModal";
 import ProjectListCard from "@/components/Home/ProjectListCard";
 import { useAppStore } from "@/store/store";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
+import { InfoContext } from "@/components/Common/InfoContext";
 
 function HomePage() {
   const { projects, fetchProjects, addProject } = useAppStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
+  const { setInfoText } = useContext(InfoContext);
 
   async function handleSubmit(project: ProjectCreate) {
     await addProject(project);
     setIsCreateModalOpen(false);
   }
+
+  useFocusEffect(
+    useCallback(() => {
+      setInfoText("Create/Navigate to Project");
+    }, [setInfoText])
+  );
 
   useEffect(() => {
     fetchProjects();

@@ -1,21 +1,17 @@
-import NoRecordsFound from "@/components/Common/NoRecordsFound";
 import ProjectCodeReviewListView from "@/components/Project/CodeReview/ProjectCodeReviewListView";
 import { Box } from "@/components/ui/box";
-import { useAppStore } from "@/store/store";
-import React, { useEffect } from "react";
-import { Fab, FabLabel, FabIcon } from "@/components/ui/fab";
 import ProjectGenerateCodeReviewPromptModal from "@/components/Project/CodeReview/ProjectGenerateCodeReviewPromptModal";
+import { useCallback, useContext } from "react";
+import { InfoContext } from "@/components/Common/InfoContext";
+import { useFocusEffect } from "expo-router";
 
 function ProjectCodeReviewPage() {
-  const { fetchProjectDocuments, addDocument, project, project_id } =
-    useAppStore();
-
-  useEffect(() => {
-    fetchProjectDocuments(project_id as string);
-  }, [project_id]);
-
-  const handleDocumentSelect = async () => {};
-
+  const { setInfoText } = useContext(InfoContext);
+  useFocusEffect(
+    useCallback(() => {
+      setInfoText("Generate Code Review from Github Repository");
+    }, [setInfoText])
+  );
   return (
     <Box className="p-2 h-full w-full">
       <ProjectCodeReviewListView />

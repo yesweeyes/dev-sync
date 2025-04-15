@@ -102,7 +102,7 @@ const TestCaseListView = () => {
                       <ButtonIcon as={Send} size="lg" />
                     </Button>
                     <Button
-                      className="bg-yellow-600 rounded-full w-14 h-14 items-center justify-center"
+                      className="bg-yellow-500 rounded-full w-14 h-14 items-center justify-center"
                       onPress={() => {
                         handleEdit(item);
                       }}
