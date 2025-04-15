@@ -88,17 +88,15 @@ function HomePage() {
           {projects.length === 0 ? (
             <NoRecordsFound />
           ) : (
-            <ScrollView className="h-full w-full">
-              <FlatList
-                data={projects.filter((item) => item?.id)}
-                keyExtractor={(item, index) =>
-                  item?.id ? item.id.toString() : `fallback-${index}`
-                }
-                renderItem={({ item, index }) => (
-                  <ProjectListCard project={item} />
-                )}
-              />
-            </ScrollView>
+            <FlatList
+              data={projects.filter((item) => item?.id)}
+              keyExtractor={(item, index) =>
+                item?.id ? item.id.toString() : `fallback-${index}`
+              }
+              renderItem={({ item, index }) => (
+                <ProjectListCard project={item} />
+              )}
+            />
           )}
         </VStack>
       </HStack>
