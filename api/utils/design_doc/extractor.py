@@ -1,8 +1,8 @@
 import fitz  
 from docx import Document
 
-def extract_text_from_pdf(file_path):
-    document = fitz.open(file_path)
+def extract_text_from_pdf(document):
+    document = fitz.open(document)
     text_chunks = [page.get_text() for page in document]
     return text_chunks
 

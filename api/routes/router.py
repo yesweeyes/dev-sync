@@ -4,7 +4,7 @@ from .requirement_document import router as requirement_document_router
 from .user_story import router as user_story_router
 from .jira_issues import router as jira_issue_router
 from .testcases import router as test_case_router
-from .process import router as tech_router
+from .design_doc import router as tech_router
 from .code_review import router as code_review_router
 from .uploads import router as upload_router
 from .reviews import router as review_router

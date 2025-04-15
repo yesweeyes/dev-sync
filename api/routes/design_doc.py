@@ -1,36 +1,34 @@
 from sqlalchemy.orm import Session
 from database import get_db
-from models.db_models import Generated_HLD_Document,Generated_LLD_Document
+from models.tech_db import GeneratedHLDDocument,GeneratedLLDDocument
+from schemas.design_doc import HldLldGenerate
 
 import os
 from fastapi import APIRouter, UploadFile, File, Depends, Query, HTTPException
-from utils.Tech_Docs.extractor import extract_text_from_pdf, save_to_docx
-from utils.Tech_Docs.llm_processor import process_with_llm
+from utils.design_doc.extractor import extract_text_from_pdf, save_to_docx
+from utils.design_doc.llm_processor import process_with_llm
+import utils.user_story.generate_user_stories as user_story_gen_util
 import uuid
 
-UPLOAD_DIR = "uploads/tech_docs"
-OUTPUT_DIR = "outputs"
+output_dir = "output"
 
 router = APIRouter(
     prefix="/tech_docs",
     tags=["tech_docs"],
 )
 
-os.makedirs(UPLOAD_DIR, exist_ok=True)
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(output_dir, exist_ok=True)
 
-
-@router.post("/upload/")
-async def upload_pdf(file: UploadFile = File(...), project_id: uuid.UUID =Query(...), db: Session =Depends(get_db)):
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
+@router.post("/generate/")
+def GenerateDesignDocs(data:HldLldGenerate, db: Session =Depends(get_db)):
+    project_id=data.project_id
     
-    with open(file_path, "wb") as f:
-        f.write(await file.read())
-    
+    document=user_story_gen_util.get_files(project_id,db)
+       
     # extracting text and saving as a docx
-    text_chunks = extract_text_from_pdf(file_path)
-    docx_path = os.path.join(OUTPUT_DIR, "extracted_docx.docx")
-    save_to_docx(text_chunks, docx_path)
+    text_chunks = extract_text_from_pdf(document)
+    docx_path = os.path.join(output_dir, "extracted_docx.docx")
+    #save_to_docx(text_chunks, docx_path)
 
     # processing of extracted text with LLM
     hld_pdf, lld_pdf = process_with_llm(docx_path)
@@ -38,7 +36,7 @@ async def upload_pdf(file: UploadFile = File(...), project_id: uuid.UUID =Query(
     try:
 
         #for HLD
-        new_hld=Generated_HLD_Document(
+        new_hld=GeneratedHLDDocument(
             project_id=project_id,
             original_name="HLD_Document.pdf",
             stored_name=os.path.basename(hld_pdf),
@@ -47,7 +45,7 @@ async def upload_pdf(file: UploadFile = File(...), project_id: uuid.UUID =Query(
         )
 
         #for LLD
-        new_lld=Generated_LLD_Document(
+        new_lld=GeneratedLLDDocument(
             project_id=project_id,
             original_name="LLD_Document.pdf",
             stored_name=os.path.basename(lld_pdf),
@@ -63,7 +61,5 @@ async def upload_pdf(file: UploadFile = File(...), project_id: uuid.UUID =Query(
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
     
-
     return {"updates": "Processing complete", "HLD_PDF": hld_pdf, "LLD_PDF": lld_pdf}
