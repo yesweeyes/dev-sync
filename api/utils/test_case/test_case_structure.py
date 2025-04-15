@@ -8,7 +8,7 @@ import json
 if not os.environ.get("GROQ_API_KEY"):
   os.environ["GROQ_API_KEY"] = getpass.getpass("Enter API key for Groq: ")
 
-model = init_chat_model("llama-3.3-70b-specdec", model_provider="groq")
+model = init_chat_model("meta-llama/llama-4-scout-17b-16e-instruct", model_provider="groq")
 
 example_template = '''
 Module Name:Mention the name of the user story through which the test case is being created

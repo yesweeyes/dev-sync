@@ -32,7 +32,7 @@ target_metadata = Base.metadata
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode."""
 
-    url = os.getenv("POSTGRES_DATABASE_URL", "postgresql://postgres:12345@localhost:5432/devsync")
+    url = os.getenv("POSTGRES_DATABASE_URL")
     config.set_main_option("sqlalchemy.url", url)
     context.configure(
         url=url,
