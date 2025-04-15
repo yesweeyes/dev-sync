@@ -24,10 +24,10 @@ hld_prompt = PromptTemplate(
     2. Table of content with page number (a complete table format)
     3. Introduction, including - Why this HLD?, Scope of this doc, Intended audience, definitions, references, System overview
     4. System Design, includin - Application Design, process flow, Information flow.
-    5. High level Architecture, workflow of the user's typical process
+    5. High level Architecture image, workflow of the user's typical process
     6. Key modules
-    7. Network Diagram(in mermaid syntax)
-    8. UML Class diagram (in mermaid syntax)
+    7. Network Diagram(in mermaid syntax) image
+    8. UML Class diagram (in mermaid syntax) image
     9. Database Design
     10. User Interface, Hardware and Software Interface
     11. Error Handling
@@ -36,7 +36,7 @@ hld_prompt = PromptTemplate(
     14. Security
     15. Reliability 
     16. Tools Used
-    Include all the mentioned topics compulsorily and add other topics based on the content.
+    Include all the mentioned topics compulsorily and add other topics based on the content in detail
     Make sure all pages have page numbers, have a formal structure and the diagrams should be embedded wherever appropriate.
     """
 )
@@ -61,7 +61,7 @@ lld_prompt = PromptTemplate(
     10. Error handling and Logging
     11. Testing and Validation- unit testing, integration testing and Validation
     12. Deployment considerations, assumptions and dependencies
-    Include all the mentioned topics compulsorily and add other topics based on the content.
+    Include all the mentioned topics compulsorily and add other topics based on the content in detail
     Make sure all pages have page numbers, have a formal structure and the diagrams should be embedded wherever appropriate.
     """
 )
