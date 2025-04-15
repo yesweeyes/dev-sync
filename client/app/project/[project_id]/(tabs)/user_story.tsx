@@ -3,7 +3,7 @@ import { Box } from "@/components/ui/box";
 import UserStoryListView from "@/components/Project/UserStory/ProjectUserStoryListView";
 import ProjectGenerateUserStoryPromptModal from "@/components/Project/UserStory/ProjectGenerateUserStoryPromptModal";
 import CreateUserStoryModal from "@/components/Project/UserStory/CreateUserStoryModal";
-import BulkStoriesBtn from "@/components/Project/UserStory/BulkStoriesBtn";
+import GenerateBulkStoriesButton from "@/components/Project/UserStory/GenerateBulkStoriesButton";
 import { InfoContext } from "@/components/Common/InfoContext";
 import { useFocusEffect } from "expo-router";
 
@@ -21,7 +21,7 @@ function ProjectUserStoryPage() {
       <UserStoryListView />
       <CreateUserStoryModal />
       <ProjectGenerateUserStoryPromptModal />
-      <BulkStoriesBtn />
+      <GenerateBulkStoriesButton />
     </Box>
   );
 }

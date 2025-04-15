@@ -25,6 +25,7 @@ function ProjectCodeReviewListView() {
         <NoRecordsFound />
       ) : (
         <FlatList
+          className="pb-40"
           data={code_reviews}
           keyExtractor={(item) => item.id}
           renderItem={({ item }: { item: RequirementDocument }) => (
@@ -41,12 +42,12 @@ function ProjectCodeReviewListView() {
                       const fileUrl = `${BACKEND_BASE_URL}/${item.file_path}`;
                       Linking.openURL(fileUrl);
                     }}
-                    className="w-14 h-14 bg-blue-600 rounded-full items-center justify-center"
+                    className="w-14 h-14 bg-blue-600 rounded-full items-center justify-center hover:scale-105 transition-transform"
                   >
                     <ButtonIcon as={ExternalLink} size="lg" />
                   </Button>
                   <Button
-                    className="w-14 h-14 bg-red-600 rounded-full items-center justify-center"
+                    className="w-14 h-14 bg-red-600 rounded-full items-center justify-center hover:scale-105 transition-transform"
                     onPress={() => handleDocumentDelete(item.id)}
                   >
                     <ButtonIcon as={Trash2} size="lg" />
