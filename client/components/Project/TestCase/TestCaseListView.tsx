@@ -88,7 +88,7 @@ const TestCaseListView = () => {
                         <ChevronDown size={20} color="black" />
                       )}
                       <Text className="text-base font-roboto text-typography-black">
-                        {item.title} - {item.module_name}
+                        {item.module_name}
                       </Text>
                     </HStack>
                   </TouchableOpacity>
