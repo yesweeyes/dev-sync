@@ -1,8 +1,18 @@
+import { InfoContext } from "@/components/Common/InfoContext";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
 import { Box } from "@/components/ui/box";
-import React from "react";
+import { useFocusEffect } from "expo-router";
+import React, { useCallback, useContext } from "react";
 
 function ProjectDesginPage() {
+  const { setInfoText } = useContext(InfoContext);
+  useFocusEffect(
+    useCallback(() => {
+      setInfoText(
+        "Generate High-Level and Low-Level Design Documentation from Knowledge Base"
+      );
+    }, [setInfoText])
+  );
   return (
     <Box className="p-2 h-full w-full">
       <NoRecordsFound />

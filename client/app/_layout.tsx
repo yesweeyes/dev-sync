@@ -11,6 +11,8 @@ import { House } from "lucide-react-native";
 import { Pressable, Linking } from "react-native";
 import { useAppStore } from "@/store/store";
 import { useEffect } from "react";
+import { InfoProvider } from "@/components/Common/InfoContext";
+import InfoContentBox from "@/components/Common/InfoContentBox";
 
 function RootLayout() {
   const { clearProject } = useAppStore();
@@ -28,39 +30,43 @@ function RootLayout() {
 
   return (
     <GluestackUIProvider>
-      <Box className="flex-1 w-full h-full p-4">
-        <VStack space="xl" className="h-full w-full">
-          {/* Header Section */}
-          <Box className="w-full flex-row items-center justify-between">
-            {/* Left side: DevSync + Documentation */}
-            <HStack space="md">
-              <Text className="text-2xl font-bold text-typography-black">
-                DevSync
-              </Text>
-              <Pressable onPress={openNotion}>
-                <Text className="text-base text-primary underline py-1">
-                  Documentation
+      <InfoProvider>
+        <Box className="flex-1 w-full h-full p-4 font-roboto">
+          <VStack space="xl" className="h-full w-full">
+            {/* Header Section */}
+            <Box className="w-full flex-row items-center justify-between">
+              {/* Left side: DevSync + Documentation */}
+              <HStack space="md">
+                <Text className="text-2xl font-bold text-typography-black">
+                  DevSync
                 </Text>
-              </Pressable>
-            </HStack>
+                <Pressable onPress={openNotion}>
+                  <Text className="text-base text-primary underline py-1">
+                    Help
+                  </Text>
+                </Pressable>
+              </HStack>
 
-            {/* Right side: Home button */}
-            <Button
-              onPress={() => {
-                clearProject();
-                router.push(`/`);
-              }}
-            >
-              <ButtonIcon as={House} variant="outline" size="xl" />
-            </Button>
-          </Box>
+              <InfoContentBox />
 
-          {/* Main Content */}
-          <Box className="flex-1 w-full justify-center">
-            <Slot />
-          </Box>
-        </VStack>
-      </Box>
+              {/* Right side: Home button */}
+              <Button
+                onPress={() => {
+                  clearProject();
+                  router.push(`/`);
+                }}
+              >
+                <ButtonIcon as={House} variant="outline" size="xl" />
+              </Button>
+            </Box>
+
+            {/* Main Content */}
+            <Box className="flex-1 w-full justify-center">
+              <Slot />
+            </Box>
+          </VStack>
+        </Box>
+      </InfoProvider>
     </GluestackUIProvider>
   );
 }
