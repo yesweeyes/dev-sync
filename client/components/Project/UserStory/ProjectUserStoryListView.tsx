@@ -89,19 +89,19 @@ function UserStoryListView() {
                   </TouchableOpacity>
                   <HStack space="sm">
                     <Button
-                      className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center"
+                      className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center hover:scale-105 transition-transform"
                       onPress={() => handlePushToJIRA(item.id)}
                     >
                       <ButtonIcon as={Send} size="lg" />
                     </Button>
                     <Button
-                      className="bg-yellow-500 rounded-full w-14 h-14 items-center justify-center"
+                      className="bg-yellow-500 rounded-full w-14 h-14 items-center justify-center hover:scale-105 transition-transform"
                       onPress={() => handleEdit(item)}
                     >
                       <ButtonIcon as={Edit} size="lg" />
                     </Button>
                     <Button
-                      className="bg-red-600 rounded-full w-14 h-14 items-center justify-center"
+                      className="bg-red-600 rounded-full w-14 h-14 items-center justify-center hover:scale-105 transition-transform"
                       onPress={() => handleDelete(item.id)}
                     >
                       <ButtonIcon as={Trash2} size="lg" />

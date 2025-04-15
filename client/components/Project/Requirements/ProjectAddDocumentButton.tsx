@@ -3,6 +3,7 @@ import { Fab, FabLabel, FabIcon } from "@/components/ui/fab";
 import { AddIcon } from "@/components/ui/icon";
 import * as DocumentPicker from "expo-document-picker";
 import { useAppStore } from "@/store/store";
+import { Box } from "@/components/ui/box";
 
 function ProjectAddDocumentButton() {
   const { addDocument, project_id } = useAppStore();
@@ -28,10 +29,17 @@ function ProjectAddDocumentButton() {
     }
   };
   return (
-    <Fab size="md" placement="bottom right" onPress={handleDocumentSelect}>
-      <FabIcon as={AddIcon} />
-      <FabLabel>Add Document</FabLabel>
-    </Fab>
+    <Box>
+      <Fab
+        size="md"
+        placement="bottom right"
+        className="hover:scale-105 transition-transform"
+        onPress={handleDocumentSelect}
+      >
+        <FabIcon as={AddIcon} />
+        <FabLabel>Add</FabLabel>
+      </Fab>
+    </Box>
   );
 }
 

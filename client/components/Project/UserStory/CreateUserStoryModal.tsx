@@ -79,9 +79,14 @@ function CreateUserStoryModal() {
 
   return (
     <Box>
-      <Fab size="md" placement="bottom right" onPress={() => setIsOpen(true)}>
+      <Fab
+        size="md"
+        placement="bottom right"
+        className="hover:scale-105 transition-transform"
+        onPress={() => setIsOpen(true)}
+      >
         <FabIcon as={Plus} />
-        <FabLabel>Create User Story</FabLabel>
+        <FabLabel>Create</FabLabel>
       </Fab>
       <Modal
         isOpen={isOpen}
