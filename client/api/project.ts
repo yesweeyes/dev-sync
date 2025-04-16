@@ -43,6 +43,13 @@ export const getProjectUserStories = async (project_id: string) => {
   return response.data;
 };
 
+export const getProjectTechDocs = async (project_id: string) => {
+  const response = await api.get(
+    `${PROJECT_BASE_URL}/${project_id}/design_docs`
+  );
+  return response.data;
+};
+
 export const getProjectTestCases = async (project_id: string) => {
   const response = await api.get(
     `${PROJECT_BASE_URL}/${project_id}/test_cases`

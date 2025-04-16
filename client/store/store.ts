@@ -11,6 +11,7 @@ import {
   UserStoryGenerate,
   UserStoryUpdate,
 } from "@/schema/user_story";
+import { HldLld, HldLldGenerate } from "@/schema/design_doc";
 import { TestCase, TestCaseCreate, TestCaseUpdate } from "@/schema/test_case";
 import { JiraIssue, JiraIssueCreate } from "@/schema/jira_issue";
 
@@ -25,6 +26,7 @@ import {
   getProjectTestCases,
   getProjectCodeReviewFiles,
   getProjectJiraIssues,
+  getProjectTechDocs,
 } from "@/api/project";
 
 import {
@@ -39,6 +41,10 @@ import {
   updateUserStory,
   createUserStory,
 } from "@/api/user_story";
+
+import {
+  GenerateTechDoc
+} from "@/api/design_doc"
 
 import {
   createTestCase,
@@ -104,6 +110,10 @@ interface AppStoreInterface {
   ) => Promise<void>;
   deleteUserStory: (userStoryId: string) => Promise<void>;
 
+  design_docs: HldLld[];
+  fetchTechDocs: (projectId: string) => Promise<void>;
+  generateTechDocs: (data: HldLldGenerate) => Promise<void>
+
   test_cases: TestCase[];
   fetchTestCases: (projectId: string) => Promise<void>;
   createTestCase: (data: TestCaseCreate) => Promise<void>;
@@ -148,6 +158,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const project = await getProject(projectId);
       const documents = await getProjectDocuments(projectId);
       const user_stories = await getProjectUserStories(projectId);
+      const design_docs = await getProjectTechDocs(projectId);
       const test_cases = await getProjectTestCases(projectId);
       const code_reviews = await getProjectCodeReviewFiles(projectId);
       const jira_issues = await getProjectJiraIssues(projectId);
@@ -156,6 +167,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
         project_id: project.id,
         documents,
         user_stories,
+        design_docs,
         test_cases,
         code_reviews,
         loading: false,
@@ -316,6 +328,28 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
+    }
+  },
+
+  design_docs: [],
+  fetchTechDocs: async (projectId) => {
+    set({ loading: true,error: null});
+    try{
+      const design_docs=await getProjectTechDocs(projectId);
+      set({ design_docs, loading:false});
+    } catch (error:any) {
+      set({error:error.message, loading:false});
+    }
+  },
+
+  generateTechDocs: async (data) => {
+    set({ loading: true, error: null });
+    try{
+      await GenerateTechDoc(data);
+      await useAppStore.getState().fetchTechDocs(data.project_id);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error:error.message, loading:false});
     }
   },
 
