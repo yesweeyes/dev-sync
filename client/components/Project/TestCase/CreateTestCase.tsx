@@ -71,6 +71,7 @@ const CreateTestCase = () => {
       post_condition: postCondition,
       priority: priority,
       test_type: TestType,
+      jiraPush: false,
     };
 
     createTestCase(data);

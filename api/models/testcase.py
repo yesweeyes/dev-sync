@@ -1,5 +1,5 @@
 from database import Base
-from sqlalchemy import Column, String, ForeignKey, Enum as SQLEnum, Text, ARRAY, TIMESTAMP, text
+from sqlalchemy import Column, String, ForeignKey, Enum as SQLEnum, Text, ARRAY, TIMESTAMP, text, Boolean
 import uuid
 from sqlalchemy.dialects.postgresql import UUID
 from enum import Enum
@@ -22,4 +22,5 @@ class TestCase(Base):
     post_condition = Column(Text, nullable=False)
     priority = Column(SQLEnum(TestCasePriorityEnum), nullable=False)
     test_type =Column(String, nullable=False)
+    jiraPush = Column(Boolean, default=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, ForeignKey, Enum as SQLEnum, Text, ARRAY, TIMESTAMP, text
+from sqlalchemy import Column, String, Integer,Boolean, ForeignKey, Enum as SQLEnum, Text, ARRAY, TIMESTAMP, text
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from enum import Enum
@@ -22,4 +22,5 @@ class UserStory(Base):
     storyPoints = Column(Integer, nullable=False)
     labels = Column(ARRAY(String), nullable=True)  
     issueType = Column(Text, nullable=False)
+    jiraPush = Column(Boolean, default=False)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))

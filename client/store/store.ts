@@ -34,6 +34,7 @@ import {
 
 import {
   generateUserStory,
+  getUserStory,
   deleteUserStory,
   updateUserStory,
   createUserStory,
@@ -81,6 +82,7 @@ interface AppStoreInterface {
 
   user_stories: UserStory[];
   fetchUserStories: (projectId: string) => Promise<void>;
+  getUserStory: (userStoryId: string) => Promise<UserStory>;
   generateUserStories: (data: UserStoryGenerate) => Promise<void>;
   createUserStory: (data: UserStoryCreate) => Promise<void>;
   updateUserStory: (
@@ -91,6 +93,7 @@ interface AppStoreInterface {
 
   test_cases: TestCase[];
   fetchTestCases: (projectId: string) => Promise<void>;
+  getTestCase: (testCaseId: string) => Promise<TestCase>;
   createTestCase: (data: TestCaseCreate) => Promise<void>;
   updateTestCase: (testCaseId: string, data: TestCaseUpdate) => Promise<void>;
   deleteTestCase: (TestCaseId: string) => Promise<void>;
@@ -136,6 +139,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
         documents,
         user_stories,
         test_cases,
+        jira_issues,
         loading: false,
       });
     } catch (error: any) {
@@ -241,6 +245,17 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     }
   },
 
+  getUserStory: async (userStoryId) => {
+    set({ loading: false, error: null });
+    try {
+      const story = await getUserStory(userStoryId);
+      set({ loading: false });
+      return story;
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
   generateUserStories: async (data) => {
     set({ loading: true, error: null });
     try {
@@ -309,6 +324,16 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     }
   },
 
+  getTestCase: async (testCaseId) => {
+    set({ loading: false, error: null });
+    try {
+      const story = await getTestCase(testCaseId);
+      set({ loading: false });
+      return story;
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
   createTestCase: async (data) => {
     set({ loading: true, error: null });
     try {

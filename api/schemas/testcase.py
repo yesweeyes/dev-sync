@@ -18,6 +18,7 @@ class TestCaseBase(BaseModel):
     post_condition: str
     priority:PriorityEnum
     test_type:str
+    jiraPush:bool
 
     class Config:
         from_attributes = True 
@@ -32,18 +33,20 @@ class TestCaseCreate(BaseModel):
     post_condition: str
     priority:PriorityEnum
     test_type:str
+    jiraPush:bool
 
     class Config:
         from_attributes = True 
 
 class TestCaseUpdate(BaseModel):
-    module_name: Optional[str]
-    description: Optional[str]
-    preconditions: Optional[str]
-    test_steps : Optional[List[str]]
-    post_condition: Optional[str]
-    priority: Optional[PriorityEnum]
-    test_type: Optional[str]
+    module_name: Optional[str] = None
+    description: Optional[str] = None
+    preconditions: Optional[str] = None
+    test_steps : Optional[List[str]] = None
+    post_condition: Optional[str] = None
+    priority: Optional[PriorityEnum] = None
+    test_type: Optional[str] = None
+    jiraPush:bool = None
 
     class Config:
         from_attributes = True 

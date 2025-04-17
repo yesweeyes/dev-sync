@@ -21,8 +21,14 @@ import { updateTestCase } from "@/api/test_case";
 import { postIssueByTestcaseId } from "@/api/jira_issue";
 
 const TestCaseListView = () => {
-  const { test_cases, project_id, fetchTestCases, deleteTestCase } =
-    useAppStore();
+  const {
+    test_cases,
+    project_id,
+    fetchTestCases,
+    deleteTestCase,
+    getTestCase,
+    updateTestCase,
+  } = useAppStore();
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
   const [isEditModalOpen, setisEditModalOpen] = useState(false);
   const [selectedTestcase, setselectedTestcase] = useState<TestCase>();
@@ -53,6 +59,9 @@ const TestCaseListView = () => {
     if (testcase_id) {
       await postIssueByTestcaseId(testcase_id);
     }
+    let testcase = await getTestCase(testcase_id);
+    testcase.jiraPush = true;
+    await updateTestCase(testcase_id, { jiraPush: true });
   }
   return (
     <Box className="h-full w-full">
@@ -94,7 +103,12 @@ const TestCaseListView = () => {
                   </TouchableOpacity>
                   <HStack className="basis-1/5 justify-end" space="sm">
                     <Button
-                      className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center"
+                      className={`rounded-full w-14 h-14 items-center justify-center ${
+                        item.jiraPush
+                          ? "bg-gray-600 cursor-not-allowed"
+                          : "bg-blue-600"
+                      }`}
+                      disabled={item.jiraPush}
                       onPress={() => {
                         handlePushToJira(item.id);
                       }}
