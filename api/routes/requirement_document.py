@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
 import uuid
 from schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate
@@ -18,12 +18,13 @@ router = APIRouter(
 
 @router.post("/upload")
 async def upload_document(
+    background_tasks: BackgroundTasks,
     project_id: uuid.UUID = Form(...), 
     file: UploadFile = File(...), 
     db: Session = Depends(get_db),
 ):
     try:
-        return save_requirement_document_service(db, project_id, file)
+        return save_requirement_document_service(db, project_id, file, background_tasks)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
