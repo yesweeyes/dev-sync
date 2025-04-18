@@ -1,15 +1,19 @@
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
+from services.document_summary import (
+    create_document_summary_for_req_doc as create_document_summary_for_req_doc_service
+)
 from models.requirement_document import RequirementDocument
 from schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate, RequirementDocumentBase
 import uuid
 from fastapi import UploadFile
 from typing import List
 import os
+from fastapi import BackgroundTasks
 
 UPLOAD_FOLDER = "uploads"
 
-def save_requirement_document(db: Session, project_id: uuid.UUID, file: UploadFile):
+def save_requirement_document(db: Session, project_id: uuid.UUID, file: UploadFile, background_tasks: BackgroundTasks):
     # Ensure uploads folder exists
     os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
@@ -29,6 +33,9 @@ def save_requirement_document(db: Session, project_id: uuid.UUID, file: UploadFi
     db.add(new_doc)
     db.commit()
     db.refresh(new_doc)
+
+    # create_document_summary_for_req_doc_service(db, new_doc)
+    background_tasks.add_task(create_document_summary_for_req_doc_service, db, new_doc)
 
     return new_doc
 
