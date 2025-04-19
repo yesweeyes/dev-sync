@@ -3,20 +3,15 @@ from database import get_db
 from sqlalchemy.orm import Session
 import uuid
 from services.project import get_project
-from services.user_story import get_user_story
+from services.testcases import get_test_case
 from requests.auth import HTTPBasicAuth
 import requests
 import json
 
-load_dotenv()
-
-
-def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session):
+def push_test_case_to_jira(test_case_id: uuid.UUID, db: Session):
     try:
-        print("A")
-        user_story = get_user_story(db, user_story_id)
-        print("B")
-        project_id = user_story.project_id
+        test_case = get_test_case(db, test_case_id)
+        project_id = test_case.project_id
         project = get_project(db, project_id)
 
         PROJECT_KEY = project.jira_project_key
@@ -35,7 +30,7 @@ def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session):
                 "project": {
                     "key": PROJECT_KEY
                 },
-                "summary": user_story.title,
+                "summary": test_case.module_name,
                 "description": {
                     "type": "doc",
                     "version": 1,
@@ -45,16 +40,15 @@ def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session):
                             "content": [
                                 {
                                     "type": "text",
-                                    "text": user_story.description + "/n" + user_story.acceptance_criteria
+                                    "text": test_case.description  + "/n" + test_case.post_condition
                                 }
                             ]
                         }
                     ]
                 },
                 "issuetype": {
-                    "name": user_story.issueType
+                    "name": "Task"
                 },
-                "customfield_10016": user_story.storyPoints
             }
         })
 

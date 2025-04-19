@@ -17,8 +17,7 @@ import LabeledText from "./LabeledText";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
 import { TestCase, TestCaseUpdate } from "@/schema/test_case";
 import EditTestCaseModal from "./EditTestCaseModal";
-import { updateTestCase } from "@/api/test_case";
-import { postIssueByTestcaseId } from "@/api/jira_issue";
+import { pushTestCaseToJira, updateTestCase } from "@/api/test_case";
 
 const TestCaseListView = () => {
   const {
@@ -57,11 +56,12 @@ const TestCaseListView = () => {
 
   async function handlePushToJira(testcase_id: string) {
     if (testcase_id) {
-      await postIssueByTestcaseId(testcase_id);
+      const res = await pushTestCaseToJira(testcase_id);
+      await updateTestCase(testcase_id, {
+        jiraPush: true,
+        jira_id: res["id"],
+      });
     }
-    let testcase = await getTestCase(testcase_id);
-    testcase.jiraPush = true;
-    await updateTestCase(testcase_id, { jiraPush: true });
   }
   return (
     <Box className="h-full w-full">

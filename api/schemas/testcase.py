@@ -19,6 +19,7 @@ class TestCaseBase(BaseModel):
     priority:PriorityEnum
     test_type:str
     jiraPush:bool
+    jira_id:int
 
     class Config:
         from_attributes = True 
@@ -34,6 +35,7 @@ class TestCaseCreate(BaseModel):
     priority:PriorityEnum
     test_type:str
     jiraPush:bool
+    jira_id:int
 
     class Config:
         from_attributes = True 
@@ -46,7 +48,8 @@ class TestCaseUpdate(BaseModel):
     post_condition: Optional[str] = None
     priority: Optional[PriorityEnum] = None
     test_type: Optional[str] = None
-    jiraPush:bool = None
+    jiraPush:Optional[bool] = None
+    jira_id:Optional[int] = None
 
     class Config:
         from_attributes = True 

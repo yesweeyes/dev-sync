@@ -12,7 +12,11 @@ import { Button, ButtonIcon } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { useAppStore } from "@/store/store";
-import { deleteUserStory, pushUserStoryToJIRA } from "@/api/user_story";
+import {
+  deleteUserStory,
+  pushUserStoryToJIRA,
+  getIssuesFromJira,
+} from "@/api/user_story";
 import { UserStory, UserStoryUpdate } from "@/schema/user_story";
 import { Box } from "@/components/ui/box";
 import EditUserStoryModal from "./EditUserStoryModal";
@@ -48,19 +52,24 @@ function UserStoryListView() {
 
   async function handleDelete(user_story_id: string) {
     if (user_story_id && project_id) {
-      await deleteUserStory(user_story_id);
+      const story = await getUserStory(user_story_id);
+      if (story.jira_ignored == false) {
+        await updateUserStory(user_story_id, { jira_ignored: true });
+      } else {
+        await deleteUserStory(user_story_id);
+      }
       fetchUserStories(project_id);
     }
   }
 
   async function handlePushToJIRA(user_story_id: string) {
     if (user_story_id) {
-      await pushUserStoryToJIRA(user_story_id);
+      const res = await pushUserStoryToJIRA(user_story_id);
+      await updateUserStory(user_story_id, {
+        jiraPush: true,
+        jira_id: res["id"],
+      });
     }
-    await getUserStory(user_story_id).then((story) => {
-      story["jiraPush"] = true;
-    });
-    await updateUserStory(user_story_id, { jiraPush: true });
   }
 
   return (

@@ -10,6 +10,7 @@ export interface TestCase {
   priority: "HIGH" | "MEDIUM" | "LOW";
   test_type: string;
   jiraPush: boolean;
+  jiraId: number;
   created_at: Date;
 }
 
@@ -24,6 +25,7 @@ export interface TestCaseCreate {
   priority: "HIGH" | "MEDIUM" | "LOW";
   jiraPush: boolean;
   test_type: string;
+  jira_id: number;
 }
 
 export interface TestCaseUpdate {
@@ -35,4 +37,5 @@ export interface TestCaseUpdate {
   priority?: "HIGH" | "MEDIUM" | "LOW";
   test_type?: string;
   jiraPush?: boolean;
+  jira_id?: number;
 }

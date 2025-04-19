@@ -12,7 +12,6 @@ import {
   UserStoryUpdate,
 } from "@/schema/user_story";
 import { TestCase, TestCaseCreate, TestCaseUpdate } from "@/schema/test_case";
-import { JiraIssue, JiraIssueCreate } from "@/schema/jira_issue";
 
 import {
   getAllProjects,
@@ -38,6 +37,7 @@ import {
   deleteUserStory,
   updateUserStory,
   createUserStory,
+  getIssuesFromJira,
 } from "@/api/user_story";
 
 import {
@@ -47,13 +47,6 @@ import {
   deleteTestCase,
   generateTestCase,
 } from "@/api/test_case";
-
-import {
-  postIssueStories,
-  postIssueByStoryId,
-  postIssueTestCases,
-  postIssueByTestcaseId,
-} from "@/api/jira_issue";
 
 interface AppStoreInterface {
   loading: boolean;
@@ -98,13 +91,6 @@ interface AppStoreInterface {
   updateTestCase: (testCaseId: string, data: TestCaseUpdate) => Promise<void>;
   deleteTestCase: (TestCaseId: string) => Promise<void>;
   generateTestCase: (projectId: string) => Promise<void>;
-
-  jira_issues: JiraIssue[];
-  fetchJiraIssues: (projectId: string) => Promise<void>;
-  postIssueStories: (projectId: string) => Promise<void>;
-  postIssueByStoryId: (storyId: string) => Promise<void>;
-  postIssueTestCases: (projectId: string) => Promise<void>;
-  postIssueByTestcaseId: (testCaseId: string) => Promise<void>;
 }
 
 export const useAppStore = create<AppStoreInterface>((set) => ({
@@ -132,14 +118,12 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const documents = await getProjectDocuments(projectId);
       const user_stories = await getProjectUserStories(projectId);
       const test_cases = await getProjectTestCases(projectId);
-      const jira_issues = await getProjectJiraIssues(projectId);
       set({
         project,
         project_id: project.id,
         documents,
         user_stories,
         test_cases,
-        jira_issues,
         loading: false,
       });
     } catch (error: any) {
@@ -238,6 +222,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
   fetchUserStories: async (projectId) => {
     set({ loading: true, error: null });
     try {
+      await getIssuesFromJira(projectId);
       const user_stories = await getProjectUserStories(projectId);
       set({ user_stories, loading: false });
     } catch (error: any) {
@@ -384,53 +369,6 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     try {
       await generateTestCase(projectId);
       await useAppStore.getState().fetchTestCases(projectId);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-
-  jira_issues: [],
-  fetchJiraIssues: async (projectId) => {
-    set({ loading: true, error: null });
-    try {
-      const jira_issues = await getProjectJiraIssues(projectId);
-      set({ jira_issues, loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-  postIssueStories: async (projectId) => {
-    set({ loading: true, error: null });
-    try {
-      await postIssueStories(projectId);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-  postIssueByStoryId: async (storyId) => {
-    set({ loading: true, error: null });
-    try {
-      await postIssueByStoryId(storyId);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-  postIssueTestCases: async (projectId) => {
-    set({ loading: true, error: null });
-    try {
-      await postIssueTestCases(projectId);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-  postIssueByTestcaseId: async (testCaseId) => {
-    set({ loading: true, error: null });
-    try {
-      await postIssueByTestcaseId(testCaseId);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });

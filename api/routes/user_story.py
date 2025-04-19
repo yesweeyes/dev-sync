@@ -15,6 +15,7 @@ from services.user_story import(
 )
 import utils.user_story.generate_user_stories as user_story_gen_util
 import utils.user_story.user_story_jira_interface as user_story_jira_interface_util
+import utils.user_story.get_issue_from_jira as get_issue_from_jira_util
 
 router = APIRouter(
     prefix = "/user_story",
@@ -79,6 +80,18 @@ def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session =Depends(get_d
         return jira_response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/{project_id}/jira")
+def get_issue_from_jira(project_id: uuid.UUID, db: Session = Depends(get_db)):
+    issues = get_issue_from_jira_util.get_story_issues_from_jira(db, project_id)
+    try:
+        for issue in issues:
+            data = get_issue_from_jira_util.parse_issues(db, project_id, issue)
+            res = create_user_story_service(db, data)
+            print(res)
+        return f"Data obtained successfully"
+    except Exception as e:
+        raise HTTPException(400, detail=str(e))
     
 # @router.get("/userStories/download/{project_id}")
 # def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):

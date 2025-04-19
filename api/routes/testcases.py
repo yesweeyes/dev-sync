@@ -12,6 +12,7 @@ from services.testcases import(
     update_test_case as update_test_case_service,
     delete_test_case as delete_test_case_service
 )
+import utils.test_case.test_case_jira_interface as test_case_jira_interface_service
 
 
 router = APIRouter(
@@ -33,7 +34,7 @@ def get_test_case(test_case_id:uuid.UUID, db:Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code = 404, detail = str(e))
     
-@router.put("/{test_case_id}")
+@router.put("/{test_case_id}", response_model=TestCaseUpdate)
 def update_test_case(test_case_id:uuid.UUID, test_case_data:TestCaseUpdate,db:Session = Depends(get_db)):
     try:
         return update_test_case_service(db, test_case_id, test_case_data)
@@ -56,3 +57,11 @@ def generate_test_cases(project_id:uuid.UUID, db:Session = Depends(get_db)):
         return {"message": "Test cases saved to database successfully"}
     except Exception as e:
         raise HTTPException(status_code = 404, detail = str(e))
+    
+@router.get("/{test_case_id}/push")
+def push_test_case_to_jira(test_case_id:uuid.UUID, db:Session = Depends(get_db)):
+    try:
+        jira_response =  test_case_jira_interface_service.push_test_case_to_jira(test_case_id, db)
+        return jira_response
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
