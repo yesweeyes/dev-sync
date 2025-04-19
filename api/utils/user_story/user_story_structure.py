@@ -53,8 +53,7 @@ Do not include explanations, markdown, or backticks — just return the array.
     })
 
     response = response.content.strip().lstrip("```json").rstrip("```")
-    print(response)
-
+    
     try:
         return response
     except Exception as e:
