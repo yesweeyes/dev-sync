@@ -3,7 +3,12 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-from fpdf import FPDF
+# from fpdf import FPDF
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.utils import simpleSplit
 
 
 load_dotenv(".env")
@@ -92,11 +97,24 @@ def process_with_llm(text_chunks):
 
     return hld_path,lld_path
 
+
+pdfmetrics.registerFont(TTFont("DejaVu","fonts\DejaVuSans.ttf"))
+
 def save_to_pdf(content, file_name):
-    pdf = FPDF()
-    pdf.set_auto_page_break(auto=True, margin=15)
-    pdf.add_page()
-    pdf.set_font("Arial", size=12)
-    for line in content.split('\n'):    
-        pdf.multi_cell(0, 10, line)
-    pdf.output(file_name)
+    c = canvas.Canvas(file_name, pagesize=A4)
+    width, height = A4
+    c.setFont("Helvetica", 12)
+
+    #aligining the contents into different lines
+    lines = simpleSplit(content, "Helvetica", 12, width - 100)
+
+    y = height - 50
+    for line in lines:
+        if y < 50:
+            c.showPage()
+            c.setFont("Helvetica", 12)
+            y = height - 50
+        c.drawString(50, y, line)
+        y -= 24
+
+    c.save()
