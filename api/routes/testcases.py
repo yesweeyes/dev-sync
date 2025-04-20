@@ -49,7 +49,7 @@ def delete_test_case(test_case_id:uuid.UUID, db:Session = Depends(get_db)):
         raise HTTPException(status_code = 404, detail = str(e))
         
 @router.post("/{project_id}/generate")
-def generate_test_cases(project_id:uuid.UUID, db:Session = Depends(get_db)):
+async def generate_test_cases(project_id:uuid.UUID, db:Session = Depends(get_db)):
     try:
         response = test_case_service.generate_test_cases_for_user_stories(project_id, db)
         test_case_service.store_test_cases_in_db(db, response, project_id)

@@ -4,12 +4,17 @@ import { VStack } from "@/components/ui/vstack";
 import { Box } from "@/components/ui/box";
 import ProjectDetailCard from "@/components/Project/ProjectDetailCard";
 import { Tabs, useLocalSearchParams } from "expo-router";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useAppStore } from "@/store/store";
+import { ListChecks } from "lucide-react-native";
+import { FileText } from "lucide-react-native";
+import { UserRoundPen } from "lucide-react-native";
+import { CodeXml } from "lucide-react-native";
+import { Box as BoxIcon } from "lucide-react-native";
 
 function ProjectPageLayout() {
   const { project_id } = useLocalSearchParams();
-  const { fetchProject, documents, user_stories, test_cases } = useAppStore();
+  const { fetchProject, documents, user_stories, test_cases, code_reviews } =
+    useAppStore();
 
   useEffect(() => {
     fetchProject(project_id as string);
@@ -28,61 +33,51 @@ function ProjectPageLayout() {
         <VStack className="flex-1 h-full pl-2 rounded-xl">
           <Tabs
             screenOptions={{
-              tabBarActiveTintColor: "blue",
+              tabBarActiveTintColor: "white",
+              tabBarActiveBackgroundColor: "#2563eb",
               headerShown: false,
               tabBarPosition: "top",
               tabBarStyle: {
-                borderBottomWidth: 0,
+                borderBottomWidth: 1,
+              },
+              tabBarLabelStyle: {
+                fontSize: 14,
               },
             }}
           >
             <Tabs.Screen
               name="requirements"
               options={{
-                title: `Requirements (${documents.length})`,
-                tabBarIcon: ({ color }) => (
-                  <MaterialIcons
-                    name="document-scanner"
-                    size={24}
-                    color={color}
-                  />
-                ),
+                title: `Requirement Document (${documents.length})`,
+                tabBarIcon: ({ color }) => <FileText color={color} />,
               }}
             />
             <Tabs.Screen
               name="user_story"
               options={{
                 title: `User Story (${user_stories.length})`,
-                tabBarIcon: ({ color }) => (
-                  <MaterialIcons name="person" size={24} color={color} />
-                ),
+                tabBarIcon: ({ color }) => <UserRoundPen color={color} />,
               }}
             />
             <Tabs.Screen
               name="design"
               options={{
-                title: "Design",
-                tabBarIcon: ({ color }) => (
-                  <MaterialIcons name="engineering" size={24} color={color} />
-                ),
+                title: "Technical Design",
+                tabBarIcon: ({ color }) => <BoxIcon color={color} />,
               }}
             />
             <Tabs.Screen
               name="testcase"
               options={{
-                title: `Testcases (${test_cases.length})`,
-                tabBarIcon: ({ color }) => (
-                  <MaterialIcons name="check-box" size={24} color={color} />
-                ),
+                title: `Test Cases (${test_cases.length})`,
+                tabBarIcon: ({ color }) => <ListChecks color={color} />,
               }}
             />
             <Tabs.Screen
               name="code_review"
               options={{
-                title: "Code Review",
-                tabBarIcon: ({ color }) => (
-                  <MaterialIcons name="code" size={24} color={color} />
-                ),
+                title: `Code Review (${code_reviews.length})`,
+                tabBarIcon: ({ color }) => <CodeXml color={color} />,
               }}
             />
           </Tabs>

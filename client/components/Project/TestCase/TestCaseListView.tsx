@@ -80,6 +80,7 @@ const TestCaseListView = () => {
         </>
       ) : (
         <FlatList
+          className="pb-40"
           data={test_cases}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
@@ -116,7 +117,7 @@ const TestCaseListView = () => {
                       <ButtonIcon as={Send} size="lg" />
                     </Button>
                     <Button
-                      className="bg-yellow-600 rounded-full w-14 h-14 items-center justify-center"
+                      className="bg-yellow-500 rounded-full w-14 h-14 items-center justify-center hover:scale-105 transition-transform"
                       onPress={() => {
                         handleEdit(item);
                       }}
@@ -124,7 +125,7 @@ const TestCaseListView = () => {
                       <ButtonIcon as={Edit} size="lg" />
                     </Button>
                     <Button
-                      className="bg-red-600 rounded-full w-14 h-14 items-center justify-center"
+                      className="bg-red-600 rounded-full w-14 h-14 items-center justify-center hover:scale-105 transition-transform"
                       onPress={() => {
                         handleDelete(item.id);
                       }}

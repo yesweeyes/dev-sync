@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, ScrollView, Text } from "react-native";
-import { Download, Trash2 } from "lucide-react-native";
+import { ExternalLink, Trash2 } from "lucide-react-native";
 import { RequirementDocument } from "@/schema/requirement_document";
 import { Linking } from "react-native";
 import { Card } from "@/components/ui/card";
@@ -25,6 +25,7 @@ function ProjectDocumentListView() {
         <NoRecordsFound />
       ) : (
         <FlatList
+          className="pb-40"
           data={documents}
           keyExtractor={(item) => item.id}
           renderItem={({ item }: { item: RequirementDocument }) => (
@@ -36,10 +37,14 @@ function ProjectDocumentListView() {
                 </Text>
                 <HStack space="sm">
                   <Button
-                    onPress={() => Linking.openURL(item.file_path)}
+                    onPress={() => {
+                      const BACKEND_BASE_URL = "http://127.0.0.1:8000/api/v1"; // or from env
+                      const fileUrl = `${BACKEND_BASE_URL}/${item.file_path}`;
+                      Linking.openURL(fileUrl);
+                    }}
                     className="w-14 h-14 bg-blue-600 rounded-full items-center justify-center"
                   >
-                    <ButtonIcon as={Download} size="lg" />
+                    <ButtonIcon as={ExternalLink} size="lg" />
                   </Button>
                   <Button
                     className="w-14 h-14 bg-red-600 rounded-full items-center justify-center"

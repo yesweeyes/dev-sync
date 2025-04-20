@@ -1,6 +1,8 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from routes import router
+import os
 
 app = FastAPI()
 
@@ -16,7 +18,18 @@ app.add_middleware(
 # Include routes
 app.include_router(router.router)
 
+UPLOAD_FOLDER = "uploads"
+REVIEW_FOLDER = "reviews"
+OUTPUT_FOLDER = "outputs"
+
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+os.makedirs(REVIEW_FOLDER, exist_ok=True)
+os.makedirs(OUTPUT_FOLDER, exist_ok=True)
+
+app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
+app.mount("/reviews", StaticFiles(directory="reviews"), name="reviews")
+app.mount("/outputs", StaticFiles(directory="outputs"), name="outputs")
+
 @app.get("/")
 async def root():
     return {"message": "Hello World"}
-

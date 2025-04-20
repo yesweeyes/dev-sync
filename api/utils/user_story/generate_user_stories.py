@@ -52,9 +52,9 @@ def extract_text_from_pdf(doc_list):
         raise Exception(f"Failed to extract text from PDF: {str(e)}")
 
 
-def generate_user_stories(text_chunks, user_prompt):
+def generate_user_stories(summary, user_prompt):
     try:
-        response = generate_user_story_helper(text_chunks, user_prompt)
+        response = generate_user_story_helper(summary, user_prompt)
         return json.loads(response)
     except Exception as e:
         raise Exception(f"Failed to generate user stories: {str(e)}")

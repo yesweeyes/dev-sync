@@ -13,9 +13,7 @@ load_dotenv()
 
 def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session):
     try:
-        print("A")
         user_story = get_user_story(db, user_story_id)
-        print("B")
         project_id = user_story.project_id
         project = get_project(db, project_id)
 
@@ -64,7 +62,6 @@ def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session):
             headers=headers,
             auth=auth
         )
-        print(response.json())
         return response.json()
     except Exception as e:
         raise Exception(f"Unable to post user story to jira: {str(e)}")

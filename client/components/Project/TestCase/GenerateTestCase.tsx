@@ -12,27 +12,22 @@ const GenerateTestCase = () => {
 
   const handleGenerate = async () => {
     if (!project_id) return;
-    if (user_stories.length == 0) {
-      alert("No user stories generated");
-      return;
-    }
-    console.log(project_id);
     generateTestCase(project_id);
   };
 
-  const isDisabled =
-    test_cases.length >= user_stories.length && user_stories.length != 0;
+  const isDisabled = user_stories.length == 0;
 
   return (
     <Box>
       <Fab
         size="md"
         placement="bottom left"
+        className="bg-gradient-to-r from-blue-500 to-purple-600 hover:scale-105 transition-transform"
         onPress={handleGenerate}
         disabled={isDisabled}
       >
         <FabIcon as={Sparkles} />
-        <FabLabel>Generate Test Cases</FabLabel>
+        <FabLabel>Bulk Generate</FabLabel>
       </Fab>
     </Box>
   );

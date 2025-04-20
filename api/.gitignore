@@ -51,7 +51,7 @@ docker-compose.override.yml
 .dockerignore
 
 # Migrations
-migrations/versions
+migrations/versions/*
 
 # Dependencies
 *.lock
@@ -66,5 +66,8 @@ dist/
 build/
 *.egg-info/
 
-# Uploaded files
-uploads/
+# Files
+uploads/*
+reviews/*
+outputs/*
+

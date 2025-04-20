@@ -91,12 +91,13 @@ const CreateTestCase = () => {
       <Fab
         size="md"
         placement="bottom right"
+        className="hover:scale-105 transition-transform"
         onPress={() => {
           setisOpen(true);
         }}
       >
         <FabIcon as={Plus} />
-        <FabLabel>Create Test Case</FabLabel>
+        <FabLabel>Create</FabLabel>
       </Fab>
       <Modal
         isOpen={isOpen}

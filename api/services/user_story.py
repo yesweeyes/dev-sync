@@ -55,31 +55,3 @@ def delete_user_story(db:Session, story_id:uuid.UUID) -> None:
     db.delete(user_story)
     db.commit()
 
-def download_user_stories(db:Session, project_id:uuid.UUID)-> FileResponse:
-    userStories = get_all_user_stories(db, project_id)
-    if not userStories:
-        raise NoResultFound(f"No user stories found for project {project_id}")
-    unique_filename = f"{project_id}_UserStories.txt"
-    file_path = os.path.join(DOWNLOAD_FOLDER, unique_filename)
-    try:
-        with open(file_path, "w", encoding="utf-8") as file:
-            for story in userStories:
-                file.write(
-                    f"User Story:\n"
-                    f"Title: {story.title or 'N/A'}\n"
-                    f"Description: {story.description or 'N/A'}\n"
-                    f"Acceptance Criteria: {story.acceptance_criteria or 'N/A'}\n"
-                    f"Priority: {story.priority or 'N/A'}\n"
-                    f"Story Points: {story.storyPoints or 'N/A'}\n"
-                    f"Labels: {story.labels or 'N/A'}\n"
-                    f"{'-'*40}\n\n" 
-                )
-        return FileResponse(
-            path=file_path,
-            media_type="application/octet-stream",
-            filename=unique_filename,
-            headers={"Content-Disposition": f"attachment; filename={unique_filename}"}
-        )
-    except (IOError, OSError) as e:
-        raise RuntimeError(f"Error writing user stories to file: {str(e)}")
-    

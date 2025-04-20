@@ -8,14 +8,15 @@ from fastapi.responses import FileResponse
 from services.user_story import(
     create_user_story as create_user_story_service,
     get_user_story as get_user_story_service,
-    get_all_user_stories as get_all_user_stories_service,
     update_user_story as update_user_story_service,
     delete_user_story as delete_user_story_service,
-    download_user_stories as download_user_stories_service
 )
 import utils.user_story.generate_user_stories as user_story_gen_util
 import utils.user_story.user_story_jira_interface as user_story_jira_interface_util
 import utils.user_story.get_issue_from_jira as get_issue_from_jira_util
+from services.document_summary import (
+    get_document_summary_by_project as get_document_summary_by_project_service
+)
 
 router = APIRouter(
     prefix = "/user_story",
@@ -56,17 +57,19 @@ def delete_user_story(story_id: uuid.UUID, db:Session = Depends(get_db)):
     
         
 @router.post("/generate")
-def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db)):
+async def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db)):
     project_id = data.project_id
     user_prompt = data.user_prompt
 
     try:
-        documents = user_story_gen_util.get_files(project_id, db)
-        if not documents:
-            raise HTTPException(status_code=404, detail="No requirement documents found for the given project ID.")
+        # documents = user_story_gen_util.get_files(project_id, db)
+        # if not documents:
+        #     raise HTTPException(status_code=404, detail="No requirement documents found for the given project ID.")
         
-        text_chunks = user_story_gen_util.extract_text_from_pdf(documents)
-        user_stories_json = user_story_gen_util.generate_user_stories(text_chunks, user_prompt)
+        # text_chunks = user_story_gen_util.extract_text_from_pdf(documents)
+        summary = get_document_summary_by_project_service(project_id=project_id)
+        user_stories_json = user_story_gen_util.generate_user_stories(summary, user_prompt)
+        print(user_stories_json)
         user_story_gen_util.insert_user_stories(db, user_stories_json, project_id)
         
         return {"message": "User stories generated and stored successfully."}
@@ -130,3 +133,4 @@ def get_issue_from_jira(project_id: uuid.UUID, db: Session = Depends(get_db)):
 #         )
 #     except Exception as e:
 #         raise HTTPException(400, detail=f"Error fetching user stories: {str(e)}")
+    

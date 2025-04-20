@@ -22,6 +22,7 @@ import {
   getProjectDocuments,
   getProjectUserStories,
   getProjectTestCases,
+  getProjectCodeReviewFiles,
   getProjectJiraIssues,
 } from "@/api/project";
 
@@ -47,6 +48,19 @@ import {
   deleteTestCase,
   generateTestCase,
 } from "@/api/test_case";
+
+import {
+  CodeReviewFile,
+  CodeReviewFileUpdate,
+  CodeReviewGenerate,
+} from "@/schema/code_review";
+
+import {
+  getCodeReviewFile,
+  updateCodeReviewFile,
+  deleteCodeReviewFile,
+  generateCodeReviewFile,
+} from "@/api/code_review";
 
 interface AppStoreInterface {
   loading: boolean;
@@ -91,6 +105,15 @@ interface AppStoreInterface {
   updateTestCase: (testCaseId: string, data: TestCaseUpdate) => Promise<void>;
   deleteTestCase: (TestCaseId: string) => Promise<void>;
   generateTestCase: (projectId: string) => Promise<void>;
+
+  code_reviews: CodeReviewFile[];
+  fetchCodeReviewFiles: (projectId: string) => Promise<void>;
+  updateCodeReviewFile: (
+    code_review_file_id: string,
+    data: CodeReviewFileUpdate
+  ) => Promise<void>;
+  deleteCodeReviewFile: (code_review_file_id: string) => Promise<void>;
+  generateCodeReviewFile: (data: CodeReviewGenerate) => Promise<void>;
 }
 
 export const useAppStore = create<AppStoreInterface>((set) => ({
@@ -118,12 +141,14 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const documents = await getProjectDocuments(projectId);
       const user_stories = await getProjectUserStories(projectId);
       const test_cases = await getProjectTestCases(projectId);
+      const code_reviews = await getProjectCodeReviewFiles(projectId);
       set({
         project,
         project_id: project.id,
         documents,
         user_stories,
         test_cases,
+        code_reviews,
         loading: false,
       });
     } catch (error: any) {
@@ -194,13 +219,12 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await updateProjectDocument(documentId, data);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
       await useAppStore
         .getState()
         .fetchProjectDocuments(useAppStore.getState().project_id!);
       set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
     }
   },
 
@@ -208,13 +232,12 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     set({ loading: true, error: null });
     try {
       await deleteProjectDocument(documentId);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
       await useAppStore
         .getState()
         .fetchProjectDocuments(useAppStore.getState().project_id!);
       set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
     }
   },
 
@@ -369,6 +392,53 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     try {
       await generateTestCase(projectId);
       await useAppStore.getState().fetchTestCases(projectId);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+  code_reviews: [],
+  fetchCodeReviewFiles: async (projectId) => {
+    set({ loading: true, error: null });
+    try {
+      const code_reviews = await getProjectCodeReviewFiles(projectId);
+      set({ code_reviews, loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  updateCodeReviewFile: async (code_review_file_id, data) => {
+    set({ loading: true, error: null });
+    try {
+      await updateCodeReviewFile(code_review_file_id, data);
+      await useAppStore
+        .getState()
+        .fetchCodeReviewFiles(useAppStore.getState().project_id!);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  deleteCodeReviewFile: async (code_review_file_id) => {
+    set({ loading: true, error: null });
+    try {
+      await deleteCodeReviewFile(code_review_file_id);
+      await useAppStore
+        .getState()
+        .fetchCodeReviewFiles(useAppStore.getState().project_id!);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  generateCodeReviewFile: async (data) => {
+    set({ loading: true, error: null });
+    try {
+      await generateCodeReviewFile(data);
+      await useAppStore.getState().fetchCodeReviewFiles(data.project_id);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });

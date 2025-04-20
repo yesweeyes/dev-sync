@@ -11,7 +11,6 @@ from services.testcases import create_test_case
 db = next(get_db())
 def generate_test_cases_for_user_stories(project_id:uuid.UUID, db:Session):
     user_stories = get_all_user_stories_service(db, project_id)
-    print(f"length of api response:{len(user_stories)}")
     if not user_stories:
         raise NoResultFound(f"Couldnt fetch user stories for project id : {project_id}")
     
@@ -27,7 +26,6 @@ def generate_test_cases_for_user_stories(project_id:uuid.UUID, db:Session):
     for story in user_stories
     ] 
     
-    print(f"length of parsed response:{len(user_stories_list)}")
     response = generate_test_case_helper(user_stories_list)
     if response:
         return response
