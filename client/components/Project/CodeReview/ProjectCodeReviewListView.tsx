@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, ScrollView, Text } from "react-native";
-import { ExternalLink, Trash2 } from "lucide-react-native";
+import { ExternalLink, Send, Trash2 } from "lucide-react-native";
 import { RequirementDocument } from "@/schema/requirement_document";
 import { Linking } from "react-native";
 import { Card } from "@/components/ui/card";
@@ -11,12 +11,18 @@ import { Box } from "@/components/ui/box";
 import { useAppStore } from "@/store/store";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
+import { pushCodeReviewToJIRA } from "@/api/code_review";
 
 function ProjectCodeReviewListView() {
   const { code_reviews, deleteCodeReviewFile } = useAppStore();
 
   function handleDocumentDelete(code_review_file_id: string) {
     deleteCodeReviewFile(code_review_file_id);
+  }
+  async function handlePushToJIRA(user_story_id: string) {
+    if (user_story_id) {
+      await pushCodeReviewToJIRA(user_story_id);
+    }
   }
 
   return (
@@ -36,6 +42,12 @@ function ProjectCodeReviewListView() {
                   {item.original_name}
                 </Text>
                 <HStack space="sm">
+                  <Button
+                    className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center hover:scale-105 transition-transform"
+                    onPress={() => handlePushToJIRA(item.id)}
+                  >
+                    <ButtonIcon as={Send} size="lg" />
+                  </Button>
                   <Button
                     onPress={() => {
                       const BACKEND_BASE_URL = "http://127.0.0.1:8000/api/v1"; // or from env
