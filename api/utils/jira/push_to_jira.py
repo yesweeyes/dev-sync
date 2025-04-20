@@ -61,7 +61,7 @@ def push_to_jira(data: PushToJiraData, project: ProjectBase):
         raise Exception(f"Unable to post data to jira: {str(e)}")
     
 
-def add_attachment_to_issue(issueKey: str, file_path: str, project: ProjectBase):
+def add_attachment_to_issue(issue_key: str, file_path: str, project: ProjectBase):
     """
     Add attachment to valid issue in jira
     """
@@ -83,9 +83,12 @@ def add_attachment_to_issue(issueKey: str, file_path: str, project: ProjectBase)
 
     try:
         url = project.jira_project_endpoint
-        url = url.strip("/") + f"/issue/{issueKey}/attachments"
+        url = url.rstrip("/") + f"/{issue_key}/attachments"
         print(url)
-        response = requests.post(url, data=payload, headers=headers, auth=auth)
-        return response.json()
+        response = requests.post(url, files=payload, headers=headers, auth=auth)
+        if response.content:
+            return response.json()
+        else:
+            return {"status_code": response.status_code, "text": response.text}
     except Exception as e:
-        raise Exception (f"Unable to add attachment to issue:{issueKey}, {str(e)}")
+        raise Exception (f"Unable to add attachment to issue:{issue_key}, \n {str(e)}")

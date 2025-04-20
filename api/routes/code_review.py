@@ -15,8 +15,8 @@ from services.code_review import (
 from services.project import (
     get_project as get_project_service
 )
-from utils.code_review import (
-    push_to_jira as code_review_push_to_jira_util
+from utils.code_review.push_to_jira import (
+    push_code_review_to_jira as code_review_push_to_jira_util
 )
 
 router = APIRouter(
