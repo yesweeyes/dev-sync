@@ -11,6 +11,7 @@ import {
   UserStoryGenerate,
   UserStoryUpdate,
 } from "@/schema/user_story";
+
 import { HldLld, HldLldGenerate } from "@/schema/design_doc";
 import { TestCase, TestCaseCreate, TestCaseUpdate } from "@/schema/test_case";
 import { JiraIssue, JiraIssueCreate } from "@/schema/jira_issue";
@@ -26,7 +27,7 @@ import {
   getProjectTestCases,
   getProjectCodeReviewFiles,
   getProjectJiraIssues,
-  getProjectTechDocs,
+  getProjectTechDocs
 } from "@/api/project";
 
 import {
@@ -112,7 +113,7 @@ interface AppStoreInterface {
 
   design_docs: HldLld[];
   fetchTechDocs: (projectId: string) => Promise<void>;
-  generateTechDocs: (data: HldLldGenerate) => Promise<void>
+  generateTechDocs: (data: HldLldGenerate) => Promise<void>;
 
   test_cases: TestCase[];
   fetchTestCases: (projectId: string) => Promise<void>;
@@ -158,7 +159,6 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const project = await getProject(projectId);
       const documents = await getProjectDocuments(projectId);
       const user_stories = await getProjectUserStories(projectId);
-      const design_docs = await getProjectTechDocs(projectId);
       const test_cases = await getProjectTestCases(projectId);
       const code_reviews = await getProjectCodeReviewFiles(projectId);
       const jira_issues = await getProjectJiraIssues(projectId);
@@ -167,7 +167,6 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
         project_id: project.id,
         documents,
         user_stories,
-        design_docs,
         test_cases,
         code_reviews,
         loading: false,
