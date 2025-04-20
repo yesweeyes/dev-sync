@@ -22,3 +22,8 @@ export const generateCodeReviewFile = async (data: CodeReviewGenerate) => {
     const response = await api.post(`${CODE_REVIEW_BASE_URL}/generate`, data);
     return response.data;
 }
+
+export const pushCodeReviewToJIRA = async (code_review_file_id: string) => {
+    const response = await api.post(`${CODE_REVIEW_BASE_URL}/${code_review_file_id}/push`);
+    return response.data;
+}

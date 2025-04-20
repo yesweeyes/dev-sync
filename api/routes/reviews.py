@@ -1,6 +1,10 @@
 import os
-from fastapi import APIRouter, HTTPException
+import uuid
+from sqlalchemy.orm import Session
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import FileResponse
+from database import get_db
+
 
 router = APIRouter(
     prefix="/reviews",
