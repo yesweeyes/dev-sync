@@ -98,7 +98,7 @@ def process_with_llm(text_chunks):
     return hld_path,lld_path
 
 
-pdfmetrics.registerFont(TTFont("DejaVu","fonts\DejaVuSans.ttf"))
+# pdfmetrics.registerFont(TTFont("DejaVu","fonts\DejaVuSans.ttf"))
 
 def save_to_pdf(content, file_name):
     c = canvas.Canvas(file_name, pagesize=A4)
