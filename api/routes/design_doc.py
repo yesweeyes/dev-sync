@@ -4,11 +4,11 @@ from models.tech_db import GeneratedHLDDocument,GeneratedLLDDocument
 from schemas.design_doc import HldLldGenerate
 
 import os
-from fastapi import APIRouter, UploadFile, File, Depends, Query, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from utils.design_doc.extractor import extract_text_from_pdf, save_to_docx
 from utils.design_doc.llm_processor import process_with_llm
 import utils.user_story.generate_user_stories as user_story_gen_util
-import uuid
+import traceback
 
 output_dir = "output"
 
@@ -27,11 +27,11 @@ def GenerateDesignDocs(data:HldLldGenerate, db: Session =Depends(get_db)):
        
     # extracting text and saving as a docx
     text_chunks = extract_text_from_pdf(document)
-    docx_path = os.path.join(output_dir, "extracted_docx.docx")
+    #docx_path = os.path.join(output_dir, "extracted_docx.docx")
     #save_to_docx(text_chunks, docx_path)
 
     # processing of extracted text with LLM
-    hld_pdf, lld_pdf = process_with_llm(docx_path)
+    hld_pdf, lld_pdf = process_with_llm(text_chunks)
 
     try:
 
@@ -60,6 +60,8 @@ def GenerateDesignDocs(data:HldLldGenerate, db: Session =Depends(get_db)):
         db.refresh(new_lld)
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        print("Error Occured: ",str(e))
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail="Internal Server Error....~.")
     
     return {"updates": "Processing complete", "HLD_PDF": hld_pdf, "LLD_PDF": lld_pdf}

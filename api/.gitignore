@@ -70,4 +70,5 @@ build/
 uploads/*
 reviews/*
 outputs/*
+output/*
 

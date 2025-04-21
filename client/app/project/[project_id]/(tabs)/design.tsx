@@ -1,5 +1,8 @@
 import { InfoContext } from "@/components/Common/InfoContext";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
+import GenerateDesignDocs from "@/components/Project/Design_docs/Generate_docs_btn";
+import DesignDocumenntListView from "@/components/Project/Design_docs/DesignDocumentListView";
+
 import { Box } from "@/components/ui/box";
 import { useFocusEffect } from "expo-router";
 import React, { useCallback, useContext } from "react";
@@ -14,8 +17,9 @@ function ProjectDesginPage() {
     }, [setInfoText])
   );
   return (
-    <Box className="p-2 h-full w-full">
-      <NoRecordsFound />
+    <Box className="p-2 h-full w-full " >
+      <DesignDocumenntListView />
+      <GenerateDesignDocs />
     </Box>
   );
 }

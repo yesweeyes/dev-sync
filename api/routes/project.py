@@ -23,6 +23,10 @@ from services.code_review import (
     get_all_code_review_file_for_project as get_all_code_review_file_service
 )
 
+from services.design_doc import (
+    get_all_design_documents as get_all_design_documents_service
+)
+
 router = APIRouter(
     prefix="/project",
     tags=["project"],
@@ -74,6 +78,12 @@ def get_user_stories(project_id : uuid.UUID, db:Session = Depends(get_db)):
     except Exception as e:
         raise HTTPException(status_code=404, detail = str(e))
     
+@router.get("/{project_id}/design_docs")
+def get_design_docs(project_id: uuid.UUID, db:Session = Depends(get_db)):
+    try:
+        return get_all_design_documents_service(db, project_id)
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
     
 @router.get("/{project_id}/test_cases")
 def get_all_test_cases(project_id:uuid.UUID, db:Session = Depends(get_db)):
