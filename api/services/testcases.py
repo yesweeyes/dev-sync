@@ -31,7 +31,6 @@ def update_test_case(db:Session, test_case_id:uuid.UUID, test_case_data:TestCase
     
     for key, value in test_case_data.model_dump(exclude_unset= True).items():
         setattr(test_case, key, value)
-    
     db.commit()
     db.refresh(test_case)
     return test_case

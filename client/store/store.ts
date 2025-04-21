@@ -14,7 +14,6 @@ import {
 
 import { HldLld, HldLldGenerate } from "@/schema/design_doc";
 import { TestCase, TestCaseCreate, TestCaseUpdate } from "@/schema/test_case";
-import { JiraIssue, JiraIssueCreate } from "@/schema/jira_issue";
 
 import {
   getAllProjects,
@@ -26,7 +25,6 @@ import {
   getProjectUserStories,
   getProjectTestCases,
   getProjectCodeReviewFiles,
-  getProjectJiraIssues,
   getProjectTechDocs
 } from "@/api/project";
 
@@ -38,9 +36,11 @@ import {
 
 import {
   generateUserStory,
+  getUserStory,
   deleteUserStory,
   updateUserStory,
   createUserStory,
+  getIssuesFromJira,
 } from "@/api/user_story";
 
 import {
@@ -67,14 +67,6 @@ import {
   deleteCodeReviewFile,
   generateCodeReviewFile,
 } from "@/api/code_review";
-
-import {
-  postIssueStories,
-  postIssueByStoryId,
-  postIssueTestCases,
-  postIssueByTestcaseId,
-} from "@/api/jira_issue";
-
 
 interface AppStoreInterface {
   loading: boolean;
@@ -103,6 +95,7 @@ interface AppStoreInterface {
 
   user_stories: UserStory[];
   fetchUserStories: (projectId: string) => Promise<void>;
+  getUserStory: (userStoryId: string) => Promise<UserStory>;
   generateUserStories: (data: UserStoryGenerate) => Promise<void>;
   createUserStory: (data: UserStoryCreate) => Promise<void>;
   updateUserStory: (
@@ -117,6 +110,7 @@ interface AppStoreInterface {
 
   test_cases: TestCase[];
   fetchTestCases: (projectId: string) => Promise<void>;
+  getTestCase: (testCaseId: string) => Promise<TestCase>;
   createTestCase: (data: TestCaseCreate) => Promise<void>;
   updateTestCase: (testCaseId: string, data: TestCaseUpdate) => Promise<void>;
   deleteTestCase: (TestCaseId: string) => Promise<void>;
@@ -124,15 +118,12 @@ interface AppStoreInterface {
 
   code_reviews: CodeReviewFile[];
   fetchCodeReviewFiles: (projectId: string) => Promise<void>;
-  updateCodeReviewFile: (code_review_file_id: string, data: CodeReviewFileUpdate) => Promise<void>;
+  updateCodeReviewFile: (
+    code_review_file_id: string,
+    data: CodeReviewFileUpdate
+  ) => Promise<void>;
   deleteCodeReviewFile: (code_review_file_id: string) => Promise<void>;
   generateCodeReviewFile: (data: CodeReviewGenerate) => Promise<void>;
-  jira_issues: JiraIssue[];
-  fetchJiraIssues: (projectId: string) => Promise<void>;
-  postIssueStories: (projectId: string) => Promise<void>;
-  postIssueByStoryId: (storyId: string) => Promise<void>;
-  postIssueTestCases: (projectId: string) => Promise<void>;
-  postIssueByTestcaseId: (testCaseId: string) => Promise<void>;
 }
 
 export const useAppStore = create<AppStoreInterface>((set) => ({
@@ -161,7 +152,6 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const user_stories = await getProjectUserStories(projectId);
       const test_cases = await getProjectTestCases(projectId);
       const code_reviews = await getProjectCodeReviewFiles(projectId);
-      const jira_issues = await getProjectJiraIssues(projectId);
       set({
         project,
         project_id: project.id,
@@ -266,8 +256,20 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
   fetchUserStories: async (projectId) => {
     set({ loading: true, error: null });
     try {
+      await getIssuesFromJira(projectId);
       const user_stories = await getProjectUserStories(projectId);
       set({ user_stories, loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
+
+  getUserStory: async (userStoryId) => {
+    set({ loading: false, error: null });
+    try {
+      const story = await getUserStory(userStoryId);
+      set({ loading: false });
+      return story;
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
@@ -363,6 +365,16 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     }
   },
 
+  getTestCase: async (testCaseId) => {
+    set({ loading: false, error: null });
+    try {
+      const story = await getTestCase(testCaseId);
+      set({ loading: false });
+      return story;
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
+    }
+  },
   createTestCase: async (data) => {
     set({ loading: true, error: null });
     try {
@@ -470,47 +482,44 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
   fetchJiraIssues: async (projectId) => {
     set({ loading: true, error: null });
     try {
-      const jira_issues = await getProjectJiraIssues(projectId);
-      set({ jira_issues, loading: false });
+      const code_reviews = await getProjectCodeReviewFiles(projectId);
+      set({ code_reviews, loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
   },
 
-  postIssueStories: async (projectId) => {
+  updateCodeReviewFile: async (code_review_file_id, data) => {
     set({ loading: true, error: null });
     try {
-      await postIssueStories(projectId);
+      await updateCodeReviewFile(code_review_file_id, data);
+      await useAppStore
+        .getState()
+        .fetchCodeReviewFiles(useAppStore.getState().project_id!);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
   },
 
-  postIssueByStoryId: async (storyId) => {
+  deleteCodeReviewFile: async (code_review_file_id) => {
     set({ loading: true, error: null });
     try {
-      await postIssueByStoryId(storyId);
+      await deleteCodeReviewFile(code_review_file_id);
+      await useAppStore
+        .getState()
+        .fetchCodeReviewFiles(useAppStore.getState().project_id!);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
     }
   },
 
-  postIssueTestCases: async (projectId) => {
+  generateCodeReviewFile: async (data) => {
     set({ loading: true, error: null });
     try {
-      await postIssueTestCases(projectId);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-
-  postIssueByTestcaseId: async (testCaseId) => {
-    set({ loading: true, error: null });
-    try {
-      await postIssueByTestcaseId(testCaseId);
+      await generateCodeReviewFile(data);
+      await useAppStore.getState().fetchCodeReviewFiles(data.project_id);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });

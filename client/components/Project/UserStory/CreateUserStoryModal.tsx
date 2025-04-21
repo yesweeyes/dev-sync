@@ -63,6 +63,7 @@ function CreateUserStoryModal() {
       storyPoints: storyPoints,
       issueType: issueType,
       labels: labels,
+      jiraPush: false,
     };
 
     createUserStory(data);
