@@ -22,9 +22,6 @@ from services.testcases import (
 from services.code_review import (
     get_all_code_review_file_for_project as get_all_code_review_file_service
 )
-from services.jira_issues import (
-    get_all_jira_issues_by_project as get_all_jira_issues_by_project_service,
-)
 
 from services.design_doc import (
     get_all_design_documents as get_all_design_documents_service
@@ -99,13 +96,6 @@ def get_all_test_cases(project_id:uuid.UUID, db:Session = Depends(get_db)):
 def get_all_code_reviews(project_id:uuid.UUID, db:Session = Depends(get_db)):
     try:
         return get_all_code_review_file_service(db, project_id)
-    except Exception as e:
-        raise HTTPException(status_code=404, detail=str(e))
-    
-@router.get("/{project_id}/jira")
-def get_all_issues(project_id:uuid.UUID, db:Session = Depends(get_db)):
-    try:
-        return get_all_jira_issues_by_project_service(db, project_id)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
 

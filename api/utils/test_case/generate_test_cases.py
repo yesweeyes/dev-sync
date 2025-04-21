@@ -7,6 +7,7 @@ from sqlalchemy.exc import NoResultFound
 from utils.test_case.test_case_structure import generate_test_case_helper
 import json
 from services.testcases import create_test_case
+from services.document_summary import get_document_summary_by_project as get_document_summary_by_project_service
     
 db = next(get_db())
 def generate_test_cases_for_user_stories(project_id:uuid.UUID, db:Session):
@@ -26,7 +27,8 @@ def generate_test_cases_for_user_stories(project_id:uuid.UUID, db:Session):
     for story in user_stories
     ] 
     
-    response = generate_test_case_helper(user_stories_list)
+    summary = get_document_summary_by_project_service(project_id)
+    response = generate_test_case_helper(user_stories_list, summary)
     if response:
         return response
     else:

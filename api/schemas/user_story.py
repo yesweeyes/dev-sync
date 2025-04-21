@@ -17,6 +17,9 @@ class UserStoryBase(BaseModel):
     storyPoints: int = Field(..., gt=0)
     labels : List[str]
     issueType: str
+    jira_id:int
+    jiraPush : bool
+    jira_ignored :bool
 
     class Config:
         from_attributes = True 
@@ -24,24 +27,30 @@ class UserStoryBase(BaseModel):
 class UserStoryCreate(BaseModel):
     project_id : UUID4
     title: str
-    description: str
-    acceptance_criteria: str
-    priority : PriorityEnum
-    storyPoints: int = Field(..., gt=0)
-    labels : List[str]
+    description: Optional[str] = None
+    acceptance_criteria: Optional[str] = None
+    priority : Optional[PriorityEnum] = None
+    storyPoints: Optional[int] = None
+    labels : Optional[List[str]] = None
     issueType: str
+    jiraPush : bool
+    jira_id:int
+    jira_ignored:Optional[bool] = None
 
     class Config:
         from_attributes = True 
 
 class UserStoryUpdate(BaseModel):
-    title: Optional[str]
-    description: Optional[str]
-    acceptance_criteria: Optional[Union[str, List[str]]]
-    priority : Optional[PriorityEnum]
+    title: Optional[str] = None
+    description: Optional[str] = None
+    acceptance_criteria: Optional[Union[str, List[str]]] = None
+    priority : Optional[PriorityEnum] = None
     storyPoints: Optional[int] = Field(None, gt=0)
-    labels : Optional[List[str]]
-    issueType : Optional[str]
+    labels : Optional[List[str]] = None
+    issueType : Optional[str] = None
+    jiraPush:Optional[bool] = None
+    jira_id : Optional[int] = None
+    jira_ignored : Optional[bool] = None
 
     class Config:
         from_attributes = True 

@@ -9,7 +9,7 @@ const GenerateBulkStoriesButton = () => {
   const { project_id, generateUserStories } = useAppStore();
   const handleSubmit = async () => {
     if (!project_id) return;
-    generateUserStories({
+    await generateUserStories({
       project_id: project_id,
       user_prompt:
         "Generate a maximum of 10 user storiesfor all the content including functional and non functional",

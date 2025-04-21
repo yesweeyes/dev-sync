@@ -12,15 +12,24 @@ import { Button, ButtonIcon } from "@/components/ui/button";
 import { HStack } from "@/components/ui/hstack";
 import { VStack } from "@/components/ui/vstack";
 import { useAppStore } from "@/store/store";
-import { deleteUserStory, pushUserStoryToJIRA } from "@/api/user_story";
+import {
+  deleteUserStory,
+  pushUserStoryToJIRA,
+  getIssuesFromJira,
+} from "@/api/user_story";
 import { UserStory, UserStoryUpdate } from "@/schema/user_story";
 import { Box } from "@/components/ui/box";
 import EditUserStoryModal from "./EditUserStoryModal";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
 
 function UserStoryListView() {
-  const { user_stories, fetchUserStories, project_id, updateUserStory } =
-    useAppStore();
+  const {
+    user_stories,
+    fetchUserStories,
+    project_id,
+    updateUserStory,
+    getUserStory,
+  } = useAppStore();
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedStory, setSelectedStory] = useState<UserStory>();
@@ -43,14 +52,23 @@ function UserStoryListView() {
 
   async function handleDelete(user_story_id: string) {
     if (user_story_id && project_id) {
-      await deleteUserStory(user_story_id);
+      const story = await getUserStory(user_story_id);
+      if (story.jira_ignored == false) {
+        await updateUserStory(user_story_id, { jira_ignored: true });
+      } else {
+        await deleteUserStory(user_story_id);
+      }
       fetchUserStories(project_id);
     }
   }
 
   async function handlePushToJIRA(user_story_id: string) {
     if (user_story_id) {
-      await pushUserStoryToJIRA(user_story_id);
+      const res = await pushUserStoryToJIRA(user_story_id);
+      await updateUserStory(user_story_id, {
+        jiraPush: true,
+        jira_id: res["id"],
+      });
     }
   }
 
@@ -90,7 +108,12 @@ function UserStoryListView() {
                   </TouchableOpacity>
                   <HStack space="sm">
                     <Button
-                      className="bg-blue-600 rounded-full w-14 h-14 items-center justify-center hover:scale-105 transition-transform"
+                      className={`rounded-full w-14 h-14 flex items-center justify-center ${
+                        item.jiraPush
+                          ? "bg-gray-400 cursor-not-allowed"
+                          : "bg-blue-600 hover:bg-blue-700"
+                      }`}
+                      disabled={item.jiraPush}
                       onPress={() => handlePushToJIRA(item.id)}
                     >
                       <ButtonIcon as={Send} size="lg" />

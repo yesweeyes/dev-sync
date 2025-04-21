@@ -22,7 +22,7 @@ Test Type:This field can be used to classify tests based on test types.
 '''
     
     
-def generate_test_case_helper(user_stories: List[dict]) -> str:
+def generate_test_case_helper(user_stories: List[dict], summary) -> str:
 
   test_cases = []
   for story in user_stories:
@@ -50,7 +50,7 @@ def generate_test_case_helper(user_stories: List[dict]) -> str:
       )
       prompt = prompt_template.invoke({
           "example_template": example_template,
-          "context": story,
+          "context": story + summary,
           "text": "Generate necessary test cases for the content including functional and non-functional"
       })
       response = model.invoke(prompt)

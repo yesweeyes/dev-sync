@@ -13,6 +13,7 @@ from services.user_story import(
 )
 import utils.user_story.generate_user_stories as user_story_gen_util
 import utils.user_story.user_story_jira_interface as user_story_jira_interface_util
+import utils.user_story.get_issue_from_jira as get_issue_from_jira_util
 from services.document_summary import (
     get_document_summary_by_project as get_document_summary_by_project_service
 )
@@ -82,4 +83,54 @@ def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session =Depends(get_d
         return jira_response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+    
+@router.get("/{project_id}/jira")
+def get_issue_from_jira(project_id: uuid.UUID, db: Session = Depends(get_db)):
+    issues = get_issue_from_jira_util.get_story_issues_from_jira(db, project_id)
+    try:
+        for issue in issues:
+            data = get_issue_from_jira_util.parse_issues(db, project_id, issue)
+            res = create_user_story_service(db, data)
+            print(res)
+        return f"Data obtained successfully"
+    except Exception as e:
+        raise HTTPException(400, detail=str(e))
+    
+# @router.get("/userStories/download/{project_id}")
+# def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):
+#     try:
+#         return download_user_stories_service(db, project_id)
+#     except Exception as e:
+#         raise HTTPException(status_code=500, detail=str(e))
+    
+
+# TODO: Move the logic to project router and fine tune the code  
+# @router.get("/userStories/download/{project_id}")
+# def download_user_stories(project_id:uuid.UUID, db:Session = Depends(get_db)):
+#     userStories = get_all_user_stories(project_id, db)
+#     if not userStories:
+#         raise HTTPException(status_code=404, detail=f"No user stories found for project {project_id}")
+#     try:
+#         unique_filename = f"{project_id}_UserStories.txt"
+#         file_path = os.path.join(DOWNLOAD_FOLDER, unique_filename)
+#         with open(file_path, "w", encoding="utf-8") as file:
+#             for story in userStories:
+#                 file.write(
+#                     f"User Story:\n"
+#                     f"Title: {story.title or 'N/A'}\n"
+#                     f"Description: {story.description or 'N/A'}\n"
+#                     f"Acceptance Criteria: {story.acceptance_criteria or 'N/A'}\n"
+#                     f"Priority: {story.priority or 'N/A'}\n"
+#                     f"Story Points: {story.storyPoints or 'N/A'}\n"
+#                     f"Labels: {story.labels or 'N/A'}\n"
+#                     f"{'-'*40}\n\n" 
+#                 )
+#         return FileResponse(
+#             path=file_path,
+#             media_type="application/octet-stream",
+#             filename=unique_filename,
+#             headers={"Content-Disposition": f"attachment; filename={unique_filename}"}
+#         )
+#     except Exception as e:
+#         raise HTTPException(400, detail=f"Error fetching user stories: {str(e)}")
     

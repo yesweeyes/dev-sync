@@ -32,3 +32,8 @@ export const generateTestCase = async (project_id: string) => {
   );
   return response.data;
 };
+
+export const pushTestCaseToJira = async (test_case_id: string) => {
+  const response = await api.get(`${TEST_CASE_BASE_URL}/${test_case_id}/push`);
+  return response.data;
+};
