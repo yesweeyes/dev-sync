@@ -23,13 +23,8 @@ import EditUserStoryModal from "./EditUserStoryModal";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
 
 function UserStoryListView() {
-  const {
-    user_stories,
-    fetchUserStories,
-    project_id,
-    updateUserStory,
-    getUserStory,
-  } = useAppStore();
+  const { user_stories, fetchUserStories, project_id, updateUserStory } =
+    useAppStore();
   const [expanded, setExpanded] = useState<{ [key: string]: boolean }>({});
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedStory, setSelectedStory] = useState<UserStory>();
@@ -52,13 +47,9 @@ function UserStoryListView() {
 
   async function handleDelete(user_story_id: string) {
     if (user_story_id && project_id) {
-      const story = await getUserStory(user_story_id);
-      if (story.jira_ignored == false) {
-        await updateUserStory(user_story_id, { jira_ignored: true });
-      } else {
-        await deleteUserStory(user_story_id);
-      }
+      await deleteUserStory(user_story_id);
       fetchUserStories(project_id);
+      console.log("completed fetch");
     }
   }
 

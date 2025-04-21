@@ -24,5 +24,4 @@ class UserStory(Base):
     issueType = Column(Text, nullable=False)
     jiraPush = Column(Boolean, default=False)
     jira_id = Column(Integer, unique=True)
-    jira_ignored = Column(Boolean)
     created_at = Column(TIMESTAMP(timezone=True), server_default=text('now()'))

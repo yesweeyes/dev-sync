@@ -31,7 +31,7 @@ def get_story_issues_from_jira(db:Session,project_id:uuid.UUID):
 
         jira_issues = [
             str(item.jira_id) for item in db.query(UserStory).filter(UserStory.project_id == project_id).all()
-            if item.jiraPush and item.jira_ignored == False
+            if item.jiraPush
         ]
         
         new_issues = []
@@ -58,7 +58,6 @@ def parse_issues(db: Session, project_id: uuid.UUID, issue: dict) -> UserStoryCr
         issueType=fields.get("issuetype", {}).get("name"),
         jiraPush = True,
         jira_id= issue["id"],
-        jira_ignored=False
     )
 
 

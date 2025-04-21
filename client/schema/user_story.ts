@@ -11,7 +11,6 @@ export interface UserStory {
   issueType: string;
   jiraPush: boolean;
   jira_id: number;
-  jira_ignored: boolean;
   created_at: Date;
 }
 
@@ -26,7 +25,6 @@ export interface UserStoryCreate {
   jiraPush: boolean;
   issueType: string;
   jira_id: number;
-  jira_ignored?: boolean;
 }
 
 export interface UserStoryUpdate {
@@ -39,7 +37,6 @@ export interface UserStoryUpdate {
   jiraPush?: boolean;
   issueType?: string;
   jira_id?: number;
-  jira_ignored?: boolean;
 }
 
 export interface UserStoryGenerate {
