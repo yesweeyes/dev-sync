@@ -1,0 +1,53 @@
+import React from "react";
+import { FlatList, ScrollView, Text } from "react-native";
+import { ExternalLink } from "lucide-react-native";
+import { HldLld } from "@/schema/design_doc";
+import { Linking } from "react-native";
+import { Card } from "@/components/ui/card";
+import { Button, ButtonIcon } from "@/components/ui/button";
+import { HStack } from "@/components/ui/hstack";
+import { Box } from "@/components/ui/box";
+import { useAppStore } from "@/store/store";
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import NoRecordsFound from "@/components/Common/NoRecordsFound";
+
+function DesignDocumenntListView() {
+  const { design_docs } = useAppStore();
+
+  return (
+    <Box className="flex-1 h-full w-full">
+      {design_docs.length === 0 ? (
+        <NoRecordsFound />
+      ) : (
+        <FlatList
+          data={design_docs}
+          keyExtractor={(item) => item.id}
+          renderItem={({ item }: { item: HldLld }) => (
+            <Card className="p-2 m-2 rounded-xl bg-white">
+              <HStack className="justify-between items-center" space="lg">
+                <MaterialIcons name="file-present" size={24} color="black" />
+                <Text className="text-base font-roboto text-typography-black flex-1">
+                  {item.original_name}
+                </Text>
+                <HStack space="sm">
+                  <Button
+                    onPress={() => {
+                      const BACKEND_BASE_URL = "http://127.0.0.1:8000"; // or from env
+                      const fileUrl = `${BACKEND_BASE_URL}/${item.file_path}`;
+                      Linking.openURL(fileUrl);
+                    }}
+                    className="w-14 h-14 bg-blue-600 rounded-full items-center justify-center"
+                  >
+                    <ButtonIcon as={ExternalLink} size="lg" />
+                  </Button>
+                </HStack>
+              </HStack>
+            </Card>
+          )}
+        />
+      )}
+    </Box>
+  );
+}
+
+export default DesignDocumenntListView;

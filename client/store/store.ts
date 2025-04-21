@@ -11,6 +11,8 @@ import {
   UserStoryGenerate,
   UserStoryUpdate,
 } from "@/schema/user_story";
+
+import { HldLld, HldLldGenerate } from "@/schema/design_doc";
 import { TestCase, TestCaseCreate, TestCaseUpdate } from "@/schema/test_case";
 import { JiraIssue, JiraIssueCreate } from "@/schema/jira_issue";
 
@@ -25,6 +27,7 @@ import {
   getProjectTestCases,
   getProjectCodeReviewFiles,
   getProjectJiraIssues,
+  getProjectTechDocs
 } from "@/api/project";
 
 import {
@@ -39,6 +42,10 @@ import {
   updateUserStory,
   createUserStory,
 } from "@/api/user_story";
+
+import {
+  GenerateTechDoc
+} from "@/api/design_doc"
 
 import {
   createTestCase,
@@ -103,6 +110,10 @@ interface AppStoreInterface {
     data: UserStoryUpdate
   ) => Promise<void>;
   deleteUserStory: (userStoryId: string) => Promise<void>;
+
+  design_docs: HldLld[];
+  fetchTechDocs: (projectId: string) => Promise<void>;
+  generateTechDocs: (data: HldLldGenerate) => Promise<void>;
 
   test_cases: TestCase[];
   fetchTestCases: (projectId: string) => Promise<void>;
@@ -316,6 +327,28 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
+    }
+  },
+
+  design_docs: [],
+  fetchTechDocs: async (projectId) => {
+    set({ loading: true,error: null});
+    try{
+      const design_docs=await getProjectTechDocs(projectId);
+      set({ design_docs, loading:false});
+    } catch (error:any) {
+      set({error:error.message, loading:false});
+    }
+  },
+
+  generateTechDocs: async (data) => {
+    set({ loading: true, error: null });
+    try{
+      await GenerateTechDoc(data);
+      await useAppStore.getState().fetchTechDocs(data.project_id);
+      set({ loading: false });
+    } catch (error: any) {
+      set({ error:error.message, loading:false});
     }
   },
 
