@@ -3,20 +3,20 @@ import sys
 from logging.config import fileConfig
 from sqlalchemy import engine_from_config, pool
 from alembic import context
-from database import Base  # Import Base to access metadata
+from app.database import Base  # Import Base to access metadata
 
 
 # Ensure models are imported
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # Explicitly import models so Alembic can detect them
-from models.project import Project  
-from models.requirement_document import RequirementDocument  
-from models.user_story import UserStory
-from models.testcase import TestCase
-from models.code_review import CodeReviewFile
-from models.tech_db import GeneratedHLDDocument, GeneratedLLDDocument
-from models.document_summary import DocumentSummary
+from app.models.project import Project  
+from app.models.requirement_document import RequirementDocument  
+from app.models.user_story import UserStory
+from app.models.testcase import TestCase
+from app.models.code_review import CodeReviewFile
+from app.models.tech_db import GeneratedHLDDocument, GeneratedLLDDocument
+from app.models.document_summary import DocumentSummary
 
 
 # Alembic Config object
