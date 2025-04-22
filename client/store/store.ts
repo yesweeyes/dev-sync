@@ -25,7 +25,7 @@ import {
   getProjectUserStories,
   getProjectTestCases,
   getProjectCodeReviewFiles,
-  getProjectTechDocs
+  getProjectTechDocs,
 } from "@/api/project";
 
 import {
@@ -43,9 +43,7 @@ import {
   getIssuesFromJira,
 } from "@/api/user_story";
 
-import {
-  GenerateTechDoc
-} from "@/api/design_doc"
+import { GenerateTechDoc } from "@/api/design_doc";
 
 import {
   createTestCase,
@@ -58,8 +56,8 @@ import {
 import {
   CodeReviewFile,
   CodeReviewFileUpdate,
-  CodeReviewGenerate
-} from "@/schema/code_review"
+  CodeReviewGenerate,
+} from "@/schema/code_review";
 
 import {
   getCodeReviewFile,
@@ -234,7 +232,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
         .fetchProjectDocuments(useAppStore.getState().project_id!);
       set({ loading: false });
     } catch (error: any) {
-      set({ error: error.message, loading: false }); 
+      set({ error: error.message, loading: false });
     }
   },
 
@@ -243,12 +241,11 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
     try {
       await deleteProjectDocument(documentId);
       await useAppStore
-      .getState()
-      .fetchProjectDocuments(useAppStore.getState().project_id!);
+        .getState()
+        .fetchProjectDocuments(useAppStore.getState().project_id!);
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
- 
     }
   },
 
@@ -334,23 +331,23 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
 
   design_docs: [],
   fetchTechDocs: async (projectId) => {
-    set({ loading: true,error: null});
-    try{
-      const design_docs=await getProjectTechDocs(projectId);
-      set({ design_docs, loading:false});
-    } catch (error:any) {
-      set({error:error.message, loading:false});
+    set({ loading: true, error: null });
+    try {
+      const design_docs = await getProjectTechDocs(projectId);
+      set({ design_docs, loading: false });
+    } catch (error: any) {
+      set({ error: error.message, loading: false });
     }
   },
 
   generateTechDocs: async (data) => {
     set({ loading: true, error: null });
-    try{
+    try {
       await GenerateTechDoc(data);
       await useAppStore.getState().fetchTechDocs(data.project_id);
       set({ loading: false });
     } catch (error: any) {
-      set({ error:error.message, loading:false});
+      set({ error: error.message, loading: false });
     }
   },
 

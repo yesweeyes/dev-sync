@@ -19,7 +19,6 @@ class UserStoryBase(BaseModel):
     issueType: str
     jira_id:int
     jiraPush : bool
-    jira_ignored :bool
 
     class Config:
         from_attributes = True 
@@ -35,7 +34,6 @@ class UserStoryCreate(BaseModel):
     issueType: str
     jiraPush : bool
     jira_id:int
-    jira_ignored:Optional[bool] = None
 
     class Config:
         from_attributes = True 
@@ -50,7 +48,6 @@ class UserStoryUpdate(BaseModel):
     issueType : Optional[str] = None
     jiraPush:Optional[bool] = None
     jira_id : Optional[int] = None
-    jira_ignored : Optional[bool] = None
 
     class Config:
         from_attributes = True 

@@ -50,7 +50,7 @@ def generate_test_case_helper(user_stories: List[dict], summary) -> str:
       )
       prompt = prompt_template.invoke({
           "example_template": example_template,
-          "context": story + summary,
+          "context": str(story) + summary,
           "text": "Generate necessary test cases for the content including functional and non-functional"
       })
       response = model.invoke(prompt)
