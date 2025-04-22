@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
-from config import POSTGRES_DATABASE_URL
+from app.config import POSTGRES_DATABASE_URL
 
 # Create a synchronous engine
 engine = create_engine(POSTGRES_DATABASE_URL, echo=True)

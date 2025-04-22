@@ -1,8 +1,7 @@
-import json
-from schemas.code_review import CodeReviewBase
-from schemas.project import ProjectBase
-from schemas.push_to_jira import PushToJiraData
-from utils.jira.push_to_jira import (
+from app.schemas.code_review import CodeReviewBase
+from app.schemas.project import ProjectBase
+from app.schemas.push_to_jira import PushToJiraData
+from app.utils.jira.push_to_jira import (
     push_to_jira as push_to_jira_util, 
     add_attachment_to_issue as add_attachment_to_issue_util
 )

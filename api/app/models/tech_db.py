@@ -1,7 +1,7 @@
-from database import Base
+import uuid
 from sqlalchemy import Column, String, ForeignKey, UniqueConstraint
 from sqlalchemy.dialects.postgresql import UUID
-import uuid
+from app.database import Base
 
 class GeneratedHLDDocument(Base):
 

@@ -1,15 +1,14 @@
+import uuid
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, Form, BackgroundTasks
 from sqlalchemy.orm import Session
-import uuid
-from schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate
-from database import get_db
-from services.requirement_document import (
+from app.database import get_db
+from app.schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate
+from app.services.requirement_document import (
     save_requirement_document as save_requirement_document_service,
     get_requirement_document_by_id,
     update_requirement_document as update_doc_service,
     delete_requirement_document as delete_doc_service
 )
-from typing import List
 
 router = APIRouter(
     prefix="/document",

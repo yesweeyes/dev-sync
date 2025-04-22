@@ -1,21 +1,14 @@
 import os
-from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-# from fpdf import FPDF
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.utils import simpleSplit
+from app.config import GEMINI_API_KEY
+from app.dependencies import HLD_FOLDER, LLD_FOLDER
 
-
-load_dotenv(".env")
-Gemini_api_Key = os.getenv("GEMINI_API_KEY")
-
-
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=Gemini_api_Key, api_version="v1")
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=GEMINI_API_KEY, api_version="v1")
 
 
 hld_prompt = PromptTemplate(
@@ -74,8 +67,8 @@ lld_prompt = PromptTemplate(
 def generate_hld(content):
     hld_chain = LLMChain(llm=llm, prompt=hld_prompt)
     hld_response=hld_chain.run(content=content)
-    hld_pdf_path = os.path.join("output", "HLD_Document.pdf")
-    os.makedirs("output", exist_ok=True)
+    hld_pdf_path = os.path.join(HLD_FOLDER, "HLD_Document.pdf")
+
     save_to_pdf(hld_response, hld_pdf_path)
 
     return hld_response, hld_pdf_path
@@ -83,8 +76,7 @@ def generate_hld(content):
 def generate_lld(hld_response):
     lld_chain=LLMChain(llm=llm,prompt=lld_prompt)
     lld_response=lld_chain.run(hld_response=hld_response)
-    lld_pdf_path=os.path.join("output","LLD_Document.pdf")
-    os.makedirs("output",exist_ok=True)
+    lld_pdf_path=os.path.join(LLD_FOLDER,"LLD_Document.pdf")
     save_to_pdf(lld_response,lld_pdf_path)
 
     return lld_response,lld_pdf_path

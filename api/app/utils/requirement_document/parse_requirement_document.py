@@ -1,5 +1,5 @@
-from schemas.requirement_document import  RequirementDocumentBase
 import fitz  
+from app.schemas.requirement_document import  RequirementDocumentBase
 
 def parse_requirement_document(file: RequirementDocumentBase) -> str:
     content = ""

@@ -1,14 +1,10 @@
-from sqlalchemy.orm import Session
-from sqlalchemy.exc import NoResultFound
-from models.user_story import UserStory
-from schemas.user_story import UserStoryCreate, UserStoryUpdate
+import os
 import uuid
 from typing import List
-from fastapi.responses import FileResponse
-import os
-
-DOWNLOAD_FOLDER = "downloads"
-os.makedirs(DOWNLOAD_FOLDER, exist_ok=True) 
+from sqlalchemy.orm import Session
+from sqlalchemy.exc import NoResultFound
+from app.models.user_story import UserStory
+from app.schemas.user_story import UserStoryCreate, UserStoryUpdate
 
 def create_user_story(db:Session, user_story_data: UserStoryCreate) -> UserStory:
     new_story = UserStory(**user_story_data.model_dump())

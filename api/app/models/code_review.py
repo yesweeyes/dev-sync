@@ -1,7 +1,7 @@
-from database import Base
+import uuid
 from sqlalchemy import TIMESTAMP, Column, String, ForeignKey, text
 from sqlalchemy.dialects.postgresql import UUID
-import uuid
+from app.database import Base
 
 class CodeReviewFile(Base):
     __tablename__ = "code_review_file"

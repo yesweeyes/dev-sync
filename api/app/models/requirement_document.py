@@ -1,7 +1,7 @@
-from database import Base
-from sqlalchemy import TIMESTAMP, Column, String, ForeignKey, UniqueConstraint, text
-from sqlalchemy.dialects.postgresql import UUID
 import uuid
+from app.database import Base
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy import TIMESTAMP, Column, String, ForeignKey, UniqueConstraint, text
 
 class RequirementDocument(Base):
     __tablename__ = "requirement_document"

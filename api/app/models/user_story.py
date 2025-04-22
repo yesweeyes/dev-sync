@@ -1,8 +1,8 @@
-from sqlalchemy import Column, String, Integer,Boolean, ForeignKey, Enum as SQLEnum, Text, ARRAY, TIMESTAMP, text
-from sqlalchemy.dialects.postgresql import UUID
 import uuid
 from enum import Enum
-from database import Base
+from sqlalchemy import Column, String, Integer,Boolean, ForeignKey, Enum as SQLEnum, Text, ARRAY, TIMESTAMP, text
+from sqlalchemy.dialects.postgresql import UUID
+from app.database import Base
 
 
 class UserStoryPriorityEnum(str, Enum):

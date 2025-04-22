@@ -1,24 +1,23 @@
+import os
+import uuid
+from fastapi import UploadFile, BackgroundTasks
+from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
-from services.document_summary import (
+from app.models.requirement_document import RequirementDocument
+from app.schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate, RequirementDocumentBase
+from app.services.document_summary import (
     create_document_summary_for_req_doc as create_document_summary_for_req_doc_service
 )
-from models.requirement_document import RequirementDocument
-from schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate, RequirementDocumentBase
-import uuid
-from fastapi import UploadFile
-from typing import List
-import os
-from fastapi import BackgroundTasks
+from app.dependencies import REQUIREMENT_DOCS_FOLDER
 
-UPLOAD_FOLDER = "uploads"
 
 def save_requirement_document(db: Session, project_id: uuid.UUID, file: UploadFile, background_tasks: BackgroundTasks):
     # Ensure uploads folder exists
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    os.makedirs(REQUIREMENT_DOCS_FOLDER, exist_ok=True)
 
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
-    file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+    file_path = os.path.join(REQUIREMENT_DOCS_FOLDER, unique_filename)
 
     # Read and save the file
     with open(file_path, "wb") as buffer:

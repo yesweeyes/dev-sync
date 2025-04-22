@@ -1,12 +1,8 @@
-import getpass
-import os
+import json
+from typing import List
 from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
-from typing import List
-import json
-
-if not os.environ.get("GROQ_API_KEY"):
-  os.environ["GROQ_API_KEY"] = getpass.getpass("Enter API key for Groq: ")
+from app.config import GROQ_API_KEY
 
 model = init_chat_model("llama-3.3-70b-versatile", model_provider="groq")
 

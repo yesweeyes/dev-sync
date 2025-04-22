@@ -1,12 +1,11 @@
-from sqlalchemy.orm import Session
 import uuid
-from models.testcase import TestCase
-from schemas.testcase import TestCaseCreate, TestCaseUpdate
-from sqlalchemy.exc import NoResultFound
 from typing import List
+from sqlalchemy.exc import NoResultFound
+from sqlalchemy.orm import Session
+from app.models.testcase import TestCase
+from app.schemas.testcase import TestCaseCreate, TestCaseUpdate
 
 def create_test_case(db:Session, test_case_data:TestCaseCreate) -> TestCase:
-    print("Type of test_case_data:", type(test_case_data))
     if hasattr(test_case_data, "model_dump"):
         test_case_data = test_case_data.model_dump()
     new_test_case = TestCase(**test_case_data)

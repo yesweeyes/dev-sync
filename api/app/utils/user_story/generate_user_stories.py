@@ -1,27 +1,12 @@
-from groq import Groq
-from sqlalchemy.orm import Session
 import uuid
-import re
 import json
 import fitz
-from dotenv import load_dotenv
-from database import get_db
-from models import user_story
-from utils.user_story.user_story_structure import generate_user_story_helper
-from services.requirement_document import get_all_requirement_documents_for_project
-from services.user_story import generate_create_user_story
-import os
-import getpass
-from langchain_core.messages import HumanMessage, SystemMessage
+from sqlalchemy.orm import Session
 from langchain.chat_models import init_chat_model
-from langchain_core.prompts import ChatPromptTemplate
-from fastapi import APIRouter, Depends, HTTPException
-
-router = APIRouter()
-
-# Load Groq API Key
-if not os.environ.get("GROQ_API_KEY"):
-    os.environ["GROQ_API_KEY"] = getpass.getpass("Enter API key for Groq: ")
+from app.services.requirement_document import get_all_requirement_documents_for_project
+from app.services.user_story import generate_create_user_story
+from app.utils.user_story.user_story_structure import generate_user_story_helper
+from app.config import GROQ_API_KEY
 
 # Initialize Groq Model
 model = init_chat_model("llama-3.3-70b-versatile", model_provider="groq")
