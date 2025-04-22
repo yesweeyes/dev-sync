@@ -1,6 +1,6 @@
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_core.prompts import ChatPromptTemplate
-from config import GEMINI_API_KEY
+from app.config import GEMINI_API_KEY
 
 
 def generate_document_summary(documet_content: str) -> str:

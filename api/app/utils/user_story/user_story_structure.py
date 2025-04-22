@@ -1,8 +1,6 @@
-import json
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_google_genai import ChatGoogleGenerativeAI
-from config import GEMINI_API_KEY
-from schemas.user_story import UserStoryCreate
+from app.config import GEMINI_API_KEY
 
 def generate_user_story_helper(summary: str, user_prompt: str):
     # Set up the model

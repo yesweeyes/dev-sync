@@ -1,19 +1,16 @@
 import uuid
-from fastapi import Depends
-from pydantic import UUID4
 from sqlalchemy.orm import Session
-from models.document_summary import DocumentSummary
-from schemas.document_summary import DocumentSummaryBase, DocumentSummaryCreate
-from schemas.requirement_document import RequirementDocumentBase
-from utils.requirement_document.parse_requirement_document import (
+from app.database import SessionLocal
+from app.models.document_summary import DocumentSummary
+from app.schemas.document_summary import DocumentSummaryBase, DocumentSummaryCreate
+from app.schemas.requirement_document import RequirementDocumentBase
+from app.utils.requirement_document.parse_requirement_document import (
     parse_requirement_document as parse_requirement_document_util
 )
-from utils.document_summary.generate_document_summary import (
+from app.utils.document_summary.generate_document_summary import (
     generate_document_summary as generate_document_summary_util
 )
-from database import SessionLocal
 
-# Take a Requirement Doc File and create a summary in db
 def create_document_summary_for_req_doc(db: Session, file: RequirementDocumentBase) -> DocumentSummary:
     document_id = file.id
     project_id = file.project_id

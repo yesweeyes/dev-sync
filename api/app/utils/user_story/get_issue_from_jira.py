@@ -1,10 +1,10 @@
-from sqlalchemy.orm import Session
 import uuid
-from models.user_story import UserStory
-from requests.auth import HTTPBasicAuth
 import requests
-from services.project import get_project
-from schemas.user_story import UserStoryCreate
+from requests.auth import HTTPBasicAuth
+from sqlalchemy.orm import Session
+from app.models.user_story import UserStory
+from app.schemas.user_story import UserStoryCreate
+from app.services.project import get_project
 
 
 def get_story_issues_from_jira(db:Session,project_id:uuid.UUID):

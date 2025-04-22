@@ -56,7 +56,7 @@ python -m venv venv  # Create a virtual environment
 source venv/bin/activate  # Activate virtual environment (Linux/macOS)
 venv\Scripts\activate  # Activate virtual environment (Windows)
 pip install -r requirements.txt  # Install dependencies
-uvicorn main:app --reload  # Start FastAPI server
+uvicorn app.main:app --reload  # Start FastAPI server
 ```
 
 ### Database Migration Setup (Alembic)

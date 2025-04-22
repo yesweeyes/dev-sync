@@ -1,7 +1,7 @@
+import uuid
 from sqlalchemy import Column, ForeignKey, Enum as SQLEnum, Text, TIMESTAMP, text
 from sqlalchemy.dialects.postgresql import UUID
-import uuid
-from database import Base
+from app.database import Base
 
 class DocumentSummary(Base):
     __tablename__ = "document_summary"

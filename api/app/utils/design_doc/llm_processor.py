@@ -3,19 +3,12 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
-# from fpdf import FPDF
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
-from reportlab.pdfbase import pdfmetrics
-from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.lib.utils import simpleSplit
+from app.config import GEMINI_API_KEY
 
-
-load_dotenv(".env")
-Gemini_api_Key = os.getenv("GEMINI_API_KEY")
-
-
-llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=Gemini_api_Key, api_version="v1")
+llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=GEMINI_API_KEY, api_version="v1")
 
 
 hld_prompt = PromptTemplate(

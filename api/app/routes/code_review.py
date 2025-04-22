@@ -1,21 +1,21 @@
 import uuid
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.code_review import CodeReviewGenerate, CodeReviewUpdate
-from database import get_db
-from services.code_review import (
+from app.schemas.code_review import CodeReviewGenerate, CodeReviewUpdate
+from app.database import get_db
+from app.services.code_review import (
     generate_code_review_file as generate_code_review_service,
     get_code_review_file_by_id as get_code_review_file_by_id_service, 
     update_code_review_file as update_code_review_file_service,
     delete_code_review_file as delete_code_review_file_service
 )
-from services.code_review import (
+from app.services.code_review import (
     get_code_review_file_by_id as get_code_review_file_by_id_service
 )
-from services.project import (
+from app.services.project import (
     get_project as get_project_service
 )
-from utils.code_review.push_to_jira import (
+from app.utils.code_review.push_to_jira import (
     push_code_review_to_jira as code_review_push_to_jira_util
 )
 
