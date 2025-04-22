@@ -1,15 +1,7 @@
-from dotenv import load_dotenv
-from database import get_db
-from sqlalchemy.orm import Session
 import uuid
-from services.project import get_project
-from services.user_story import get_all_user_stories
-from requests.auth import HTTPBasicAuth
-import requests
 import json
-
-load_dotenv()
-
+import requests
+from requests.auth import HTTPBasicAuth
 
 headers = {
   "Accept": "application/json",

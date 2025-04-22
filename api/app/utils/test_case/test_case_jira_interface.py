@@ -1,12 +1,10 @@
-from dotenv import load_dotenv
-from database import get_db
-from sqlalchemy.orm import Session
 import uuid
-from services.project import get_project
-from services.testcases import get_test_case
-from requests.auth import HTTPBasicAuth
-import requests
 import json
+import requests
+from requests.auth import HTTPBasicAuth
+from sqlalchemy.orm import Session
+from app.services.project import get_project
+from app.services.testcases import get_test_case
 
 def push_test_case_to_jira(test_case_id: uuid.UUID, db: Session):
     try:

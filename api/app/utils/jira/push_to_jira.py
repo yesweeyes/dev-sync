@@ -2,8 +2,8 @@ import os
 import json
 import requests
 from requests.auth import HTTPBasicAuth
-from schemas.project import ProjectBase
-from schemas.push_to_jira import PushToJiraData
+from app.schemas.project import ProjectBase
+from app.schemas.push_to_jira import PushToJiraData
 
 
 def push_to_jira(data: PushToJiraData, project: ProjectBase):

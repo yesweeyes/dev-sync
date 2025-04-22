@@ -1,14 +1,10 @@
-from dotenv import load_dotenv
-from database import get_db
-from sqlalchemy.orm import Session
 import uuid
-from services.project import get_project
-from services.user_story import get_user_story
-from requests.auth import HTTPBasicAuth
-import requests
 import json
-
-load_dotenv()
+import requests
+from requests.auth import HTTPBasicAuth
+from sqlalchemy.orm import Session
+from app.services.project import get_project
+from app.services.user_story import get_user_story
 
 
 def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session):
