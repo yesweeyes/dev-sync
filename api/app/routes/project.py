@@ -1,29 +1,29 @@
+import uuid
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
-from schemas.project import ProjectCreate, ProjectUpdate
-from database import get_db
-import uuid
-from services.project import (
+from app.schemas.project import ProjectCreate, ProjectUpdate
+from app.database import get_db
+from app.services.project import (
     create_project as create_project_service,
     get_all_projects as get_all_projects_service,
     get_project as get_project_service,
     update_project as update_project_service,
     delete_project as delete_project_service,
 )
-from services.requirement_document import (
+from app.services.requirement_document import (
     get_all_requirement_documents_for_project as get_project_documents_service
 )
-from services.user_story import (
+from app.services.user_story import (
     get_all_user_stories as get_all_user_stories_service,
 )
-from services.testcases import (
+from app.services.testcases import (
     get_all_test_cases as get_all_test_cases_service,
 )
-from services.code_review import (
+from app.services.code_review import (
     get_all_code_review_file_for_project as get_all_code_review_file_service
 )
 
-from services.design_doc import (
+from app.services.design_doc import (
     get_all_design_documents as get_all_design_documents_service
 )
 

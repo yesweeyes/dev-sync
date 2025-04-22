@@ -1,9 +1,9 @@
+import uuid
 from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
-from models.project import Project
-from schemas.project import ProjectCreate, ProjectUpdate
-import uuid
+from app.models.project import Project
+from app.schemas.project import ProjectCreate, ProjectUpdate
 
 def create_project(db: Session, project_data: ProjectCreate) -> Project:
     new_project = Project(**project_data.model_dump()) 

@@ -1,18 +1,18 @@
-from typing import List
 import uuid
+from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
-from models.code_review import CodeReviewFile
-from schemas.code_review import CodeReviewBase, CodeReviewCreate, CodeReviewUpdate
-from services.project import get_project as get_project_service
-from utils.code_review.parse_repo import (
+from app.models.code_review import CodeReviewFile
+from app.schemas.code_review import CodeReviewBase, CodeReviewCreate, CodeReviewUpdate
+from app.services.project import get_project as get_project_service
+from app.utils.code_review.parse_repo import (
     clone_github_repo as clone_github_repo_util,
     read_code_from_temp_dir as read_code_from_temp_dir_util,
 )
-from utils.code_review.generate_review_file import (
+from app.utils.code_review.generate_review_file import (
     generate_code_review_html as generate_code_review_html_util
 )
-from utils.code_review.save_review_to_file import (
+from app.utils.code_review.save_review_to_file import (
     save_review_to_file as save_review_to_file_util
 )
 

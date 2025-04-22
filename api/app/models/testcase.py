@@ -1,8 +1,8 @@
-from database import Base
-from sqlalchemy import Column, String, ForeignKey, Enum as SQLEnum, Text, ARRAY, TIMESTAMP, text, Boolean, Integer
 import uuid
-from sqlalchemy.dialects.postgresql import UUID
 from enum import Enum
+from sqlalchemy import Column, String, ForeignKey, Enum as SQLEnum, Text, ARRAY, TIMESTAMP, text, Boolean, Integer
+from sqlalchemy.dialects.postgresql import UUID
+from app.database import Base
 
 class TestCasePriorityEnum(str, Enum):
     LOW = "LOW"

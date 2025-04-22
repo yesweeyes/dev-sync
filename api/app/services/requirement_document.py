@@ -1,15 +1,14 @@
+import os
+import uuid
+from fastapi import UploadFile, BackgroundTasks
+from typing import List
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import NoResultFound
-from services.document_summary import (
+from app.models.requirement_document import RequirementDocument
+from app.schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate, RequirementDocumentBase
+from app.services.document_summary import (
     create_document_summary_for_req_doc as create_document_summary_for_req_doc_service
 )
-from models.requirement_document import RequirementDocument
-from schemas.requirement_document import RequirementDocumentCreate, RequirementDocumentUpdate, RequirementDocumentBase
-import uuid
-from fastapi import UploadFile
-from typing import List
-import os
-from fastapi import BackgroundTasks
 
 UPLOAD_FOLDER = "uploads"
 
