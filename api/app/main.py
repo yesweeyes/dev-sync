@@ -25,10 +25,10 @@ os.makedirs(CODE_REVIEW_FOLDER, exist_ok=True)
 os.makedirs(HLD_FOLDER, exist_ok=True)
 os.makedirs(LLD_FOLDER, exist_ok=True)
 
-app.mount("/app/uploads", StaticFiles(directory=REQUIREMENT_DOCS_FOLDER), name="uploads")
-app.mount("/app/reviews", StaticFiles(directory=CODE_REVIEW_FOLDER), name="reviews")
-app.mount("/app/output", StaticFiles(directory=HLD_FOLDER), name="output")
-app.mount("/app/output", StaticFiles(directory=LLD_FOLDER), name="output")
+app.mount("/api/v1/app/local_fs/requirement_document", StaticFiles(directory=REQUIREMENT_DOCS_FOLDER), name="uploads")
+app.mount("/api/v1/app/local_fs/code_review", StaticFiles(directory=CODE_REVIEW_FOLDER), name="reviews")
+app.mount("/api/v1/app/local_fs/highlevel_doc", StaticFiles(directory=HLD_FOLDER), name="highlevel_doc")
+app.mount("/api/v1/app/local_fs/lowlevel_doc", StaticFiles(directory=LLD_FOLDER), name="lowlevel_doc")
 
 
 @app.get("/")

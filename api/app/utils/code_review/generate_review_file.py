@@ -20,6 +20,9 @@ Please provide a detailed HTML-formatted review of the following code:
 - Use <pre><code> for code blocks.
 - Format with proper headings and bullet points.
 
+User Prompt:
+```{user_prompt}```
+
 Code:
 ```{code}```
 """
@@ -27,7 +30,7 @@ Code:
 
 def generate_code_review_html(code: str, user_prompt: str) -> str:
     # Format the prompt
-    prompt = code_review_prompt.format(code=code)
+    prompt = code_review_prompt.format(code=code, user_prompt=user_prompt)
 
     # Get Gemini response
     response = llm.invoke(prompt)
