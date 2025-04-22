@@ -71,4 +71,5 @@ uploads/*
 reviews/*
 outputs/*
 output/*
+app/local_fs/*
 

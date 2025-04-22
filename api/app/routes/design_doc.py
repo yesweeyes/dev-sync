@@ -9,14 +9,11 @@ from app.utils.design_doc.extractor import extract_text_from_pdf, save_to_docx
 from app.utils.design_doc.llm_processor import process_with_llm
 import app.utils.user_story.generate_user_stories as user_story_gen_util
 
-output_dir = "output"
 
 router = APIRouter(
     prefix="/tech_docs",
     tags=["tech_docs"],
 )
-
-os.makedirs(output_dir, exist_ok=True)
 
 @router.post("/generate/")
 def GenerateDesignDocs(data:HldLldGenerate, db: Session =Depends(get_db)):
@@ -26,8 +23,6 @@ def GenerateDesignDocs(data:HldLldGenerate, db: Session =Depends(get_db)):
        
     # extracting text and saving as a docx
     text_chunks = extract_text_from_pdf(document)
-    #docx_path = os.path.join(output_dir, "extracted_docx.docx")
-    #save_to_docx(text_chunks, docx_path)
 
     # processing of extracted text with LLM
     hld_pdf, lld_pdf = process_with_llm(text_chunks)

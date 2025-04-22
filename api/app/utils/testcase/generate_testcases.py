@@ -6,7 +6,7 @@ from app.database import get_db
 from app.services.user_story import get_all_user_stories as get_all_user_stories_service
 from app.services.testcases import create_test_case
 from app.services.document_summary import get_document_summary_by_project as get_document_summary_by_project_service
-from app.utils.test_case.test_case_structure import generate_test_case_helper
+from app.utils.testcase.testcase_structure import generate_test_case_helper
     
 db = next(get_db())
 def generate_test_cases_for_user_stories(project_id:uuid.UUID, db:Session):

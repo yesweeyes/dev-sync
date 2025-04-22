@@ -4,9 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 from app.routes import router
-
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from app.dependencies import REQUIREMENT_DOCS_FOLDER, CODE_REVIEW_FOLDER, HLD_FOLDER, LLD_FOLDER
 
 app = FastAPI()
 
@@ -22,20 +20,16 @@ app.add_middleware(
 # Include routes
 app.include_router(router.router)
 
-UPLOAD_FOLDER = "uploads"
-REVIEW_FOLDER = "reviews"
-OUTPUT_FOLDER = "outputs"
-output_dir = "output"
+os.makedirs(REQUIREMENT_DOCS_FOLDER, exist_ok=True)
+os.makedirs(CODE_REVIEW_FOLDER, exist_ok=True)
+os.makedirs(HLD_FOLDER, exist_ok=True)
+os.makedirs(LLD_FOLDER, exist_ok=True)
 
-os.makedirs(UPLOAD_FOLDER, exist_ok=True)
-os.makedirs(REVIEW_FOLDER, exist_ok=True)
-os.makedirs(OUTPUT_FOLDER, exist_ok=True)
-os.makedirs(output_dir, exist_ok=True)
+app.mount("/app/uploads", StaticFiles(directory=REQUIREMENT_DOCS_FOLDER), name="uploads")
+app.mount("/app/reviews", StaticFiles(directory=CODE_REVIEW_FOLDER), name="reviews")
+app.mount("/app/output", StaticFiles(directory=HLD_FOLDER), name="output")
+app.mount("/app/output", StaticFiles(directory=LLD_FOLDER), name="output")
 
-app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
-app.mount("/reviews", StaticFiles(directory="reviews"), name="reviews")
-app.mount("/outputs", StaticFiles(directory="outputs"), name="outputs")
-app.mount("/output",StaticFiles(directory="output"),name="output")
 
 @app.get("/")
 async def root():

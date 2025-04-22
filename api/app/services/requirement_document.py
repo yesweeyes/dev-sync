@@ -9,15 +9,15 @@ from app.schemas.requirement_document import RequirementDocumentCreate, Requirem
 from app.services.document_summary import (
     create_document_summary_for_req_doc as create_document_summary_for_req_doc_service
 )
+from app.dependencies import REQUIREMENT_DOCS_FOLDER
 
-UPLOAD_FOLDER = "uploads"
 
 def save_requirement_document(db: Session, project_id: uuid.UUID, file: UploadFile, background_tasks: BackgroundTasks):
     # Ensure uploads folder exists
-    os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    os.makedirs(REQUIREMENT_DOCS_FOLDER, exist_ok=True)
 
     unique_filename = f"{uuid.uuid4()}_{file.filename}"
-    file_path = os.path.join(UPLOAD_FOLDER, unique_filename)
+    file_path = os.path.join(REQUIREMENT_DOCS_FOLDER, unique_filename)
 
     # Read and save the file
     with open(file_path, "wb") as buffer:

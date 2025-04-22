@@ -1,0 +1,5 @@
+LOCAL_FS = "app/local_fs/"
+REQUIREMENT_DOCS_FOLDER = LOCAL_FS + "requirement_document"
+CODE_REVIEW_FOLDER = LOCAL_FS+ "code_review"
+HLD_FOLDER = LOCAL_FS + "highlevel_doc"
+LLD_FOLDER = LOCAL_FS + "lowlevel_doc"

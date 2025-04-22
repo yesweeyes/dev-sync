@@ -3,14 +3,14 @@ from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from app.schemas.testcase import TestCaseCreate, TestCaseUpdate
 from app.database import get_db
-import app.utils.test_case.generate_test_cases as test_case_service
+import app.utils.testcase.generate_testcases as test_case_service
 from app.services.testcases import(
     create_test_case as create_test_case_service,
     get_test_case as get_test_case_service,
     update_test_case as update_test_case_service,
     delete_test_case as delete_test_case_service
 )
-import app.utils.test_case.test_case_jira_interface as test_case_jira_interface_service
+import app.utils.testcase.testcase_jira_interface as test_case_jira_interface_service
 
 
 router = APIRouter(
