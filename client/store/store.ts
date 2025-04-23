@@ -66,6 +66,7 @@ import {
   generateCodeReviewFile,
 } from "@/api/code_review";
 
+
 interface AppStoreInterface {
   loading: boolean;
   error: string | null;
@@ -429,54 +430,6 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
   },
   code_reviews: [],
   fetchCodeReviewFiles: async (projectId) => {
-    set({ loading: true, error: null });
-    try {
-      const code_reviews = await getProjectCodeReviewFiles(projectId);
-      set({ code_reviews, loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-
-  updateCodeReviewFile: async (code_review_file_id, data) => {
-    set({ loading: true, error: null });
-    try {
-      await updateCodeReviewFile(code_review_file_id, data);
-      await useAppStore
-        .getState()
-        .fetchCodeReviewFiles(useAppStore.getState().project_id!);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-
-  deleteCodeReviewFile: async (code_review_file_id) => {
-    set({ loading: true, error: null });
-    try {
-      await deleteCodeReviewFile(code_review_file_id);
-      await useAppStore
-        .getState()
-        .fetchCodeReviewFiles(useAppStore.getState().project_id!);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-
-  generateCodeReviewFile: async (data) => {
-    set({ loading: true, error: null });
-    try {
-      await generateCodeReviewFile(data);
-      await useAppStore.getState().fetchCodeReviewFiles(data.project_id);
-      set({ loading: false });
-    } catch (error: any) {
-      set({ error: error.message, loading: false });
-    }
-  },
-
-  jira_issues: [],
-  fetchJiraIssues: async (projectId) => {
     set({ loading: true, error: null });
     try {
       const code_reviews = await getProjectCodeReviewFiles(projectId);
