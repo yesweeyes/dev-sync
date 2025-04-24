@@ -10,7 +10,7 @@ from app.models.requirement_document import RequirementDocument
 from app.models.user_story import UserStory
 from app.models.testcase import TestCase
 from app.models.code_review import CodeReviewFile
-from app.models.tech_db import GeneratedHLDDocument, GeneratedLLDDocument
+from app.models.design_document import GeneratedHLDDocument, GeneratedLLDDocument
 from app.models.document_summary import DocumentSummary
 
 

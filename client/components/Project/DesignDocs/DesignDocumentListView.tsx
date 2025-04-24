@@ -1,6 +1,6 @@
 import React from "react";
 import { FlatList, ScrollView, Text } from "react-native";
-import { ExternalLink } from "lucide-react-native";
+import { ExternalLink, Trash2 } from "lucide-react-native";
 import { HldLld } from "@/schema/design_doc";
 import { Linking } from "react-native";
 import { Card } from "@/components/ui/card";
@@ -12,7 +12,11 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
 
 function DesignDocumenntListView() {
-  const { design_docs } = useAppStore();
+  const { design_docs, deleteTechDocs } = useAppStore();
+
+  function handleDesignDocsDelete(design_docs_file_id:string) {
+    deleteTechDocs(design_docs_file_id);
+  }
 
   return (
     <Box className="flex-1 h-full w-full">
@@ -32,13 +36,19 @@ function DesignDocumenntListView() {
                 <HStack space="sm">
                   <Button
                     onPress={() => {
-                      const BACKEND_BASE_URL = "http://127.0.0.1:8000"; // or from env
+                      const BACKEND_BASE_URL = "http://127.0.0.1:8000/api/v1"; // or from env
                       const fileUrl = `${BACKEND_BASE_URL}/${item.file_path}`;
                       Linking.openURL(fileUrl);
                     }}
                     className="w-14 h-14 bg-blue-600 rounded-full items-center justify-center"
                   >
                     <ButtonIcon as={ExternalLink} size="lg" />
+                  </Button>
+                  <Button
+                    className="w-14 h-14 bg-red-600 rounded-full items-center justify-center hover:scale-105 transition-transform"
+                    onPress={() => handleDesignDocsDelete(item.id)}
+                  >
+                    <ButtonIcon as = {Trash2} size="lg" />
                   </Button>
                 </HStack>
               </HStack>

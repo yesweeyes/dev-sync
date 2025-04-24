@@ -1,31 +1,28 @@
 import os
+import uuid
 import traceback
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db
-from app.models.tech_db import GeneratedHLDDocument,GeneratedLLDDocument
+from app.models.design_document import GeneratedHLDDocument,GeneratedLLDDocument
 from app.schemas.design_doc import HldLldGenerate
-from app.utils.design_doc.extractor import extract_text_from_pdf, save_to_docx
 from app.utils.design_doc.llm_processor import process_with_llm
 import app.utils.user_story.generate_user_stories as user_story_gen_util
-
+from app.services.design_doc import delete_design_documents as delete_design_documents_file_service
+from app.services.document_summary import get_document_summary_by_project
 
 router = APIRouter(
     prefix="/tech_docs",
     tags=["tech_docs"],
 )
 
-@router.post("/generate/")
+@router.post("/generate")
 def GenerateDesignDocs(data:HldLldGenerate, db: Session =Depends(get_db)):
     project_id=data.project_id
-    
-    document=user_story_gen_util.get_files(project_id,db)
-       
-    # extracting text and saving as a docx
-    text_chunks = extract_text_from_pdf(document)
-
-    # processing of extracted text with LLM
-    hld_pdf, lld_pdf = process_with_llm(text_chunks)
+               
+    # processing of summary with LLM
+    summary=get_document_summary_by_project(project_id)    
+    hld_pdf, lld_pdf = process_with_llm(summary)
 
     try:
 
@@ -59,3 +56,11 @@ def GenerateDesignDocs(data:HldLldGenerate, db: Session =Depends(get_db)):
         raise HTTPException(status_code=500, detail="Internal Server Error....~.")
     
     return {"updates": "Processing complete", "HLD_PDF": hld_pdf, "LLD_PDF": lld_pdf}
+
+@router.delete("/{design_docs_file_id}")
+def delete_design_docs(design_docs_file_id: uuid.UUID, db:Session = Depends(get_db)):
+    try: 
+        delete_design_documents_file_service(db,design_docs_file_id)
+        return {"detail": "Design Docs Deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))

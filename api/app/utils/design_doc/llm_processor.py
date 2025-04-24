@@ -1,4 +1,5 @@
 import os
+import uuid
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
@@ -12,10 +13,10 @@ llm = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=GEMINI_API
 
 
 hld_prompt = PromptTemplate(
-    input_variables=["content"],
+    input_variables=["summary"],
     template="""
     You are a solution architect. Generate a detailed High-Level Design (HLD) document based on the following content:
-    {content}
+    {summary}
 
     The generated document should include :
     1. Title (for example, High-Level Design (HLD) for "document name")
@@ -24,8 +25,8 @@ hld_prompt = PromptTemplate(
     4. System Design, includin - Application Design, process flow, Information flow.
     5. High level Architecture image, workflow of the user's typical process
     6. Key modules
-    7. Network Diagram image
-    8. UML Class diagram image
+    7. Network Diagram 
+    8. UML Class diagram 
     9. Database Design
     10. User Interface, Hardware and Software Interface
     11. Error Handling
@@ -64,28 +65,28 @@ lld_prompt = PromptTemplate(
     """
 )
 
-def generate_hld(content):
+def generate_hld(summary,doc_id):
     hld_chain = LLMChain(llm=llm, prompt=hld_prompt)
-    hld_response=hld_chain.run(content=content)
-    hld_pdf_path = os.path.join(HLD_FOLDER, "HLD_Document.pdf")
+    hld_response=hld_chain.run(summary=summary)
+    hld_pdf_path = os.path.join(HLD_FOLDER, f"HLD_Document_{doc_id}.pdf")
 
     save_to_pdf(hld_response, hld_pdf_path)
 
     return hld_response, hld_pdf_path
 
-def generate_lld(hld_response):
+def generate_lld(hld_response,doc_id):
     lld_chain=LLMChain(llm=llm,prompt=lld_prompt)
     lld_response=lld_chain.run(hld_response=hld_response)
-    lld_pdf_path=os.path.join(LLD_FOLDER,"LLD_Document.pdf")
+    lld_pdf_path=os.path.join(LLD_FOLDER,f"LLD_Document_{doc_id}.pdf")
     save_to_pdf(lld_response,lld_pdf_path)
 
     return lld_response,lld_pdf_path
 
 
-def process_with_llm(text_chunks):
-   
-    hld_response,hld_path=generate_hld(text_chunks)
-    lld_response,lld_path=generate_lld(hld_response)
+def process_with_llm(summary):
+    doc_id=str(uuid.uuid4())   
+    hld_response,hld_path=generate_hld(summary,doc_id)
+    lld_response,lld_path=generate_lld(hld_response,doc_id)
 
     return hld_path,lld_path
 

@@ -1,7 +1,7 @@
 import { InfoContext } from "@/components/Common/InfoContext";
 import NoRecordsFound from "@/components/Common/NoRecordsFound";
-import GenerateDesignDocs from "@/components/Project/Design_docs/Generate_docs_btn";
-import DesignDocumenntListView from "@/components/Project/Design_docs/DesignDocumentListView";
+import GenerateDesignDocs from "@/components/Project/DesignDocs/GenerateDocsButton";
+import DesignDocumenntListView from "@/components/Project/DesignDocs/DesignDocumentListView";
 
 import { Box } from "@/components/ui/box";
 import { useFocusEffect } from "expo-router";
