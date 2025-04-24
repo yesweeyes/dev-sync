@@ -9,3 +9,8 @@ export const GenerateTechDoc = async (data: HldLldGenerate) => {
     return response.data;
 }
 
+export const DeleteTechDoc=async (design_docs_file_id: string)=> {
+    const response = await api.delete(`${TECH_DOCS_BASE_URL}/${design_docs_file_id}`);
+    return response.data;
+}
+
