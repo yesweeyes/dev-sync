@@ -56,7 +56,6 @@ def push_test_case_to_jira(test_case_id: uuid.UUID, db: Session):
             headers=headers,
             auth=auth
         )
-        print(response.json())
         return response.json()
     except Exception as e:
         raise Exception(f"Unable to post user story to jira: {str(e)}")

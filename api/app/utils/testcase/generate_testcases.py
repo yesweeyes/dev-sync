@@ -36,7 +36,6 @@ def generate_test_cases_for_user_stories(project_id:uuid.UUID, db:Session):
 
 def store_test_cases_in_db(db: Session, test_case_response: str, project_id:uuid.UUID):
     test_cases = json.loads(test_case_response) 
-    print(f"response:{len(test_cases)}")
     try:
         for list_of_test_cases in test_cases:
             for test_case in list_of_test_cases:
