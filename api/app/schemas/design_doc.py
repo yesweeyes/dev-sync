@@ -1,4 +1,4 @@
-from pydantic import BaseModel, UUID4
+from pydantic import BaseModel, UUID4, ConfigDict
 
 class HldLldBase(BaseModel):
     id: UUID4
@@ -7,12 +7,10 @@ class HldLldBase(BaseModel):
     stored_name: str
     file_path: str
 
-    class Config:
-        from_attributes=True
+    model_config = ConfigDict(from_attributes=True)
 
 class HldLldGenerate(BaseModel):
     project_id: UUID4
 
-    class Config:
-        from_attributes=True
+    model_config = ConfigDict(from_attributes=True)
 
