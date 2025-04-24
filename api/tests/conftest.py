@@ -1,12 +1,17 @@
+import os
 import pytest
+from dotenv import load_dotenv
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from app.main import app
 from app.database import get_db, Base
+from app.schemas.project import ProjectCreate
+
+load_dotenv()
 
 # Use a different database URL for testing
-TEST_DATABASE_URL = "postgresql://postgres:password@localhost:5432/devsync_test"
+TEST_DATABASE_URL = os.getenv("POSTGRES_TEST_DATABASE_URL")
 
 # Set up the test engine and session
 engine = create_engine(TEST_DATABASE_URL)
@@ -34,7 +39,7 @@ def test_db():
     yield
     Base.metadata.drop_all(bind=engine)  # Clean up after tests
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def test_client(test_db):
     with TestClient(app) as client:
         yield client
