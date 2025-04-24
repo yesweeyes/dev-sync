@@ -19,6 +19,7 @@ Please provide a detailed HTML-formatted review of the following code:
 - Add missing documentation if needed.
 - Use <pre><code> for code blocks.
 - Format with proper headings and bullet points.
+- Strictly adhere to the user prompt given below, extend or overule previous conditions.
 
 User Prompt:
 ```{user_prompt}```

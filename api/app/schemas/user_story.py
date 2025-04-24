@@ -1,4 +1,4 @@
-from pydantic import BaseModel, UUID4, Field
+from pydantic import BaseModel, UUID4, Field, ConfigDict
 from typing import List, Optional, Union
 from enum import Enum
 
@@ -17,11 +17,10 @@ class UserStoryBase(BaseModel):
     storyPoints: int = Field(..., gt=0)
     labels : List[str]
     issueType: str
-    jira_id:int
-    jiraPush : bool
+    jira_id: Optional[int]
+    jiraPush : Optional[bool]
 
-    class Config:
-        from_attributes = True 
+    model_config = ConfigDict(from_attributes=True)
 
 class UserStoryCreate(BaseModel):
     project_id : UUID4
@@ -32,11 +31,10 @@ class UserStoryCreate(BaseModel):
     storyPoints: Optional[int] = None
     labels : Optional[List[str]] = None
     issueType: str
-    jiraPush : bool
-    jira_id:int
+    jira_id: Optional[int]
+    jiraPush : Optional[bool]
 
-    class Config:
-        from_attributes = True 
+    model_config = ConfigDict(from_attributes=True)
 
 class UserStoryUpdate(BaseModel):
     title: Optional[str] = None
@@ -49,8 +47,7 @@ class UserStoryUpdate(BaseModel):
     jiraPush:Optional[bool] = None
     jira_id : Optional[int] = None
 
-    class Config:
-        from_attributes = True 
+    model_config = ConfigDict(from_attributes=True)
 
 class UserStoryGenerate(BaseModel):
     project_id: UUID4

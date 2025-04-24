@@ -1,4 +1,4 @@
-from pydantic import BaseModel, UUID4, Field
+from pydantic import BaseModel, UUID4, ConfigDict
 from typing import Optional, List
 from enum import Enum
 
@@ -21,8 +21,7 @@ class TestCaseBase(BaseModel):
     jiraPush:bool
     jira_id:int
 
-    class Config:
-        from_attributes = True 
+    model_config = ConfigDict(from_attributes=True)
 
 class TestCaseCreate(BaseModel):
     project_id:UUID4
@@ -37,8 +36,7 @@ class TestCaseCreate(BaseModel):
     jiraPush:bool
     jira_id:int
 
-    class Config:
-        from_attributes = True 
+    model_config = ConfigDict(from_attributes=True)
 
 class TestCaseUpdate(BaseModel):
     module_name: Optional[str] = None
@@ -51,5 +49,4 @@ class TestCaseUpdate(BaseModel):
     jiraPush:Optional[bool] = None
     jira_id:Optional[int] = None
 
-    class Config:
-        from_attributes = True 
+    model_config = ConfigDict(from_attributes=True)

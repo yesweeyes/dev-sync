@@ -84,7 +84,6 @@ def add_attachment_to_issue(issue_key: str, file_path: str, project: ProjectBase
     try:
         url = project.jira_project_endpoint
         url = url.rstrip("/") + f"/{issue_key}/attachments"
-        print(url)
         response = requests.post(url, files=payload, headers=headers, auth=auth)
         if response.content:
             return response.json()
