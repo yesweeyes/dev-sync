@@ -81,6 +81,6 @@ def get_issue_from_jira(project_id: uuid.UUID, db: Session = Depends(get_db)):
         for issue in issues:
             data = get_issue_from_jira_util.parse_issues(db, project_id, issue)
             res = create_user_story_service(db, data)
-        return f"Data obtained successfully"
+        return {"detail":"User Stories imported from JIRA"}
     except Exception as e:
         raise HTTPException(400, detail=str(e))

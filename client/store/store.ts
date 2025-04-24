@@ -257,7 +257,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
   fetchUserStories: async (projectId) => {
     set({ loading: true, error: null });
     try {
-      await getIssuesFromJira(projectId);
+      // await getIssuesFromJira(projectId);
       const user_stories = await getProjectUserStories(projectId);
       set({ user_stories, loading: false });
     } catch (error: any) {
