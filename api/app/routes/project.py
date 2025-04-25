@@ -98,4 +98,15 @@ def get_all_code_reviews(project_id:uuid.UUID, db:Session = Depends(get_db)):
         return get_all_code_review_file_service(db, project_id)
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
+    
+# @router.get("/{project_id}/jira")
+# def get_issue_from_jira(project_id: uuid.UUID, db: Session = Depends(get_db)):
+#     issues = get_issue_from_jira_util.get_story_issues_from_jira(db, project_id)
+#     try:
+#         for issue in issues:
+#             data = get_issue_from_jira_util.parse_issues(db, project_id, issue)
+#             res = create_user_story_service(db, data)
+#         return {"detail":"User Stories imported from JIRA"}
+#     except Exception as e:
+#         raise HTTPException(400, detail=str(e))
 
