@@ -32,8 +32,8 @@ class UserStoryCreate(BaseModel):
     storyPoints: Optional[int] = None
     labels : Optional[List[str]] = None
     issueType: str
-    jiraPush : bool
-    jira_id:int
+    jiraPush : Optional[bool] = None
+    jira_id:Optional[int] = None
 
     class Config:
         from_attributes = True 

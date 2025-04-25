@@ -34,8 +34,8 @@ class TestCaseCreate(BaseModel):
     post_condition: str
     priority:PriorityEnum
     test_type:str
-    jiraPush:bool
-    jira_id:int
+    jiraPush:Optional[bool] = None
+    jira_id:Optional[int] = None
 
     class Config:
         from_attributes = True 
