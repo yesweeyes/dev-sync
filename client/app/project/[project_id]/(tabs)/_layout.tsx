@@ -66,13 +66,6 @@ function ProjectPageLayout() {
               }}
             />
             <Tabs.Screen
-              name="design"
-              options={{
-                title: `Technical Design (${design_docs.length})`,
-                tabBarIcon: ({ color }) => <BoxIcon color={color} />,
-              }}
-            />
-            <Tabs.Screen
               name="testcase"
               options={{
                 title: `Test Cases (${test_cases.length})`,
@@ -84,6 +77,13 @@ function ProjectPageLayout() {
               options={{
                 title: `Code Review (${code_reviews.length})`,
                 tabBarIcon: ({ color }) => <CodeXml color={color} />,
+              }}
+            />
+            <Tabs.Screen
+              name="design"
+              options={{
+                title: `Technical Design (${design_docs.length})`,
+                tabBarIcon: ({ color }) => <BoxIcon color={color} />,
               }}
             />
           </Tabs>
