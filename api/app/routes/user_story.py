@@ -70,6 +70,8 @@ async def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db
 def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session =Depends(get_db)):
     try:
         jira_response = user_story_jira_interface_util.push_user_story_to_jira(user_story_id, db)
+        update_user_story = UserStoryUpdate(jiraPush=True, jira_id=jira_response["id"])
+        update_user_story_service(db, user_story_id, update_user_story)
         return jira_response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -81,6 +83,6 @@ def get_issue_from_jira(project_id: uuid.UUID, db: Session = Depends(get_db)):
         for issue in issues:
             data = get_issue_from_jira_util.parse_issues(db, project_id, issue)
             res = create_user_story_service(db, data)
-        return f"Data obtained successfully"
+        return {"detail":"User Stories imported from JIRA"}
     except Exception as e:
         raise HTTPException(400, detail=str(e))

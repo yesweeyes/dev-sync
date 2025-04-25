@@ -13,8 +13,14 @@ import { Box as BoxIcon } from "lucide-react-native";
 
 function ProjectPageLayout() {
   const { project_id } = useLocalSearchParams();
-  const { fetchProject, documents, user_stories, test_cases, code_reviews } =
-    useAppStore();
+  const {
+    fetchProject,
+    documents,
+    user_stories,
+    test_cases,
+    code_reviews,
+    design_docs,
+  } = useAppStore();
 
   useEffect(() => {
     fetchProject(project_id as string);
@@ -60,13 +66,6 @@ function ProjectPageLayout() {
               }}
             />
             <Tabs.Screen
-              name="design"
-              options={{
-                title: "Technical Design",
-                tabBarIcon: ({ color }) => <BoxIcon color={color} />,
-              }}
-            />
-            <Tabs.Screen
               name="testcase"
               options={{
                 title: `Test Cases (${test_cases.length})`,
@@ -78,6 +77,13 @@ function ProjectPageLayout() {
               options={{
                 title: `Code Review (${code_reviews.length})`,
                 tabBarIcon: ({ color }) => <CodeXml color={color} />,
+              }}
+            />
+            <Tabs.Screen
+              name="design"
+              options={{
+                title: `Technical Design (${design_docs.length})`,
+                tabBarIcon: ({ color }) => <BoxIcon color={color} />,
               }}
             />
           </Tabs>

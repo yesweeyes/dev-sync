@@ -22,9 +22,9 @@ export interface UserStoryCreate {
   storyPoints?: number;
   priority?: string;
   labels?: string[];
-  jiraPush: boolean;
+  jiraPush?: boolean;
   issueType: string;
-  jira_id: number;
+  jira_id?: number;
 }
 
 export interface UserStoryUpdate {
