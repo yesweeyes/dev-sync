@@ -38,7 +38,7 @@ https://github.com/yesweeyes/dev-sync.git
 
 ### Setup .env files
 
-IMPORTANT: Copy the .env files to their respective directories
+IMPORTANT: Using the .env.template as reference, setup .env file accordingly
 
 ### PostgreSQL Setup
 

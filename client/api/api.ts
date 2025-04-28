@@ -1,13 +1,10 @@
 import axios from "axios";
 
+const apiUrl = process.env.EXPO_PUBLIC_BACKEND_API_BASE_URL
+
 export const api = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/v1",
+  baseURL: apiUrl,
   headers: {
     "Content-Type": "application/json",
   },
 });
-
-export const api_form_data = axios.create({
-  baseURL: "http://127.0.0.1:8000/api/v1/",
-  // Don't manually set Content-Type here
-  });
