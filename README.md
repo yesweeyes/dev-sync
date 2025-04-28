@@ -92,5 +92,5 @@ alembic upgrade head  # Apply migration
 ```bash
 cd client  # Navigate to frontend folder
 npm install  # Install dependencies
-npm start  # Start the React Native app
+npx expo start --web  # Start the React Native app
 ```
