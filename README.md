@@ -48,6 +48,14 @@ Ensure that PostgreSQL is installed and running. Create a new database:
 CREATE DATABASE devsync;
 ```
 
+### Postgres Setup Prerequisite
+
+```bash
+sudo apt-get update
+sudo apt-get install -y libpq-dev gcc python3-dev
+pip install psycopg2
+```
+
 ### Backend Setup (FastAPI)
 
 ```bash
