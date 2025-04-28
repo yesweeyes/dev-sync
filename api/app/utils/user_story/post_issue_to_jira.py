@@ -10,7 +10,6 @@ headers = {
 
 
 def create_jira_issue(story , auth_details):
-    print(f"im inside:", auth_details)
     auth = HTTPBasicAuth(auth_details.jira_project_email, auth_details.jira_project_auth)
     payload = json.dumps({
         "fields": {
@@ -72,7 +71,6 @@ def parse_jira_issue(data, project_id:uuid.UUID, parent):
     }
 
 def create_test_case_jira_issue(story , auth_details):
-    print(f"im inside:", auth_details)
     auth = HTTPBasicAuth(auth_details.jira_project_email, auth_details.jira_project_auth)
     payload = json.dumps({
         "fields": {

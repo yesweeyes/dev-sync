@@ -49,17 +49,13 @@ function UserStoryListView() {
     if (user_story_id && project_id) {
       await deleteUserStory(user_story_id);
       fetchUserStories(project_id);
-      console.log("completed fetch");
     }
   }
 
   async function handlePushToJIRA(user_story_id: string) {
-    if (user_story_id) {
-      const res = await pushUserStoryToJIRA(user_story_id);
-      await updateUserStory(user_story_id, {
-        jiraPush: true,
-        jira_id: res["id"],
-      });
+    if (user_story_id && project_id) {
+      await pushUserStoryToJIRA(user_story_id);
+      fetchUserStories(project_id);
     }
   }
 

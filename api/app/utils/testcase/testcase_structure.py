@@ -2,9 +2,10 @@ import json
 from typing import List
 from langchain.chat_models import init_chat_model
 from langchain_core.prompts import ChatPromptTemplate
-from app.config import GROQ_API_KEY
+from app.config import GEMINI_API_KEY
+from langchain_google_genai import ChatGoogleGenerativeAI
 
-model = init_chat_model("llama-3.3-70b-versatile", model_provider="groq")
+model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=GEMINI_API_KEY)
 
 example_template = '''
 Module Name:Mention the name of the user story through which the test case is being created
@@ -24,19 +25,11 @@ def generate_test_case_helper(user_stories: List[dict], summary) -> str:
   for story in user_stories:
       system_template = f"""
       You are an expert in generating test cases for a given context, including edge cases and performance test cases.
-      Response must be json parseable.Do not respond to user as ```json
-      At the end, return an array of user stories in structured JSON parseable format,following this structure.Follow the given template below: 
+      The response must be in pure JSON format, without any markdown code blocks (no ```json wrapping).
+      At the end, return an array of test cases in a structured JSON format, following this structure.
 
       {example_template}
       """
-      # context = {
-      #     f"Title: story['Title']\n"
-      #     f"Description: story['Description']\n"
-      #     f"Acceptance Criteria: story['Acceptance Criteria']\n"
-      #     f"Priority: story['Priority']\n"
-      #     f"Story Points: story['Story Points']\n"
-      #     f"Labels: story['Labels']\n"
-      # }
 
       prompt_template = ChatPromptTemplate.from_messages(
         [("system",system_template), 
@@ -46,10 +39,11 @@ def generate_test_case_helper(user_stories: List[dict], summary) -> str:
       )
       prompt = prompt_template.invoke({
           "example_template": example_template,
-          "context": str(story) + summary,
-          "text": "Generate necessary test cases for the content including functional and non-functional"
+          "context": str(story),
+          "text": f"Generate necessary test cases for the context using additional content {summary} including functional and non-functional.Do not start with ```json"
       })
       response = model.invoke(prompt)
+      print(response)
       try:
         parsed_response = json.loads(response.content)  
         test_cases.append(parsed_response) 

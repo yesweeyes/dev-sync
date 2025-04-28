@@ -1,4 +1,4 @@
-from pydantic import BaseModel, UUID4, EmailStr
+from pydantic import BaseModel, UUID4, EmailStr, ConfigDict
 from typing import Optional
 from datetime import datetime
 
@@ -28,5 +28,4 @@ class ProjectUpdate(BaseModel):
     jira_project_email: Optional[EmailStr] = None
     github_endpoint: Optional[str] = None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

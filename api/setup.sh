@@ -1,14 +1,17 @@
 #!/bin/bash
 
-# Wait for PostgreSQL to be ready (adjust the host and port if needed)
-echo "Waiting for PostgreSQL to be ready..."
-wait-for-it db:5432 --timeout=60 --strict -- echo "PostgreSQL is up"
+# Avoid re-initializing Alembic if the folder already exists
+if [ ! -d "/code/migrations/versions" ]; then
+  alembic init migrations
+fi
 
-# Check for migrations
-alembic revision --autogenerate -m "init"
+# Generate a new migration only if one doesn't already exist
+if [ -z "$(ls -A /code/migrations/versions)" ]; then
+  alembic revision --autogenerate -m "init"
+fi
 
-# Run Alembic migrations
+# Apply migrations
 alembic upgrade head
 
-# Start the FastAPI app
+# Start FastAPI app
 exec uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload

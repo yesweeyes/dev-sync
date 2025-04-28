@@ -43,7 +43,7 @@ import {
   getIssuesFromJira,
 } from "@/api/user_story";
 
-import { GenerateTechDoc } from "@/api/design_doc";
+import { GenerateTechDoc,DeleteTechDoc } from "@/api/design_doc";
 
 import {
   createTestCase,
@@ -105,6 +105,7 @@ interface AppStoreInterface {
   design_docs: HldLld[];
   fetchTechDocs: (projectId: string) => Promise<void>;
   generateTechDocs: (data: HldLldGenerate) => Promise<void>;
+  deleteTechDocs: (design_docs_file_id: string)=> Promise<void>;
 
   test_cases: TestCase[];
   fetchTestCases: (projectId: string) => Promise<void>;
@@ -150,6 +151,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       const user_stories = await getProjectUserStories(projectId);
       const test_cases = await getProjectTestCases(projectId);
       const code_reviews = await getProjectCodeReviewFiles(projectId);
+      const design_docs = await getProjectTechDocs(projectId);
       set({
         project,
         project_id: project.id,
@@ -157,6 +159,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
         user_stories,
         test_cases,
         code_reviews,
+        design_docs,
         loading: false,
       });
     } catch (error: any) {
@@ -253,7 +256,7 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
   fetchUserStories: async (projectId) => {
     set({ loading: true, error: null });
     try {
-      await getIssuesFromJira(projectId);
+      // await getIssuesFromJira(projectId);
       const user_stories = await getProjectUserStories(projectId);
       set({ user_stories, loading: false });
     } catch (error: any) {
@@ -348,6 +351,19 @@ export const useAppStore = create<AppStoreInterface>((set) => ({
       set({ loading: false });
     } catch (error: any) {
       set({ error: error.message, loading: false });
+    }
+  },
+
+  deleteTechDocs: async (design_docs_file_id)=> {
+    set({ loading: true, error:null });
+    try {
+      await DeleteTechDoc(design_docs_file_id);
+      await useAppStore
+        .getState()
+        .fetchTechDocs(useAppStore.getState().project_id!);
+      set({ loading:false});
+    } catch (error: any) {
+      set({ error: error.message, loading:false});
     }
   },
 

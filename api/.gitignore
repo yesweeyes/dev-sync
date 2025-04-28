@@ -66,10 +66,13 @@ dist/
 build/
 *.egg-info/
 
-# Files
+# Folders
 uploads/*
 reviews/*
 outputs/*
 output/*
 app/local_fs/*
 
+# Files
+*.pdf
+*.html

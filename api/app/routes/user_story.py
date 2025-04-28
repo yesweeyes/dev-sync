@@ -46,7 +46,8 @@ def update_user_story(story_id: uuid.UUID, story: UserStoryUpdate, db: Session =
 @router.delete("/{story_id}")
 def delete_user_story(story_id: uuid.UUID, db:Session = Depends(get_db)):
     try:
-        return delete_user_story_service(db, story_id)
+        delete_user_story_service(db, story_id)
+        return {"detail": "User Story deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code = 404, detail = str(e))
     
@@ -59,7 +60,6 @@ async def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db
     try:
         summary = get_document_summary_by_project_service(project_id=project_id)
         user_stories_json = user_story_gen_util.generate_user_stories(summary, user_prompt)
-        print(user_stories_json)
         user_story_gen_util.insert_user_stories(db, user_stories_json, project_id)
         
         return {"message": "User stories generated and stored successfully."}
@@ -70,6 +70,8 @@ async def generate_stories(data: UserStoryGenerate, db: Session = Depends(get_db
 def push_user_story_to_jira(user_story_id: uuid.UUID, db: Session =Depends(get_db)):
     try:
         jira_response = user_story_jira_interface_util.push_user_story_to_jira(user_story_id, db)
+        update_user_story = UserStoryUpdate(jiraPush=True, jira_id=jira_response["id"])
+        update_user_story_service(db, user_story_id, update_user_story)
         return jira_response
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -81,10 +83,6 @@ def get_issue_from_jira(project_id: uuid.UUID, db: Session = Depends(get_db)):
         for issue in issues:
             data = get_issue_from_jira_util.parse_issues(db, project_id, issue)
             res = create_user_story_service(db, data)
-            print(res)
-        return f"Data obtained successfully"
+        return {"detail":"User Stories imported from JIRA"}
     except Exception as e:
         raise HTTPException(400, detail=str(e))
-    
-
-    

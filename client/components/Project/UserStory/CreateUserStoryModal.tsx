@@ -22,9 +22,10 @@ import { Fab, FabIcon, FabLabel } from "@/components/ui/fab";
 import { UserStoryCreate } from "@/schema/user_story";
 import { Plus } from "lucide-react-native";
 import { useAppStore } from "@/store/store";
+import { getProjectJiraIssues } from "@/api/project";
 
 function CreateUserStoryModal() {
-  const { project_id, createUserStory } = useAppStore();
+  const { project_id, createUserStory, fetchUserStories } = useAppStore();
   const [isOpen, setIsOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -78,17 +79,44 @@ function CreateUserStoryModal() {
     setIsOpen(false);
   };
 
+  const handleImportFromJIRA = async () => {
+    if (project_id)
+      try {
+        await getProjectJiraIssues(project_id);
+      } finally {
+        await fetchUserStories(project_id);
+      }
+  };
+
   return (
     <Box>
-      <Fab
-        size="md"
-        placement="bottom right"
-        className="hover:scale-105 transition-transform"
-        onPress={() => setIsOpen(true)}
-      >
-        <FabIcon as={Plus} />
-        <FabLabel>Create</FabLabel>
-      </Fab>
+      {/* Top FAB (new one) */}
+      <Box className="fixed bottom-24 right-4 z-50">
+        <Fab
+          size="md"
+          className="hover:scale-105 transition-transform"
+          onPress={() => {
+            handleImportFromJIRA();
+          }}
+        >
+          <FabIcon as={Plus} />
+          <FabLabel>Import</FabLabel>
+        </Fab>
+      </Box>
+
+      {/* Bottom FAB (existing "Create" button) */}
+      <Box className="fixed bottom-4 right-4 z-40">
+        <Fab
+          size="md"
+          className="hover:scale-105 transition-transform"
+          onPress={() => setIsOpen(true)}
+        >
+          <FabIcon as={Plus} />
+          <FabLabel>Create</FabLabel>
+        </Fab>
+      </Box>
+
+      {/* Modal */}
       <Modal
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}

@@ -6,10 +6,11 @@ from langchain.chat_models import init_chat_model
 from app.services.requirement_document import get_all_requirement_documents_for_project
 from app.services.user_story import generate_create_user_story
 from app.utils.user_story.user_story_structure import generate_user_story_helper
-from app.config import GROQ_API_KEY
+from app.config import GEMINI_API_KEY
+from langchain_google_genai import ChatGoogleGenerativeAI
 
 # Initialize Groq Model
-model = init_chat_model("llama-3.3-70b-versatile", model_provider="groq")
+model = ChatGoogleGenerativeAI(model="gemini-1.5-flash", google_api_key=GEMINI_API_KEY)
 
 
 def get_files(project_id: uuid.UUID, db: Session):  
