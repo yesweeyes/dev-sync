@@ -127,7 +127,72 @@ function CreateUserStoryModal() {
           <ModalHeader>
             <ModalCloseButton />
           </ModalHeader>
-          <ModalBody>{/* Form Contents */}</ModalBody>
+          <ModalBody>
+            <Box className="mb-2">
+              <FormControl isInvalid={!!errors.title}>
+                <Input variant="underlined" size="md">
+                  <InputField
+                    placeholder="Title"
+                    value={title}
+                    onChangeText={setTitle}
+                  />
+                </Input>
+                {errors.title && (
+                  <FormControlError>
+                    <FormControlErrorText>{errors.title}</FormControlErrorText>
+                  </FormControlError>
+                )}
+              </FormControl>
+            </Box>
+            <Box className="mt-6 mb-2 space-y-4">
+              <Heading size="sm">User Story Details</Heading>
+              <FormControl isInvalid={!!errors.description}>
+                <Input variant="underlined" size="md">
+                  <InputField
+                    placeholder="Description"
+                    value={description}
+                    onChangeText={setDescription}
+                  />
+                </Input>
+              </FormControl>
+              <FormControl isInvalid={!!errors.acceptance_criteria}>
+                <Input variant="underlined" size="md">
+                  <InputField
+                    placeholder="Acceptance Criteria"
+                    value={acceptanceCriteria}
+                    onChangeText={setAcceptanceCriteria}
+                  />
+                </Input>
+              </FormControl>
+              <FormControl isInvalid={!!errors.storyPoints}>
+                <Input variant="underlined" size="md">
+                  <InputField
+                    placeholder="Story Points"
+                    value={String(storyPoints)}
+                    onChangeText={(text) => setStoryPoints(Number(text) || 0)}
+                  />
+                </Input>
+              </FormControl>
+              <FormControl isInvalid={!!errors.issueType}>
+                <Input variant="underlined" size="md">
+                  <InputField
+                    placeholder="Issue Type"
+                    value={issueType}
+                    onChangeText={setIssueType}
+                  />
+                </Input>
+              </FormControl>
+              <FormControl>
+                <Input variant="underlined" size="md">
+                  <InputField
+                    placeholder="Labels (comma separated)"
+                    value={labels.join(", ")}
+                    onChangeText={handleLabelsChange}
+                  />
+                </Input>
+              </FormControl>
+            </Box>
+          </ModalBody>
           <ModalFooter>
             <Button
               onPress={() => setIsOpen(false)}
