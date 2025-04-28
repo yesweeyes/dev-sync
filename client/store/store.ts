@@ -66,7 +66,6 @@ import {
   generateCodeReviewFile,
 } from "@/api/code_review";
 
-
 interface AppStoreInterface {
   loading: boolean;
   error: string | null;

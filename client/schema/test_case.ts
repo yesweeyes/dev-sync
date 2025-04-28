@@ -23,9 +23,9 @@ export interface TestCaseCreate {
   test_steps: string[];
   post_condition: string;
   priority: "HIGH" | "MEDIUM" | "LOW";
-  jiraPush: boolean;
+  jiraPush?: boolean;
   test_type: string;
-  jira_id: number;
+  jira_id?: number;
 }
 
 export interface TestCaseUpdate {

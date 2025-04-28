@@ -31,8 +31,8 @@ class UserStoryCreate(BaseModel):
     storyPoints: Optional[int] = None
     labels : Optional[List[str]] = None
     issueType: str
-    jira_id: Optional[int]
-    jiraPush : Optional[bool]
+    jiraPush : Optional[bool] = None
+    jira_id:Optional[int] = None
 
     model_config = ConfigDict(from_attributes=True)
 
